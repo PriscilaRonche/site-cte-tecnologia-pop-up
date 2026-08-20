@@ -377,7 +377,7 @@ export default function ModalEvent({ whatsappNumber = "5511992426477" }: ModalEv
         {/* RIGHT COLUMN: Static Image view (hidden on small devices) */}
         <div 
           className="hidden md:block bg-cover bg-center relative"
-          style={{ backgroundImage: `url('/event_modal.png')` }}
+          style={{ backgroundImage: `url('https://res.cloudinary.com/dooq2eage/image/upload/e_improve:outdoor:45/e_unsharp_mask:47/nitida_webp_a6ubod.webp')` }}
         >
           <div className="absolute inset-0 bg-gradient-to-r from-[#030b18]/60 to-transparent pointer-events-none"></div>
         </div>
