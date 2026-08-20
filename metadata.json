@@ -1,0 +1,6 @@
+{
+  "name": "CTE Tecnologia",
+  "description": "Reparamos consoles de áudio, mesas de som, caixas de som, inversores solares e aparelhos de micro-ondas. Recupere com eficiência total sem precisar comprar um painel novo.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,19 +1,20 @@
-# @babel/helpers
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
+</div>
 
-> Collection of helper functions used by Babel transforms.
+# Run and deploy your AI Studio app
 
-See our website [@babel/helpers](https://babeljs.io/docs/babel-helpers) for more information.
+This contains everything you need to run your app locally.
 
-## Install
+View your app in AI Studio: https://ai.studio/apps/f0980c01-0b3c-4723-b760-948bea1c14df
 
-Using npm:
+## Run Locally
 
-```sh
-npm install --save-dev @babel/helpers
-```
+**Prerequisites:**  Node.js
 
-or using yarn:
 
-```sh
-yarn add @babel/helpers --dev
-```
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`
