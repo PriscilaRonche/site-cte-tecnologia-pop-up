@@ -1,19 +1,19 @@
-# @babel/helper-compilation-targets
+# @babel/helpers
 
-> Helper functions on Babel compilation targets
+> Collection of helper functions used by Babel transforms.
 
-See our website [@babel/helper-compilation-targets](https://babeljs.io/docs/babel-helper-compilation-targets) for more information.
+See our website [@babel/helpers](https://babeljs.io/docs/babel-helpers) for more information.
 
 ## Install
 
 Using npm:
 
 ```sh
-npm install --save @babel/helper-compilation-targets
+npm install --save-dev @babel/helpers
 ```
 
 or using yarn:
 
 ```sh
-yarn add @babel/helper-compilation-targets
+yarn add @babel/helpers --dev
 ```
