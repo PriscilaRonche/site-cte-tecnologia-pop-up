@@ -1,26 +1,39 @@
+import { clone } from "@jimp/utils";
+import { z } from "zod";
+const FisheyeOptionsSchema = z.object({
+    /** the radius of the circle */
+    radius: z.number().min(0).optional(),
+});
 export const methods = {
     /**
-     * Apply a ordered dithering effect.
+     * Adds a fisheye effect to the image.
      * @example
      * ```ts
      * import { Jimp } from "jimp";
      *
      * const image = await Jimp.read("test/image.png");
      *
-     * image.dither();
+     * image.fisheye();
      * ```
      */
-    dither(image) {
-        const rgb565Matrix = [
-            1, 9, 3, 11, 13, 5, 15, 7, 4, 12, 2, 10, 16, 8, 14, 6,
-        ];
-        image.scan((x, y, idx) => {
-            const thresholdId = ((y & 3) << 2) + (x % 4);
-            const dither = rgb565Matrix[thresholdId];
-            image.bitmap.data[idx] = Math.min(image.bitmap.data[idx] + dither, 0xff);
-            image.bitmap.data[idx + 1] = Math.min(image.bitmap.data[idx + 1] + dither, 0xff);
-            image.bitmap.data[idx + 2] = Math.min(image.bitmap.data[idx + 2] + dither, 0xff);
+    fisheye(image, options = {}) {
+        const { radius = 2.5 } = FisheyeOptionsSchema.parse(options);
+        const source = clone(image);
+        const { width, height } = source.bitmap;
+        source.scan((x, y) => {
+            const hx = x / width;
+            const hy = y / height;
+            const rActual = Math.sqrt(Math.pow(hx - 0.5, 2) + Math.pow(hy - 0.5, 2));
+            const rn = 2 * Math.pow(rActual, radius);
+            const cosA = (hx - 0.5) / rActual;
+            const sinA = (hy - 0.5) / rActual;
+            const newX = Math.round((rn * cosA + 0.5) * width);
+            const newY = Math.round((rn * sinA + 0.5) * height);
+            const color = source.getPixelColor(newX, newY);
+            image.setPixelColor(color, x, y);
         });
+        /* Set center pixel color, otherwise it will be transparent */
+        image.setPixelColor(source.getPixelColor(width / 2, height / 2), width / 2, height / 2);
         return image;
     },
 };

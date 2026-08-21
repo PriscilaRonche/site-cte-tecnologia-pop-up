@@ -1,75 +1,48 @@
 import { expect, test, describe } from "vitest";
 
 import { makeTestImage } from "@jimp/test-utils";
-import { HorizontalAlign, VerticalAlign, createJimp } from "@jimp/core";
+import { createJimp } from "@jimp/core";
 
 import { methods } from "./index.js";
 
-const jimp = createJimp({ plugins: [methods] });
+const Jimp = createJimp({ plugins: [methods] });
 
-describe("All align combinations for contain", () => {
-  const vertical = jimp.fromBitmap(
-    makeTestImage(
-      "▴▴▴▴▸▸▸▸",
-      "▴▴▴▴▸▸▸▸",
-      "▴▴▴▴▸▸▸▸",
-      "▴▴▴▴▸▸▸▸",
-      "▴▴▴▴▸▸▸▸",
-      "▴▴▴▴▸▸▸▸",
-      "▾▾▾▾◆◆◆◆",
-      "▾▾▾▾◆◆◆◆",
-      "▾▾▾▾◆◆◆◆",
-      "▾▾▾▾◆◆◆◆",
-      "▾▾▾▾◆◆◆◆",
-      "▾▾▾▾◆◆◆◆",
-    ),
-  );
-  // stores the Jimp instances of the JGD images above.
-  const horizontal = jimp.fromBitmap(
-    makeTestImage(
-      "▴▴▴▴▴▴▸▸▸▸▸▸",
-      "▴▴▴▴▴▴▸▸▸▸▸▸",
-      "▴▴▴▴▴▴▸▸▸▸▸▸",
-      "▴▴▴▴▴▴▸▸▸▸▸▸",
-      "▾▾▾▾▾▾◆◆◆◆◆◆",
-      "▾▾▾▾▾▾◆◆◆◆◆◆",
-      "▾▾▾▾▾▾◆◆◆◆◆◆",
-      "▾▾▾▾▾▾◆◆◆◆◆◆",
-    ),
-  );
+describe("Fisheye", () => {
+  test("should create fisheye lens to image", () => {
+    const img = Jimp.fromBitmap(
+      makeTestImage(
+        "0000000000",
+        "0001221000",
+        "0022222200",
+        "0122112210",
+        "0221001220",
+        "0221001220",
+        "0122112210",
+        "0022222200",
+        "0001221000",
+        "0000000000",
+      ),
+    );
 
-  const tests: Array<
-    [keyof typeof HorizontalAlign, keyof typeof VerticalAlign]
-  > = [
-    ["LEFT", "TOP"],
-    ["CENTER", "TOP"],
-    ["RIGHT", "TOP"],
-    ["LEFT", "MIDDLE"],
-    ["CENTER", "MIDDLE"],
-    ["RIGHT", "MIDDLE"],
-    ["LEFT", "BOTTOM"],
-    ["CENTER", "BOTTOM"],
-    ["RIGHT", "BOTTOM"],
-  ];
+    expect(img.fisheye()).toMatchSnapshot();
+  });
 
-  tests.forEach(([horizontalAlign, verticalAlign]) => {
-    const align = horizontalAlign + " " + verticalAlign;
-    const alignValue =
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (HorizontalAlign as any)[horizontalAlign] |
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (VerticalAlign as any)[verticalAlign];
+  test("should create fisheye lens to image with radius", async () => {
+    const imgNormal = Jimp.fromBitmap(
+      makeTestImage(
+        "0000000000",
+        "0000000000",
+        "0000000000",
+        "0000000000",
+        "0001111000",
+        "0001111000",
+        "0000000000",
+        "0000000000",
+        "0000000000",
+        "0000000000",
+      ),
+    );
 
-    test("vertical contain aligned to " + align, () => {
-      expect(
-        vertical.clone().contain({ w: 6, h: 6, align: alignValue }),
-      ).toMatchSnapshot();
-    });
-
-    test("horizontal contain aligned to " + align, () => {
-      expect(
-        horizontal.clone().contain({ w: 6, h: 6, align: alignValue }),
-      ).toMatchSnapshot();
-    });
+    expect(imgNormal.fisheye({ radius: 1.8 })).toMatchSnapshot();
   });
 });
