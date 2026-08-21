@@ -5,8 +5,6 @@ import pRetry, { AbortError } from 'p-retry';
  * Copyright 2025 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
-let _defaultBaseGeminiUrl = undefined;
-let _defaultBaseVertexUrl = undefined;
 /**
  * Overrides the base URLs for the Gemini API and Vertex AI API.
  *
@@ -28,36 +26,8 @@ let _defaultBaseVertexUrl = undefined;
  * ```
  */
 function setDefaultBaseUrls(baseUrlParams) {
-    _defaultBaseGeminiUrl = baseUrlParams.geminiUrl;
-    _defaultBaseVertexUrl = baseUrlParams.vertexUrl;
-}
-/**
- * Returns the default base URLs for the Gemini API and Vertex AI API.
- */
-function getDefaultBaseUrls() {
-    return {
-        geminiUrl: _defaultBaseGeminiUrl,
-        vertexUrl: _defaultBaseVertexUrl,
-    };
-}
-/**
- * Returns the default base URL based on the following priority:
- *   1. Base URLs set via HttpOptions.
- *   2. Base URLs set via the latest call to setDefaultBaseUrls.
- *   3. Base URLs set via environment variables.
- */
-function getBaseUrl(httpOptions, vertexai, vertexBaseUrlFromEnv, geminiBaseUrlFromEnv) {
-    var _a, _b;
-    if (!(httpOptions === null || httpOptions === void 0 ? void 0 : httpOptions.baseUrl)) {
-        const defaultBaseUrls = getDefaultBaseUrls();
-        if (vertexai) {
-            return (_a = defaultBaseUrls.vertexUrl) !== null && _a !== void 0 ? _a : vertexBaseUrlFromEnv;
-        }
-        else {
-            return (_b = defaultBaseUrls.geminiUrl) !== null && _b !== void 0 ? _b : geminiBaseUrlFromEnv;
-        }
-    }
-    return httpOptions.baseUrl;
+    baseUrlParams.geminiUrl;
+    baseUrlParams.vertexUrl;
 }
 
 /**
@@ -7508,6 +7478,246 @@ class Chat {
  * Copyright 2025 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
+function createFileSearchStoreConfigToMldev(apiClient, fromObject, parentObject) {
+    const toObject = {};
+    const fromDisplayName = getValueByPath(fromObject, ['displayName']);
+    if (parentObject !== undefined && fromDisplayName != null) {
+        setValueByPath(parentObject, ['displayName'], fromDisplayName);
+    }
+    const fromEmbeddingModel = getValueByPath(fromObject, [
+        'embeddingModel',
+    ]);
+    if (parentObject !== undefined && fromEmbeddingModel != null) {
+        setValueByPath(parentObject, ['embeddingModel'], tModel(apiClient, fromEmbeddingModel));
+    }
+    return toObject;
+}
+function createFileSearchStoreParametersToMldev(apiClient, fromObject) {
+    const toObject = {};
+    const fromConfig = getValueByPath(fromObject, ['config']);
+    if (fromConfig != null) {
+        createFileSearchStoreConfigToMldev(apiClient, fromConfig, toObject);
+    }
+    return toObject;
+}
+function deleteFileSearchStoreConfigToMldev(fromObject, parentObject) {
+    const toObject = {};
+    const fromForce = getValueByPath(fromObject, ['force']);
+    if (parentObject !== undefined && fromForce != null) {
+        setValueByPath(parentObject, ['_query', 'force'], fromForce);
+    }
+    return toObject;
+}
+function deleteFileSearchStoreParametersToMldev(fromObject) {
+    const toObject = {};
+    const fromName = getValueByPath(fromObject, ['name']);
+    if (fromName != null) {
+        setValueByPath(toObject, ['_url', 'name'], fromName);
+    }
+    const fromConfig = getValueByPath(fromObject, ['config']);
+    if (fromConfig != null) {
+        deleteFileSearchStoreConfigToMldev(fromConfig, toObject);
+    }
+    return toObject;
+}
+function getFileSearchStoreParametersToMldev(fromObject) {
+    const toObject = {};
+    const fromName = getValueByPath(fromObject, ['name']);
+    if (fromName != null) {
+        setValueByPath(toObject, ['_url', 'name'], fromName);
+    }
+    return toObject;
+}
+function importFileConfigToMldev(fromObject, parentObject) {
+    const toObject = {};
+    const fromCustomMetadata = getValueByPath(fromObject, [
+        'customMetadata',
+    ]);
+    if (parentObject !== undefined && fromCustomMetadata != null) {
+        let transformedList = fromCustomMetadata;
+        if (Array.isArray(transformedList)) {
+            transformedList = transformedList.map((item) => {
+                return item;
+            });
+        }
+        setValueByPath(parentObject, ['customMetadata'], transformedList);
+    }
+    const fromChunkingConfig = getValueByPath(fromObject, [
+        'chunkingConfig',
+    ]);
+    if (parentObject !== undefined && fromChunkingConfig != null) {
+        setValueByPath(parentObject, ['chunkingConfig'], fromChunkingConfig);
+    }
+    return toObject;
+}
+function importFileOperationFromMldev(fromObject) {
+    const toObject = {};
+    const fromName = getValueByPath(fromObject, ['name']);
+    if (fromName != null) {
+        setValueByPath(toObject, ['name'], fromName);
+    }
+    const fromMetadata = getValueByPath(fromObject, ['metadata']);
+    if (fromMetadata != null) {
+        setValueByPath(toObject, ['metadata'], fromMetadata);
+    }
+    const fromDone = getValueByPath(fromObject, ['done']);
+    if (fromDone != null) {
+        setValueByPath(toObject, ['done'], fromDone);
+    }
+    const fromError = getValueByPath(fromObject, ['error']);
+    if (fromError != null) {
+        setValueByPath(toObject, ['error'], fromError);
+    }
+    const fromResponse = getValueByPath(fromObject, ['response']);
+    if (fromResponse != null) {
+        setValueByPath(toObject, ['response'], importFileResponseFromMldev(fromResponse));
+    }
+    return toObject;
+}
+function importFileParametersToMldev(fromObject) {
+    const toObject = {};
+    const fromFileSearchStoreName = getValueByPath(fromObject, [
+        'fileSearchStoreName',
+    ]);
+    if (fromFileSearchStoreName != null) {
+        setValueByPath(toObject, ['_url', 'file_search_store_name'], fromFileSearchStoreName);
+    }
+    const fromFileName = getValueByPath(fromObject, ['fileName']);
+    if (fromFileName != null) {
+        setValueByPath(toObject, ['fileName'], fromFileName);
+    }
+    const fromConfig = getValueByPath(fromObject, ['config']);
+    if (fromConfig != null) {
+        importFileConfigToMldev(fromConfig, toObject);
+    }
+    return toObject;
+}
+function importFileResponseFromMldev(fromObject) {
+    const toObject = {};
+    const fromSdkHttpResponse = getValueByPath(fromObject, [
+        'sdkHttpResponse',
+    ]);
+    if (fromSdkHttpResponse != null) {
+        setValueByPath(toObject, ['sdkHttpResponse'], fromSdkHttpResponse);
+    }
+    const fromParent = getValueByPath(fromObject, ['parent']);
+    if (fromParent != null) {
+        setValueByPath(toObject, ['parent'], fromParent);
+    }
+    const fromDocumentName = getValueByPath(fromObject, ['documentName']);
+    if (fromDocumentName != null) {
+        setValueByPath(toObject, ['documentName'], fromDocumentName);
+    }
+    return toObject;
+}
+function listFileSearchStoresConfigToMldev(fromObject, parentObject) {
+    const toObject = {};
+    const fromPageSize = getValueByPath(fromObject, ['pageSize']);
+    if (parentObject !== undefined && fromPageSize != null) {
+        setValueByPath(parentObject, ['_query', 'pageSize'], fromPageSize);
+    }
+    const fromPageToken = getValueByPath(fromObject, ['pageToken']);
+    if (parentObject !== undefined && fromPageToken != null) {
+        setValueByPath(parentObject, ['_query', 'pageToken'], fromPageToken);
+    }
+    return toObject;
+}
+function listFileSearchStoresParametersToMldev(fromObject) {
+    const toObject = {};
+    const fromConfig = getValueByPath(fromObject, ['config']);
+    if (fromConfig != null) {
+        listFileSearchStoresConfigToMldev(fromConfig, toObject);
+    }
+    return toObject;
+}
+function listFileSearchStoresResponseFromMldev(fromObject) {
+    const toObject = {};
+    const fromSdkHttpResponse = getValueByPath(fromObject, [
+        'sdkHttpResponse',
+    ]);
+    if (fromSdkHttpResponse != null) {
+        setValueByPath(toObject, ['sdkHttpResponse'], fromSdkHttpResponse);
+    }
+    const fromNextPageToken = getValueByPath(fromObject, [
+        'nextPageToken',
+    ]);
+    if (fromNextPageToken != null) {
+        setValueByPath(toObject, ['nextPageToken'], fromNextPageToken);
+    }
+    const fromFileSearchStores = getValueByPath(fromObject, [
+        'fileSearchStores',
+    ]);
+    if (fromFileSearchStores != null) {
+        let transformedList = fromFileSearchStores;
+        if (Array.isArray(transformedList)) {
+            transformedList = transformedList.map((item) => {
+                return item;
+            });
+        }
+        setValueByPath(toObject, ['fileSearchStores'], transformedList);
+    }
+    return toObject;
+}
+function uploadToFileSearchStoreConfigToMldev(fromObject, parentObject) {
+    const toObject = {};
+    const fromMimeType = getValueByPath(fromObject, ['mimeType']);
+    if (parentObject !== undefined && fromMimeType != null) {
+        setValueByPath(parentObject, ['mimeType'], fromMimeType);
+    }
+    const fromDisplayName = getValueByPath(fromObject, ['displayName']);
+    if (parentObject !== undefined && fromDisplayName != null) {
+        setValueByPath(parentObject, ['displayName'], fromDisplayName);
+    }
+    const fromCustomMetadata = getValueByPath(fromObject, [
+        'customMetadata',
+    ]);
+    if (parentObject !== undefined && fromCustomMetadata != null) {
+        let transformedList = fromCustomMetadata;
+        if (Array.isArray(transformedList)) {
+            transformedList = transformedList.map((item) => {
+                return item;
+            });
+        }
+        setValueByPath(parentObject, ['customMetadata'], transformedList);
+    }
+    const fromChunkingConfig = getValueByPath(fromObject, [
+        'chunkingConfig',
+    ]);
+    if (parentObject !== undefined && fromChunkingConfig != null) {
+        setValueByPath(parentObject, ['chunkingConfig'], fromChunkingConfig);
+    }
+    return toObject;
+}
+function uploadToFileSearchStoreParametersToMldev(fromObject) {
+    const toObject = {};
+    const fromFileSearchStoreName = getValueByPath(fromObject, [
+        'fileSearchStoreName',
+    ]);
+    if (fromFileSearchStoreName != null) {
+        setValueByPath(toObject, ['_url', 'file_search_store_name'], fromFileSearchStoreName);
+    }
+    const fromConfig = getValueByPath(fromObject, ['config']);
+    if (fromConfig != null) {
+        uploadToFileSearchStoreConfigToMldev(fromConfig, toObject);
+    }
+    return toObject;
+}
+function uploadToFileSearchStoreResumableResponseFromMldev(fromObject) {
+    const toObject = {};
+    const fromSdkHttpResponse = getValueByPath(fromObject, [
+        'sdkHttpResponse',
+    ]);
+    if (fromSdkHttpResponse != null) {
+        setValueByPath(toObject, ['sdkHttpResponse'], fromSdkHttpResponse);
+    }
+    return toObject;
+}
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
 /**
  * API errors raised by the GenAI API.
  */
@@ -7517,6 +7727,859 @@ class ApiError extends Error {
         this.name = 'ApiError';
         this.status = options.status;
         Object.setPrototypeOf(this, ApiError.prototype);
+    }
+}
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+const CONTENT_TYPE_HEADER = 'Content-Type';
+const SERVER_TIMEOUT_HEADER = 'X-Server-Timeout';
+const USER_AGENT_HEADER = 'User-Agent';
+const GOOGLE_API_CLIENT_HEADER = 'x-goog-api-client';
+const SDK_VERSION = '2.8.0'; // x-release-please-version
+const LIBRARY_LABEL = `google-genai-sdk/${SDK_VERSION}`;
+const VERTEX_AI_API_DEFAULT_VERSION = 'v1beta1';
+const GOOGLE_AI_API_DEFAULT_VERSION = 'v1beta';
+const MULTI_REGIONAL_LOCATIONS = new Set(['us', 'eu']);
+// Default retry options.
+// The config is based on https://cloud.google.com/storage/docs/retry-strategy.
+const DEFAULT_RETRY_ATTEMPTS = 5; // Including the initial call
+// LINT.IfChange
+const DEFAULT_RETRY_HTTP_STATUS_CODES = [
+    408, // Request timeout
+    429, // Too many requests
+    500, // Internal server error
+    502, // Bad gateway
+    503, // Service unavailable
+    504, // Gateway timeout
+];
+/**
+ * The ApiClient class is used to send requests to the Gemini API or Vertex AI
+ * endpoints.
+ *
+ * WARNING: This is an internal API and may change without notice. Direct usage
+ * is not supported and may break your application.
+ */
+class ApiClient {
+    constructor(opts) {
+        var _a, _b, _c;
+        this.clientOptions = Object.assign({}, opts);
+        this.customBaseUrl = (_a = opts.httpOptions) === null || _a === void 0 ? void 0 : _a.baseUrl;
+        if (this.clientOptions.vertexai) {
+            if (this.clientOptions.project && this.clientOptions.location) {
+                this.clientOptions.apiKey = undefined;
+            }
+            else if (this.clientOptions.apiKey) {
+                this.clientOptions.project = undefined;
+                this.clientOptions.location = undefined;
+            }
+        }
+        const initHttpOptions = {};
+        if (this.clientOptions.vertexai) {
+            if (!this.clientOptions.location &&
+                !this.clientOptions.apiKey &&
+                !this.customBaseUrl) {
+                this.clientOptions.location = 'global';
+            }
+            const hasSufficientAuth = (this.clientOptions.project && this.clientOptions.location) ||
+                this.clientOptions.apiKey;
+            if (!hasSufficientAuth && !this.customBaseUrl) {
+                throw new Error('Authentication is not set up. Please provide either a project and location, or an API key, or a custom base URL.');
+            }
+            const hasConstructorAuth = (opts.project && opts.location) || !!opts.apiKey;
+            if (this.customBaseUrl && !hasConstructorAuth) {
+                initHttpOptions.baseUrl = this.customBaseUrl;
+                this.clientOptions.project = undefined;
+                this.clientOptions.location = undefined;
+            }
+            else if (this.clientOptions.apiKey ||
+                this.clientOptions.location === 'global') {
+                // Vertex Express or global endpoint case.
+                initHttpOptions.baseUrl = 'https://aiplatform.googleapis.com/';
+            }
+            else if (this.clientOptions.project &&
+                this.clientOptions.location &&
+                MULTI_REGIONAL_LOCATIONS.has(this.clientOptions.location)) {
+                initHttpOptions.baseUrl = `https://aiplatform.${this.clientOptions.location}.rep.googleapis.com/`;
+            }
+            else if (this.clientOptions.project && this.clientOptions.location) {
+                initHttpOptions.baseUrl = `https://${this.clientOptions.location}-aiplatform.googleapis.com/`;
+            }
+            initHttpOptions.apiVersion =
+                (_b = this.clientOptions.apiVersion) !== null && _b !== void 0 ? _b : VERTEX_AI_API_DEFAULT_VERSION;
+        }
+        else {
+            // Gemini API
+            if (!this.clientOptions.apiKey) {
+                console.warn('API key should be set when using the Gemini API.');
+            }
+            initHttpOptions.apiVersion =
+                (_c = this.clientOptions.apiVersion) !== null && _c !== void 0 ? _c : GOOGLE_AI_API_DEFAULT_VERSION;
+            initHttpOptions.baseUrl = `https://generativelanguage.googleapis.com/`;
+        }
+        initHttpOptions.headers = this.getDefaultHeaders();
+        this.clientOptions.httpOptions = initHttpOptions;
+        if (opts.httpOptions) {
+            this.clientOptions.httpOptions = this.patchHttpOptions(initHttpOptions, opts.httpOptions);
+        }
+    }
+    isVertexAI() {
+        var _a;
+        return (_a = this.clientOptions.vertexai) !== null && _a !== void 0 ? _a : false;
+    }
+    getProject() {
+        return this.clientOptions.project;
+    }
+    getLocation() {
+        return this.clientOptions.location;
+    }
+    getCustomBaseUrl() {
+        return this.customBaseUrl;
+    }
+    async getAuthHeaders() {
+        const headers = new Headers();
+        await this.clientOptions.auth.addAuthHeaders(headers);
+        return headers;
+    }
+    getApiVersion() {
+        if (this.clientOptions.httpOptions &&
+            this.clientOptions.httpOptions.apiVersion !== undefined) {
+            return this.clientOptions.httpOptions.apiVersion;
+        }
+        throw new Error('API version is not set.');
+    }
+    getBaseUrl() {
+        if (this.clientOptions.httpOptions &&
+            this.clientOptions.httpOptions.baseUrl !== undefined) {
+            return this.clientOptions.httpOptions.baseUrl;
+        }
+        throw new Error('Base URL is not set.');
+    }
+    getRequestUrl() {
+        return this.getRequestUrlInternal(this.clientOptions.httpOptions);
+    }
+    getHeaders() {
+        if (this.clientOptions.httpOptions &&
+            this.clientOptions.httpOptions.headers !== undefined) {
+            return this.clientOptions.httpOptions.headers;
+        }
+        else {
+            throw new Error('Headers are not set.');
+        }
+    }
+    getRequestUrlInternal(httpOptions) {
+        if (!httpOptions ||
+            httpOptions.baseUrl === undefined ||
+            httpOptions.apiVersion === undefined) {
+            throw new Error('HTTP options are not correctly set.');
+        }
+        const baseUrl = httpOptions.baseUrl.endsWith('/')
+            ? httpOptions.baseUrl.slice(0, -1)
+            : httpOptions.baseUrl;
+        const urlElement = [baseUrl];
+        if (httpOptions.apiVersion && httpOptions.apiVersion !== '') {
+            urlElement.push(httpOptions.apiVersion);
+        }
+        return urlElement.join('/');
+    }
+    getBaseResourcePath() {
+        return `projects/${this.clientOptions.project}/locations/${this.clientOptions.location}`;
+    }
+    getApiKey() {
+        return this.clientOptions.apiKey;
+    }
+    getWebsocketBaseUrl() {
+        const baseUrl = this.getBaseUrl();
+        const urlParts = new URL(baseUrl);
+        urlParts.protocol = urlParts.protocol == 'http:' ? 'ws' : 'wss';
+        return urlParts.toString();
+    }
+    setBaseUrl(url) {
+        if (this.clientOptions.httpOptions) {
+            this.clientOptions.httpOptions.baseUrl = url;
+        }
+        else {
+            throw new Error('HTTP options are not correctly set.');
+        }
+    }
+    constructUrl(path, httpOptions, prependProjectLocation) {
+        const urlElement = [this.getRequestUrlInternal(httpOptions)];
+        if (prependProjectLocation) {
+            urlElement.push(this.getBaseResourcePath());
+        }
+        if (path !== '') {
+            urlElement.push(path);
+        }
+        const url = new URL(`${urlElement.join('/')}`);
+        return url;
+    }
+    shouldPrependVertexProjectPath(request, httpOptions) {
+        if (httpOptions.baseUrl &&
+            httpOptions.baseUrlResourceScope === ResourceScope.COLLECTION) {
+            return false;
+        }
+        if (this.clientOptions.apiKey) {
+            return false;
+        }
+        if (!this.clientOptions.vertexai) {
+            return false;
+        }
+        if (request.path.startsWith('projects/')) {
+            // Assume the path already starts with
+            // `projects/<project>/location/<location>`.
+            return false;
+        }
+        if (request.httpMethod === 'GET' &&
+            request.path.startsWith('publishers/google/models')) {
+            // These paths are used by Vertex's models.get and models.list
+            // calls. For base models Vertex does not accept a project/location
+            // prefix (for tuned model the prefix is required).
+            return false;
+        }
+        return true;
+    }
+    async request(request) {
+        let patchedHttpOptions = this.clientOptions.httpOptions;
+        if (request.httpOptions) {
+            patchedHttpOptions = this.patchHttpOptions(this.clientOptions.httpOptions, request.httpOptions);
+        }
+        const prependProjectLocation = this.shouldPrependVertexProjectPath(request, patchedHttpOptions);
+        const url = this.constructUrl(request.path, patchedHttpOptions, prependProjectLocation);
+        if (request.queryParams) {
+            for (const [key, value] of Object.entries(request.queryParams)) {
+                url.searchParams.append(key, String(value));
+            }
+        }
+        let requestInit = {};
+        if (request.httpMethod === 'GET') {
+            if (request.body && request.body !== '{}') {
+                throw new Error('Request body should be empty for GET request, but got non empty request body');
+            }
+        }
+        else {
+            requestInit.body = request.body;
+        }
+        requestInit = await this.includeExtraHttpOptionsToRequestInit(requestInit, patchedHttpOptions, url.toString(), request.abortSignal);
+        return this.unaryApiCall(url, requestInit, request.httpMethod);
+    }
+    patchHttpOptions(baseHttpOptions, requestHttpOptions) {
+        const patchedHttpOptions = JSON.parse(JSON.stringify(baseHttpOptions));
+        for (const [key, value] of Object.entries(requestHttpOptions)) {
+            // Records compile to objects.
+            if (typeof value === 'object') {
+                // @ts-expect-error TS2345TS7053: Element implicitly has an 'any' type
+                // because expression of type 'string' can't be used to index type
+                // 'HttpOptions'.
+                patchedHttpOptions[key] = Object.assign(Object.assign({}, patchedHttpOptions[key]), value);
+            }
+            else if (value !== undefined) {
+                // @ts-expect-error TS2345TS7053: Element implicitly has an 'any' type
+                // because expression of type 'string' can't be used to index type
+                // 'HttpOptions'.
+                patchedHttpOptions[key] = value;
+            }
+        }
+        return patchedHttpOptions;
+    }
+    async requestStream(request) {
+        let patchedHttpOptions = this.clientOptions.httpOptions;
+        if (request.httpOptions) {
+            patchedHttpOptions = this.patchHttpOptions(this.clientOptions.httpOptions, request.httpOptions);
+        }
+        const prependProjectLocation = this.shouldPrependVertexProjectPath(request, patchedHttpOptions);
+        const url = this.constructUrl(request.path, patchedHttpOptions, prependProjectLocation);
+        if (!url.searchParams.has('alt') || url.searchParams.get('alt') !== 'sse') {
+            url.searchParams.set('alt', 'sse');
+        }
+        let requestInit = {};
+        requestInit.body = request.body;
+        requestInit = await this.includeExtraHttpOptionsToRequestInit(requestInit, patchedHttpOptions, url.toString(), request.abortSignal);
+        return this.streamApiCall(url, requestInit, request.httpMethod);
+    }
+    async includeExtraHttpOptionsToRequestInit(requestInit, httpOptions, url, abortSignal) {
+        if ((httpOptions && httpOptions.timeout) || abortSignal) {
+            const abortController = new AbortController();
+            const signal = abortController.signal;
+            if (httpOptions.timeout && (httpOptions === null || httpOptions === void 0 ? void 0 : httpOptions.timeout) > 0) {
+                // In Node > 18, the built-in fetch is backed by Undici. Undici sets a global
+                // dispatcher on the global scope which tracks its internal headersTimeout and
+                // bodyTimeout using Symbol properties.
+                const dispatcherSymbol = Symbol.for('undici.globalDispatcher.1');
+                const globalDispatcher = globalThis[dispatcherSymbol];
+                if (globalDispatcher) {
+                    const symbols = Object.getOwnPropertySymbols(globalDispatcher);
+                    for (const sym of symbols) {
+                        const desc = sym.description;
+                        if ((desc === null || desc === void 0 ? void 0 : desc.includes('headers timeout')) ||
+                            (desc === null || desc === void 0 ? void 0 : desc.includes('body timeout'))) {
+                            const currentTimeout = globalDispatcher[sym];
+                            if (typeof currentTimeout === 'number') {
+                                globalDispatcher[sym] = Math.max(currentTimeout, httpOptions.timeout);
+                            }
+                        }
+                    }
+                }
+                const timeoutHandle = setTimeout(() => abortController.abort(), httpOptions.timeout);
+                if (timeoutHandle &&
+                    typeof timeoutHandle.unref ===
+                        'function') {
+                    // call unref to prevent nodejs process from hanging, see
+                    // https://nodejs.org/api/timers.html#timeoutunref
+                    timeoutHandle.unref();
+                }
+            }
+            if (abortSignal) {
+                abortSignal.addEventListener('abort', () => {
+                    abortController.abort();
+                });
+            }
+            requestInit.signal = signal;
+        }
+        if (httpOptions && httpOptions.extraBody !== null) {
+            includeExtraBodyToRequestInit(requestInit, httpOptions.extraBody);
+        }
+        requestInit.headers = await this.getHeadersInternal(httpOptions, url);
+        return requestInit;
+    }
+    async unaryApiCall(url, requestInit, httpMethod) {
+        return this.apiCall(url.toString(), Object.assign(Object.assign({}, requestInit), { method: httpMethod }))
+            .then(async (response) => {
+            await throwErrorIfNotOK(response);
+            return new HttpResponse(response);
+        })
+            .catch((e) => {
+            if (e instanceof Error) {
+                throw e;
+            }
+            else {
+                throw new Error(`exception ${e} sending request`, { cause: e });
+            }
+        });
+    }
+    async streamApiCall(url, requestInit, httpMethod) {
+        return this.apiCall(url.toString(), Object.assign(Object.assign({}, requestInit), { method: httpMethod }))
+            .then(async (response) => {
+            await throwErrorIfNotOK(response);
+            return this.processStreamResponse(response);
+        })
+            .catch((e) => {
+            if (e instanceof Error) {
+                throw e;
+            }
+            else {
+                throw new Error(`exception ${e} sending request`, { cause: e });
+            }
+        });
+    }
+    processStreamResponse(response) {
+        return __asyncGenerator(this, arguments, function* processStreamResponse_1() {
+            var _a;
+            const reader = (_a = response === null || response === void 0 ? void 0 : response.body) === null || _a === void 0 ? void 0 : _a.getReader();
+            const decoder = new TextDecoder('utf-8');
+            if (!reader) {
+                throw new Error('Response body is empty');
+            }
+            try {
+                let buffer = '';
+                const dataPrefix = 'data:';
+                const delimiters = ['\n\n', '\r\r', '\r\n\r\n'];
+                while (true) {
+                    const { done, value } = yield __await(reader.read());
+                    if (done) {
+                        if (buffer.trim().length > 0) {
+                            throw new Error('Incomplete JSON segment at the end');
+                        }
+                        break;
+                    }
+                    const chunkString = decoder.decode(value, { stream: true });
+                    // Parse and throw an error if the chunk contains an error.
+                    try {
+                        const chunkJson = JSON.parse(chunkString);
+                        if ('error' in chunkJson) {
+                            const errorJson = JSON.parse(JSON.stringify(chunkJson['error']));
+                            const status = errorJson['status'];
+                            const code = errorJson['code'];
+                            const errorMessage = `got status: ${status}. ${JSON.stringify(chunkJson)}`;
+                            if (code >= 400 && code < 600) {
+                                const apiError = new ApiError({
+                                    message: errorMessage,
+                                    status: code,
+                                });
+                                throw apiError;
+                            }
+                        }
+                    }
+                    catch (e) {
+                        const error = e;
+                        if (error.name === 'ApiError') {
+                            throw e;
+                        }
+                    }
+                    buffer += chunkString;
+                    let delimiterIndex = -1;
+                    let delimiterLength = 0;
+                    while (true) {
+                        delimiterIndex = -1;
+                        delimiterLength = 0;
+                        for (const delimiter of delimiters) {
+                            const index = buffer.indexOf(delimiter);
+                            if (index !== -1 &&
+                                (delimiterIndex === -1 || index < delimiterIndex)) {
+                                delimiterIndex = index;
+                                delimiterLength = delimiter.length;
+                            }
+                        }
+                        if (delimiterIndex === -1) {
+                            break; // No complete event in buffer
+                        }
+                        const eventString = buffer.substring(0, delimiterIndex);
+                        buffer = buffer.substring(delimiterIndex + delimiterLength);
+                        const trimmedEvent = eventString.trim();
+                        if (trimmedEvent.startsWith(dataPrefix)) {
+                            const processedChunkString = trimmedEvent
+                                .substring(dataPrefix.length)
+                                .trim();
+                            try {
+                                const partialResponse = new Response(processedChunkString, {
+                                    headers: response === null || response === void 0 ? void 0 : response.headers,
+                                    status: response === null || response === void 0 ? void 0 : response.status,
+                                    statusText: response === null || response === void 0 ? void 0 : response.statusText,
+                                });
+                                yield yield __await(new HttpResponse(partialResponse));
+                            }
+                            catch (e) {
+                                throw new Error(`exception parsing stream chunk ${processedChunkString}. ${e}`);
+                            }
+                        }
+                    }
+                }
+            }
+            finally {
+                reader.releaseLock();
+            }
+        });
+    }
+    async apiCall(url, requestInit) {
+        var _a;
+        if (!this.clientOptions.httpOptions ||
+            !this.clientOptions.httpOptions.retryOptions) {
+            return fetch(url, requestInit);
+        }
+        const retryOptions = this.clientOptions.httpOptions.retryOptions;
+        const runFetch = async () => {
+            const response = await fetch(url, requestInit);
+            if (response.ok) {
+                return response;
+            }
+            if (DEFAULT_RETRY_HTTP_STATUS_CODES.includes(response.status)) {
+                throw new Error(`Retryable HTTP Error: ${response.statusText}`);
+            }
+            throw new AbortError(`Non-retryable exception ${response.statusText} sending request`);
+        };
+        return pRetry(runFetch, {
+            // Retry attempts is one less than the number of total attempts.
+            retries: ((_a = retryOptions.attempts) !== null && _a !== void 0 ? _a : DEFAULT_RETRY_ATTEMPTS) - 1,
+        });
+    }
+    getDefaultHeaders() {
+        const headers = {};
+        const versionHeaderValue = LIBRARY_LABEL + ' ' + this.clientOptions.userAgentExtra;
+        headers[USER_AGENT_HEADER] = versionHeaderValue;
+        headers[GOOGLE_API_CLIENT_HEADER] = versionHeaderValue;
+        headers[CONTENT_TYPE_HEADER] = 'application/json';
+        return headers;
+    }
+    async getHeadersInternal(httpOptions, url) {
+        const headers = new Headers();
+        if (httpOptions && httpOptions.headers) {
+            for (const [key, value] of Object.entries(httpOptions.headers)) {
+                headers.append(key, value);
+            }
+        }
+        // Append a timeout header if it is set, note that the timeout option is
+        // in milliseconds but the header is in seconds.
+        // NOTE: This is intentionally outside the httpOptions.headers guard above
+        // so that the X-Server-Timeout header is always sent whenever a timeout
+        // is configured, even if the caller did not supply any custom headers.
+        if ((httpOptions === null || httpOptions === void 0 ? void 0 : httpOptions.timeout) && httpOptions.timeout > 0) {
+            headers.append(SERVER_TIMEOUT_HEADER, String(Math.ceil(httpOptions.timeout / 1000)));
+        }
+        await this.clientOptions.auth.addAuthHeaders(headers, url);
+        return headers;
+    }
+    getFileName(file) {
+        var _a;
+        let fileName = '';
+        if (typeof file === 'string') {
+            fileName = file.replace(/[/\\]+$/, '');
+            fileName = (_a = fileName.split(/[/\\]/).pop()) !== null && _a !== void 0 ? _a : '';
+        }
+        return fileName;
+    }
+    /**
+     * Uploads a file asynchronously using Gemini API only, this is not supported
+     * in Vertex AI.
+     *
+     * @param file The string path to the file to be uploaded or a Blob object.
+     * @param config Optional parameters specified in the `UploadFileConfig`
+     *     interface. @see {@link types.UploadFileConfig}
+     * @return A promise that resolves to a `File` object.
+     * @throws An error if called on a Vertex AI client.
+     * @throws An error if the `mimeType` is not provided and can not be inferred,
+     */
+    async uploadFile(file, config) {
+        var _a;
+        const fileToUpload = {};
+        if (config != null) {
+            fileToUpload.mimeType = config.mimeType;
+            fileToUpload.name = config.name;
+            fileToUpload.displayName = config.displayName;
+        }
+        if (fileToUpload.name && !fileToUpload.name.startsWith('files/')) {
+            fileToUpload.name = `files/${fileToUpload.name}`;
+        }
+        const uploader = this.clientOptions.uploader;
+        const fileStat = await uploader.stat(file);
+        fileToUpload.sizeBytes = String(fileStat.size);
+        const mimeType = (_a = config === null || config === void 0 ? void 0 : config.mimeType) !== null && _a !== void 0 ? _a : fileStat.type;
+        if (mimeType === undefined || mimeType === '') {
+            throw new Error('Can not determine mimeType. Please provide mimeType in the config.');
+        }
+        fileToUpload.mimeType = mimeType;
+        const body = {
+            file: fileToUpload,
+        };
+        const fileName = this.getFileName(file);
+        const path = formatMap('upload/v1beta/files', body['_url']);
+        const uploadUrl = await this.fetchUploadUrl(path, fileToUpload.sizeBytes, fileToUpload.mimeType, fileName, body, config === null || config === void 0 ? void 0 : config.httpOptions);
+        return uploader.upload(file, uploadUrl, this);
+    }
+    /**
+     * Uploads a file to a given file search store asynchronously using Gemini API only, this is not supported
+     * in Vertex AI.
+     *
+     * @param fileSearchStoreName The name of the file search store to upload the file to.
+     * @param file The string path to the file to be uploaded or a Blob object.
+     * @param config Optional parameters specified in the `UploadFileConfig`
+     *     interface. @see {@link UploadFileConfig}
+     * @return A promise that resolves to a `File` object.
+     * @throws An error if called on a Vertex AI client.
+     * @throws An error if the `mimeType` is not provided and can not be inferred,
+     */
+    async uploadFileToFileSearchStore(fileSearchStoreName, file, config) {
+        var _a;
+        const uploader = this.clientOptions.uploader;
+        const fileStat = await uploader.stat(file);
+        const sizeBytes = String(fileStat.size);
+        const mimeType = (_a = config === null || config === void 0 ? void 0 : config.mimeType) !== null && _a !== void 0 ? _a : fileStat.type;
+        if (mimeType === undefined || mimeType === '') {
+            throw new Error('Can not determine mimeType. Please provide mimeType in the config.');
+        }
+        const path = `upload/v1beta/${fileSearchStoreName}:uploadToFileSearchStore`;
+        const fileName = this.getFileName(file);
+        const body = {};
+        if (config != null) {
+            uploadToFileSearchStoreConfigToMldev(config, body);
+        }
+        const uploadUrl = await this.fetchUploadUrl(path, sizeBytes, mimeType, fileName, body, config === null || config === void 0 ? void 0 : config.httpOptions);
+        return uploader.uploadToFileSearchStore(file, uploadUrl, this);
+    }
+    /**
+     * Downloads a file asynchronously to the specified path.
+     *
+     * @params params - The parameters for the download request, see {@link
+     * types.DownloadFileParameters}
+     */
+    async downloadFile(params) {
+        const downloader = this.clientOptions.downloader;
+        await downloader.download(params, this);
+    }
+    async fetchUploadUrl(path, sizeBytes, mimeType, fileName, body, configHttpOptions) {
+        var _a;
+        let httpOptions = {};
+        if (configHttpOptions) {
+            httpOptions = configHttpOptions;
+        }
+        else {
+            httpOptions = {
+                apiVersion: '', // api-version is set in the path.
+                headers: Object.assign({ 'Content-Type': 'application/json', 'X-Goog-Upload-Protocol': 'resumable', 'X-Goog-Upload-Command': 'start', 'X-Goog-Upload-Header-Content-Length': `${sizeBytes}`, 'X-Goog-Upload-Header-Content-Type': `${mimeType}` }, (fileName ? { 'X-Goog-Upload-File-Name': fileName } : {})),
+            };
+        }
+        const httpResponse = await this.request({
+            path,
+            body: JSON.stringify(body),
+            httpMethod: 'POST',
+            httpOptions,
+        });
+        if (!httpResponse || !(httpResponse === null || httpResponse === void 0 ? void 0 : httpResponse.headers)) {
+            throw new Error('Server did not return an HttpResponse or the returned HttpResponse did not have headers.');
+        }
+        const uploadUrl = (_a = httpResponse === null || httpResponse === void 0 ? void 0 : httpResponse.headers) === null || _a === void 0 ? void 0 : _a['x-goog-upload-url'];
+        if (uploadUrl === undefined) {
+            throw new Error('Failed to get upload url. Server did not return the x-google-upload-url in the headers');
+        }
+        return uploadUrl;
+    }
+}
+async function throwErrorIfNotOK(response) {
+    var _a;
+    if (response === undefined) {
+        throw new Error('response is undefined');
+    }
+    if (!response.ok) {
+        const status = response.status;
+        let errorBody;
+        if ((_a = response.headers.get('content-type')) === null || _a === void 0 ? void 0 : _a.includes('application/json')) {
+            errorBody = await response.json();
+        }
+        else {
+            errorBody = {
+                error: {
+                    message: await response.text(),
+                    code: response.status,
+                    status: response.statusText,
+                },
+            };
+        }
+        const errorMessage = JSON.stringify(errorBody);
+        if (status >= 400 && status < 600) {
+            const apiError = new ApiError({
+                message: errorMessage,
+                status: status,
+            });
+            throw apiError;
+        }
+        throw new Error(errorMessage);
+    }
+}
+/**
+ * Recursively updates the `requestInit.body` with values from an `extraBody` object.
+ *
+ * If `requestInit.body` is a string, it's assumed to be JSON and will be parsed.
+ * The `extraBody` is then deeply merged into this parsed object.
+ * If `requestInit.body` is a Blob, `extraBody` will be ignored, and a warning logged,
+ * as merging structured data into an opaque Blob is not supported.
+ *
+ * The function does not enforce that updated values from `extraBody` have the
+ * same type as existing values in `requestInit.body`. Type mismatches during
+ * the merge will result in a warning, but the value from `extraBody` will overwrite
+ * the original. `extraBody` users are responsible for ensuring `extraBody` has the correct structure.
+ *
+ * @param requestInit The RequestInit object whose body will be updated.
+ * @param extraBody The object containing updates to be merged into `requestInit.body`.
+ */
+function includeExtraBodyToRequestInit(requestInit, extraBody) {
+    if (!extraBody || Object.keys(extraBody).length === 0) {
+        return;
+    }
+    if (requestInit.body instanceof Blob) {
+        console.warn('includeExtraBodyToRequestInit: extraBody provided but current request body is a Blob. extraBody will be ignored as merging is not supported for Blob bodies.');
+        return;
+    }
+    let currentBodyObject = {};
+    // If adding new type to HttpRequest.body, please check the code below to
+    // see if we need to update the logic.
+    if (typeof requestInit.body === 'string' && requestInit.body.length > 0) {
+        try {
+            const parsedBody = JSON.parse(requestInit.body);
+            if (typeof parsedBody === 'object' &&
+                parsedBody !== null &&
+                !Array.isArray(parsedBody)) {
+                currentBodyObject = parsedBody;
+            }
+            else {
+                console.warn('includeExtraBodyToRequestInit: Original request body is valid JSON but not a non-array object. Skip applying extraBody to the request body.');
+                return;
+            }
+            /*  eslint-disable-next-line @typescript-eslint/no-unused-vars */
+        }
+        catch (e) {
+            console.warn('includeExtraBodyToRequestInit: Original request body is not valid JSON. Skip applying extraBody to the request body.');
+            return;
+        }
+    }
+    function deepMerge(target, source) {
+        const output = Object.assign({}, target);
+        for (const key in source) {
+            if (Object.prototype.hasOwnProperty.call(source, key)) {
+                const sourceValue = source[key];
+                const targetValue = output[key];
+                if (sourceValue &&
+                    typeof sourceValue === 'object' &&
+                    !Array.isArray(sourceValue) &&
+                    targetValue &&
+                    typeof targetValue === 'object' &&
+                    !Array.isArray(targetValue)) {
+                    output[key] = deepMerge(targetValue, sourceValue);
+                }
+                else {
+                    if (targetValue &&
+                        sourceValue &&
+                        typeof targetValue !== typeof sourceValue) {
+                        console.warn(`includeExtraBodyToRequestInit:deepMerge: Type mismatch for key "${key}". Original type: ${typeof targetValue}, New type: ${typeof sourceValue}. Overwriting.`);
+                    }
+                    output[key] = sourceValue;
+                }
+            }
+        }
+        return output;
+    }
+    const mergedBody = deepMerge(currentBodyObject, extraBody);
+    requestInit.body = JSON.stringify(mergedBody);
+}
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+function crossError() {
+    // TODO(b/399934880): this message needs a link to a help page explaining how to enable conditional exports
+    return new Error(`This feature requires the web or Node specific @google/genai implementation, you can fix this by either:
+
+*Enabling conditional exports for your project [recommended]*
+
+*Using a platform specific import* - Make sure your code imports either '@google/genai/web' or '@google/genai/node' instead of '@google/genai'.
+`);
+}
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+class CrossDownloader {
+    async download(_params, _apiClient) {
+        throw crossError();
+    }
+}
+
+const MAX_CHUNK_SIZE = 1024 * 1024 * 8; // bytes
+const MAX_RETRY_COUNT = 3;
+const INITIAL_RETRY_DELAY_MS = 1000;
+const DELAY_MULTIPLIER = 2;
+const X_GOOG_UPLOAD_STATUS_HEADER_FIELD = 'x-goog-upload-status';
+class CrossUploader {
+    async upload(file, uploadUrl, apiClient, httpOptions) {
+        if (typeof file === 'string') {
+            throw crossError();
+        }
+        else {
+            return uploadBlob(file, uploadUrl, apiClient, httpOptions);
+        }
+    }
+    async uploadToFileSearchStore(file, uploadUrl, apiClient, httpOptions) {
+        if (typeof file === 'string') {
+            throw crossError();
+        }
+        else {
+            return uploadBlobToFileSearchStore(file, uploadUrl, apiClient, httpOptions);
+        }
+    }
+    async stat(file) {
+        if (typeof file === 'string') {
+            throw crossError();
+        }
+        else {
+            return getBlobStat(file);
+        }
+    }
+}
+async function uploadBlob(file, uploadUrl, apiClient, httpOptions) {
+    var _a;
+    const response = await uploadBlobInternal(file, uploadUrl, apiClient, httpOptions);
+    const responseJson = (await (response === null || response === void 0 ? void 0 : response.json()));
+    if (((_a = response === null || response === void 0 ? void 0 : response.headers) === null || _a === void 0 ? void 0 : _a[X_GOOG_UPLOAD_STATUS_HEADER_FIELD]) !== 'final') {
+        throw new Error('Failed to upload file: Upload status is not finalized.');
+    }
+    return responseJson['file'];
+}
+async function uploadBlobToFileSearchStore(file, uploadUrl, apiClient, httpOptions) {
+    var _a;
+    const response = await uploadBlobInternal(file, uploadUrl, apiClient, httpOptions);
+    const responseJson = (await (response === null || response === void 0 ? void 0 : response.json()));
+    if (((_a = response === null || response === void 0 ? void 0 : response.headers) === null || _a === void 0 ? void 0 : _a[X_GOOG_UPLOAD_STATUS_HEADER_FIELD]) !== 'final') {
+        throw new Error('Failed to upload file: Upload status is not finalized.');
+    }
+    const resp = uploadToFileSearchStoreOperationFromMldev(responseJson);
+    const typedResp = new UploadToFileSearchStoreOperation();
+    Object.assign(typedResp, resp);
+    return typedResp;
+}
+async function uploadBlobInternal(file, uploadUrl, apiClient, httpOptions) {
+    var _a, _b, _c;
+    let finalUrl = uploadUrl;
+    const effectiveBaseUrl = (httpOptions === null || httpOptions === void 0 ? void 0 : httpOptions.baseUrl) || ((_a = apiClient.clientOptions.httpOptions) === null || _a === void 0 ? void 0 : _a.baseUrl);
+    if (effectiveBaseUrl) {
+        const baseUri = new URL(effectiveBaseUrl);
+        const uploadUri = new URL(uploadUrl);
+        uploadUri.protocol = baseUri.protocol;
+        uploadUri.host = baseUri.host;
+        uploadUri.port = baseUri.port;
+        finalUrl = uploadUri.toString();
+    }
+    let fileSize = 0;
+    let offset = 0;
+    let response = new HttpResponse(new Response());
+    let uploadCommand = 'upload';
+    fileSize = file.size;
+    while (offset < fileSize) {
+        const chunkSize = Math.min(MAX_CHUNK_SIZE, fileSize - offset);
+        const chunk = file.slice(offset, offset + chunkSize);
+        if (offset + chunkSize >= fileSize) {
+            uploadCommand += ', finalize';
+        }
+        let retryCount = 0;
+        let currentDelayMs = INITIAL_RETRY_DELAY_MS;
+        while (retryCount < MAX_RETRY_COUNT) {
+            const mergedHeaders = Object.assign(Object.assign({}, ((httpOptions === null || httpOptions === void 0 ? void 0 : httpOptions.headers) || {})), { 'X-Goog-Upload-Command': uploadCommand, 'X-Goog-Upload-Offset': String(offset), 'Content-Length': String(chunkSize) });
+            response = await apiClient.request({
+                path: '',
+                body: chunk,
+                httpMethod: 'POST',
+                httpOptions: Object.assign(Object.assign({}, httpOptions), { apiVersion: '', baseUrl: finalUrl, headers: mergedHeaders }),
+            });
+            if ((_b = response === null || response === void 0 ? void 0 : response.headers) === null || _b === void 0 ? void 0 : _b[X_GOOG_UPLOAD_STATUS_HEADER_FIELD]) {
+                break;
+            }
+            retryCount++;
+            await sleep$1(currentDelayMs);
+            currentDelayMs = currentDelayMs * DELAY_MULTIPLIER;
+        }
+        offset += chunkSize;
+        // The `x-goog-upload-status` header field can be `active`, `final` and
+        //`cancelled` in resposne.
+        if (((_c = response === null || response === void 0 ? void 0 : response.headers) === null || _c === void 0 ? void 0 : _c[X_GOOG_UPLOAD_STATUS_HEADER_FIELD]) !== 'active') {
+            break;
+        }
+        // TODO(b/401391430) Investigate why the upload status is not finalized
+        // even though all content has been uploaded.
+        if (fileSize <= offset) {
+            throw new Error('All content has been uploaded, but the upload status is not finalized.');
+        }
+    }
+    return response;
+}
+async function getBlobStat(file) {
+    const fileStat = { size: file.size, type: file.type };
+    return fileStat;
+}
+function sleep$1(ms) {
+    return new Promise((resolvePromise) => setTimeout(resolvePromise, ms));
+}
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+class CrossWebSocketFactory {
+    create(_url, _headers, _callbacks) {
+        throw crossError();
     }
 }
 
@@ -7962,6 +9025,2702 @@ class Files extends BaseModule {
         }
     }
 }
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+// Code generated by the Google Gen AI SDK generator DO NOT EDIT.
+function deleteDocumentConfigToMldev(fromObject, parentObject) {
+    const toObject = {};
+    const fromForce = getValueByPath(fromObject, ['force']);
+    if (parentObject !== undefined && fromForce != null) {
+        setValueByPath(parentObject, ['_query', 'force'], fromForce);
+    }
+    return toObject;
+}
+function deleteDocumentParametersToMldev(fromObject) {
+    const toObject = {};
+    const fromName = getValueByPath(fromObject, ['name']);
+    if (fromName != null) {
+        setValueByPath(toObject, ['_url', 'name'], fromName);
+    }
+    const fromConfig = getValueByPath(fromObject, ['config']);
+    if (fromConfig != null) {
+        deleteDocumentConfigToMldev(fromConfig, toObject);
+    }
+    return toObject;
+}
+function getDocumentParametersToMldev(fromObject) {
+    const toObject = {};
+    const fromName = getValueByPath(fromObject, ['name']);
+    if (fromName != null) {
+        setValueByPath(toObject, ['_url', 'name'], fromName);
+    }
+    return toObject;
+}
+function listDocumentsConfigToMldev(fromObject, parentObject) {
+    const toObject = {};
+    const fromPageSize = getValueByPath(fromObject, ['pageSize']);
+    if (parentObject !== undefined && fromPageSize != null) {
+        setValueByPath(parentObject, ['_query', 'pageSize'], fromPageSize);
+    }
+    const fromPageToken = getValueByPath(fromObject, ['pageToken']);
+    if (parentObject !== undefined && fromPageToken != null) {
+        setValueByPath(parentObject, ['_query', 'pageToken'], fromPageToken);
+    }
+    return toObject;
+}
+function listDocumentsParametersToMldev(fromObject) {
+    const toObject = {};
+    const fromParent = getValueByPath(fromObject, ['parent']);
+    if (fromParent != null) {
+        setValueByPath(toObject, ['_url', 'parent'], fromParent);
+    }
+    const fromConfig = getValueByPath(fromObject, ['config']);
+    if (fromConfig != null) {
+        listDocumentsConfigToMldev(fromConfig, toObject);
+    }
+    return toObject;
+}
+function listDocumentsResponseFromMldev(fromObject) {
+    const toObject = {};
+    const fromSdkHttpResponse = getValueByPath(fromObject, [
+        'sdkHttpResponse',
+    ]);
+    if (fromSdkHttpResponse != null) {
+        setValueByPath(toObject, ['sdkHttpResponse'], fromSdkHttpResponse);
+    }
+    const fromNextPageToken = getValueByPath(fromObject, [
+        'nextPageToken',
+    ]);
+    if (fromNextPageToken != null) {
+        setValueByPath(toObject, ['nextPageToken'], fromNextPageToken);
+    }
+    const fromDocuments = getValueByPath(fromObject, ['documents']);
+    if (fromDocuments != null) {
+        let transformedList = fromDocuments;
+        if (Array.isArray(transformedList)) {
+            transformedList = transformedList.map((item) => {
+                return item;
+            });
+        }
+        setValueByPath(toObject, ['documents'], transformedList);
+    }
+    return toObject;
+}
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+class Documents extends BaseModule {
+    constructor(apiClient) {
+        super();
+        this.apiClient = apiClient;
+        /**
+         * Lists documents.
+         *
+         * @param params - The parameters for the list request.
+         * @return - A pager of documents.
+         *
+         * @example
+         * ```ts
+         * const documents = await ai.documents.list({parent:'rag_store_name', config: {'pageSize': 2}});
+         * for await (const document of documents) {
+         *   console.log(document);
+         * }
+         * ```
+         */
+        this.list = async (params) => {
+            return new Pager(PagedItem.PAGED_ITEM_DOCUMENTS, (x) => this.listInternal({ parent: params.parent, config: x.config }), await this.listInternal(params), params);
+        };
+    }
+    /**
+     * Gets a Document.
+     *
+     * @param params - The parameters for getting a document.
+     * @return Document.
+     */
+    async get(params) {
+        var _a, _b;
+        let response;
+        let path = '';
+        let queryParams = {};
+        if (this.apiClient.isVertexAI()) {
+            throw new Error('This method is only supported by the Gemini Developer API.');
+        }
+        else {
+            const body = getDocumentParametersToMldev(params);
+            path = formatMap('{name}', body['_url']);
+            queryParams = body['_query'];
+            delete body['_url'];
+            delete body['_query'];
+            response = this.apiClient
+                .request({
+                path: path,
+                queryParams: queryParams,
+                body: JSON.stringify(body),
+                httpMethod: 'GET',
+                httpOptions: (_a = params.config) === null || _a === void 0 ? void 0 : _a.httpOptions,
+                abortSignal: (_b = params.config) === null || _b === void 0 ? void 0 : _b.abortSignal,
+            })
+                .then((httpResponse) => {
+                return httpResponse.json();
+            });
+            return response.then((resp) => {
+                return resp;
+            });
+        }
+    }
+    /**
+     * Deletes a Document.
+     *
+     * @param params - The parameters for deleting a document.
+     */
+    async delete(params) {
+        var _a, _b;
+        let path = '';
+        let queryParams = {};
+        if (this.apiClient.isVertexAI()) {
+            throw new Error('This method is only supported by the Gemini Developer API.');
+        }
+        else {
+            const body = deleteDocumentParametersToMldev(params);
+            path = formatMap('{name}', body['_url']);
+            queryParams = body['_query'];
+            delete body['_url'];
+            delete body['_query'];
+            await this.apiClient.request({
+                path: path,
+                queryParams: queryParams,
+                body: JSON.stringify(body),
+                httpMethod: 'DELETE',
+                httpOptions: (_a = params.config) === null || _a === void 0 ? void 0 : _a.httpOptions,
+                abortSignal: (_b = params.config) === null || _b === void 0 ? void 0 : _b.abortSignal,
+            });
+        }
+    }
+    async listInternal(params) {
+        var _a, _b;
+        let response;
+        let path = '';
+        let queryParams = {};
+        if (this.apiClient.isVertexAI()) {
+            throw new Error('This method is only supported by the Gemini Developer API.');
+        }
+        else {
+            const body = listDocumentsParametersToMldev(params);
+            path = formatMap('{parent}/documents', body['_url']);
+            queryParams = body['_query'];
+            delete body['_url'];
+            delete body['_query'];
+            response = this.apiClient
+                .request({
+                path: path,
+                queryParams: queryParams,
+                body: JSON.stringify(body),
+                httpMethod: 'GET',
+                httpOptions: (_a = params.config) === null || _a === void 0 ? void 0 : _a.httpOptions,
+                abortSignal: (_b = params.config) === null || _b === void 0 ? void 0 : _b.abortSignal,
+            })
+                .then((httpResponse) => {
+                return httpResponse.json();
+            });
+            return response.then((apiResponse) => {
+                const resp = listDocumentsResponseFromMldev(apiResponse);
+                const typedResp = new ListDocumentsResponse();
+                Object.assign(typedResp, resp);
+                return typedResp;
+            });
+        }
+    }
+}
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+class FileSearchStores extends BaseModule {
+    constructor(apiClient, documents = new Documents(apiClient)) {
+        super();
+        this.apiClient = apiClient;
+        this.documents = documents;
+        /**
+         * Lists file search stores.
+         *
+         * @param params - The parameters for the list request.
+         * @return - A pager of file search stores.
+         *
+         * @example
+         * ```ts
+         * const fileSearchStores = await ai.fileSearchStores.list({config: {'pageSize': 2}});
+         * for await (const fileSearchStore of fileSearchStores) {
+         *   console.log(fileSearchStore);
+         * }
+         * ```
+         */
+        this.list = async (params = {}) => {
+            return new Pager(PagedItem.PAGED_ITEM_FILE_SEARCH_STORES, (x) => this.listInternal(x), await this.listInternal(params), params);
+        };
+    }
+    /**
+     * Uploads a file asynchronously to a given File Search Store.
+     * This method is not available in Gemini Enterprise Agent Platform (previously known as Vertex AI).
+     * Supported upload sources:
+     * - Node.js: File path (string) or Blob object.
+     * - Browser: Blob object (e.g., File).
+     *
+     * @remarks
+     * The `mimeType` can be specified in the `config` parameter. If omitted:
+     *  - For file path (string) inputs, the `mimeType` will be inferred from the
+     *     file extension.
+     *  - For Blob object inputs, the `mimeType` will be set to the Blob's `type`
+     *     property.
+     *
+     * This section can contain multiple paragraphs and code examples.
+     *
+     * @param params - Optional parameters specified in the
+     *        `types.UploadToFileSearchStoreParameters` interface.
+     *         @see {@link types.UploadToFileSearchStoreParameters#config} for the optional
+     *         config in the parameters.
+     * @return A promise that resolves to a long running operation.
+     * @throws An error if called on a Gemini Enterprise Agent Platform (previously known as Vertex AI) client.
+     * @throws An error if the `mimeType` is not provided and can not be inferred,
+     * the `mimeType` can be provided in the `params.config` parameter.
+     * @throws An error occurs if a suitable upload location cannot be established.
+     *
+     * @example
+     * The following code uploads a file to a given file search store.
+     *
+     * ```ts
+     * const operation = await ai.fileSearchStores.upload({fileSearchStoreName: 'fileSearchStores/foo-bar', file: 'file.txt', config: {
+     *   mimeType: 'text/plain',
+     * }});
+     * console.log(operation.name);
+     * ```
+     */
+    async uploadToFileSearchStore(params) {
+        if (this.apiClient.isVertexAI()) {
+            throw new Error('Gemini Enterprise Agent Platform (previously known as Vertex AI) does not support uploading files to a file search store.');
+        }
+        return this.apiClient.uploadFileToFileSearchStore(params.fileSearchStoreName, params.file, params.config);
+    }
+    /**
+     * Downloads media using a Media ID or URI.
+     * This method is only supported in the Gemini Developer client.
+     *
+     * @param uri - The URI or Media ID of the blob.
+     * @param config - Optional configuration for the download.
+     * @returns A promise that resolves to the blob data as a Uint8Array.
+     */
+    async downloadMedia(uri, config) {
+        if (this.apiClient.isVertexAI()) {
+            throw new Error('This method is only supported in the Gemini Developer client.');
+        }
+        const parsedUri = new URL(uri, 'http://dummy.com');
+        let pathname = parsedUri.pathname;
+        if (pathname.startsWith('/')) {
+            pathname = pathname.slice(1);
+        }
+        if (!pathname.includes('/media/')) {
+            throw new Error(`Invalid uri format: ${uri}. Expected to contain /media/`);
+        }
+        const queryParams = {};
+        parsedUri.searchParams.forEach((value, key) => {
+            queryParams[key] = value;
+        });
+        queryParams['alt'] = 'media';
+        const httpOptions = Object.assign({}, config === null || config === void 0 ? void 0 : config.httpOptions);
+        const response = await this.apiClient.request({
+            path: pathname,
+            httpMethod: 'GET',
+            queryParams: queryParams,
+            httpOptions: httpOptions,
+        });
+        if (response instanceof HttpResponse) {
+            const arrayBuffer = await response.responseInternal.arrayBuffer();
+            return new Uint8Array(arrayBuffer);
+        }
+        else {
+            throw new Error('Unexpected response type from downloadMedia');
+        }
+    }
+    /**
+     * Creates a File Search Store.
+     *
+     * @param params - The parameters for creating a File Search Store.
+     * @return FileSearchStore.
+     */
+    async create(params) {
+        var _a, _b;
+        let response;
+        let path = '';
+        let queryParams = {};
+        if (this.apiClient.isVertexAI()) {
+            throw new Error('This method is only supported by the Gemini Developer API.');
+        }
+        else {
+            const body = createFileSearchStoreParametersToMldev(this.apiClient, params);
+            path = formatMap('fileSearchStores', body['_url']);
+            queryParams = body['_query'];
+            delete body['_url'];
+            delete body['_query'];
+            response = this.apiClient
+                .request({
+                path: path,
+                queryParams: queryParams,
+                body: JSON.stringify(body),
+                httpMethod: 'POST',
+                httpOptions: (_a = params.config) === null || _a === void 0 ? void 0 : _a.httpOptions,
+                abortSignal: (_b = params.config) === null || _b === void 0 ? void 0 : _b.abortSignal,
+            })
+                .then((httpResponse) => {
+                return httpResponse.json();
+            });
+            return response.then((resp) => {
+                return resp;
+            });
+        }
+    }
+    /**
+     * Gets a File Search Store.
+     *
+     * @param params - The parameters for getting a File Search Store.
+     * @return FileSearchStore.
+     */
+    async get(params) {
+        var _a, _b;
+        let response;
+        let path = '';
+        let queryParams = {};
+        if (this.apiClient.isVertexAI()) {
+            throw new Error('This method is only supported by the Gemini Developer API.');
+        }
+        else {
+            const body = getFileSearchStoreParametersToMldev(params);
+            path = formatMap('{name}', body['_url']);
+            queryParams = body['_query'];
+            delete body['_url'];
+            delete body['_query'];
+            response = this.apiClient
+                .request({
+                path: path,
+                queryParams: queryParams,
+                body: JSON.stringify(body),
+                httpMethod: 'GET',
+                httpOptions: (_a = params.config) === null || _a === void 0 ? void 0 : _a.httpOptions,
+                abortSignal: (_b = params.config) === null || _b === void 0 ? void 0 : _b.abortSignal,
+            })
+                .then((httpResponse) => {
+                return httpResponse.json();
+            });
+            return response.then((resp) => {
+                return resp;
+            });
+        }
+    }
+    /**
+     * Deletes a File Search Store.
+     *
+     * @param params - The parameters for deleting a File Search Store.
+     */
+    async delete(params) {
+        var _a, _b;
+        let path = '';
+        let queryParams = {};
+        if (this.apiClient.isVertexAI()) {
+            throw new Error('This method is only supported by the Gemini Developer API.');
+        }
+        else {
+            const body = deleteFileSearchStoreParametersToMldev(params);
+            path = formatMap('{name}', body['_url']);
+            queryParams = body['_query'];
+            delete body['_url'];
+            delete body['_query'];
+            await this.apiClient.request({
+                path: path,
+                queryParams: queryParams,
+                body: JSON.stringify(body),
+                httpMethod: 'DELETE',
+                httpOptions: (_a = params.config) === null || _a === void 0 ? void 0 : _a.httpOptions,
+                abortSignal: (_b = params.config) === null || _b === void 0 ? void 0 : _b.abortSignal,
+            });
+        }
+    }
+    async listInternal(params) {
+        var _a, _b;
+        let response;
+        let path = '';
+        let queryParams = {};
+        if (this.apiClient.isVertexAI()) {
+            throw new Error('This method is only supported by the Gemini Developer API.');
+        }
+        else {
+            const body = listFileSearchStoresParametersToMldev(params);
+            path = formatMap('fileSearchStores', body['_url']);
+            queryParams = body['_query'];
+            delete body['_url'];
+            delete body['_query'];
+            response = this.apiClient
+                .request({
+                path: path,
+                queryParams: queryParams,
+                body: JSON.stringify(body),
+                httpMethod: 'GET',
+                httpOptions: (_a = params.config) === null || _a === void 0 ? void 0 : _a.httpOptions,
+                abortSignal: (_b = params.config) === null || _b === void 0 ? void 0 : _b.abortSignal,
+            })
+                .then((httpResponse) => {
+                return httpResponse.json();
+            });
+            return response.then((apiResponse) => {
+                const resp = listFileSearchStoresResponseFromMldev(apiResponse);
+                const typedResp = new ListFileSearchStoresResponse();
+                Object.assign(typedResp, resp);
+                return typedResp;
+            });
+        }
+    }
+    async uploadToFileSearchStoreInternal(params) {
+        var _a, _b;
+        let response;
+        let path = '';
+        let queryParams = {};
+        if (this.apiClient.isVertexAI()) {
+            throw new Error('This method is only supported by the Gemini Developer API.');
+        }
+        else {
+            const body = uploadToFileSearchStoreParametersToMldev(params);
+            path = formatMap('upload/v1beta/{file_search_store_name}:uploadToFileSearchStore', body['_url']);
+            queryParams = body['_query'];
+            delete body['_url'];
+            delete body['_query'];
+            response = this.apiClient
+                .request({
+                path: path,
+                queryParams: queryParams,
+                body: JSON.stringify(body),
+                httpMethod: 'POST',
+                httpOptions: (_a = params.config) === null || _a === void 0 ? void 0 : _a.httpOptions,
+                abortSignal: (_b = params.config) === null || _b === void 0 ? void 0 : _b.abortSignal,
+            })
+                .then((httpResponse) => {
+                return httpResponse.json();
+            });
+            return response.then((apiResponse) => {
+                const resp = uploadToFileSearchStoreResumableResponseFromMldev(apiResponse);
+                const typedResp = new UploadToFileSearchStoreResumableResponse();
+                Object.assign(typedResp, resp);
+                return typedResp;
+            });
+        }
+    }
+    /**
+     * Imports a File from File Service to a FileSearchStore.
+     *
+     * This is a long-running operation, see aip.dev/151
+     *
+     * @param params - The parameters for importing a file to a file search store.
+     * @return ImportFileOperation.
+     */
+    async importFile(params) {
+        var _a, _b;
+        let response;
+        let path = '';
+        let queryParams = {};
+        if (this.apiClient.isVertexAI()) {
+            throw new Error('This method is only supported by the Gemini Developer API.');
+        }
+        else {
+            const body = importFileParametersToMldev(params);
+            path = formatMap('{file_search_store_name}:importFile', body['_url']);
+            queryParams = body['_query'];
+            delete body['_url'];
+            delete body['_query'];
+            response = this.apiClient
+                .request({
+                path: path,
+                queryParams: queryParams,
+                body: JSON.stringify(body),
+                httpMethod: 'POST',
+                httpOptions: (_a = params.config) === null || _a === void 0 ? void 0 : _a.httpOptions,
+                abortSignal: (_b = params.config) === null || _b === void 0 ? void 0 : _b.abortSignal,
+            })
+                .then((httpResponse) => {
+                return httpResponse.json();
+            });
+            return response.then((apiResponse) => {
+                const resp = importFileOperationFromMldev(apiResponse);
+                const typedResp = new ImportFileOperation();
+                Object.assign(typedResp, resp);
+                return typedResp;
+            });
+        }
+    }
+}
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+/**
+ * https://stackoverflow.com/a/2117523
+ */
+let uuid4Internal = function () {
+    const { crypto } = globalThis;
+    if (crypto === null || crypto === void 0 ? void 0 : crypto.randomUUID) {
+        uuid4Internal = crypto.randomUUID.bind(crypto);
+        return crypto.randomUUID();
+    }
+    const u8 = new Uint8Array(1);
+    const randomByte = crypto ? () => crypto.getRandomValues(u8)[0] : () => (Math.random() * 0xff) & 0xff;
+    return '10000000-1000-4000-8000-100000000000'.replace(/[018]/g, (c) => (+c ^ (randomByte() & (15 >> (+c / 4)))).toString(16));
+};
+const uuid4 = () => uuid4Internal();
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+function isAbortError(err) {
+    return (typeof err === 'object' &&
+        err !== null &&
+        // Spec-compliant fetch implementations
+        (('name' in err && err.name === 'AbortError') ||
+            // Expo fetch
+            ('message' in err && String(err.message).includes('FetchRequestCanceledException'))));
+}
+const castToError = (err) => {
+    if (err instanceof Error)
+        return err;
+    if (typeof err === 'object' && err !== null) {
+        try {
+            if (Object.prototype.toString.call(err) === '[object Error]') {
+                // @ts-ignore - not all envs have native support for cause yet
+                const error = new Error(err.message, err.cause ? { cause: err.cause } : {});
+                if (err.stack)
+                    error.stack = err.stack;
+                // @ts-ignore - not all envs have native support for cause yet
+                if (err.cause && !error.cause)
+                    error.cause = err.cause;
+                if (err.name)
+                    error.name = err.name;
+                return error;
+            }
+        }
+        catch (_a) { }
+        try {
+            return new Error(JSON.stringify(err));
+        }
+        catch (_b) { }
+    }
+    return new Error(err);
+};
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+class GeminiNextGenAPIClientError extends Error {
+}
+class APIError extends GeminiNextGenAPIClientError {
+    constructor(status, error, message, headers) {
+        super(`${APIError.makeMessage(status, error, message)}`);
+        this.status = status;
+        this.headers = headers;
+        this.error = error;
+    }
+    static makeMessage(status, error, message) {
+        const msg = (error === null || error === void 0 ? void 0 : error.message) ?
+            typeof error.message === 'string' ?
+                error.message
+                : JSON.stringify(error.message)
+            : error ? JSON.stringify(error)
+                : message;
+        if (status && msg) {
+            return `${status} ${msg}`;
+        }
+        if (status) {
+            return `${status} status code (no body)`;
+        }
+        if (msg) {
+            return msg;
+        }
+        return '(no status code or body)';
+    }
+    static generate(status, errorResponse, message, headers) {
+        if (!status || !headers) {
+            return new APIConnectionError({ message, cause: castToError(errorResponse) });
+        }
+        const error = errorResponse;
+        if (status === 400) {
+            return new BadRequestError(status, error, message, headers);
+        }
+        if (status === 401) {
+            return new AuthenticationError(status, error, message, headers);
+        }
+        if (status === 403) {
+            return new PermissionDeniedError(status, error, message, headers);
+        }
+        if (status === 404) {
+            return new NotFoundError(status, error, message, headers);
+        }
+        if (status === 409) {
+            return new ConflictError(status, error, message, headers);
+        }
+        if (status === 422) {
+            return new UnprocessableEntityError(status, error, message, headers);
+        }
+        if (status === 429) {
+            return new RateLimitError(status, error, message, headers);
+        }
+        if (status >= 500) {
+            return new InternalServerError(status, error, message, headers);
+        }
+        return new APIError(status, error, message, headers);
+    }
+}
+class APIUserAbortError extends APIError {
+    constructor({ message } = {}) {
+        super(undefined, undefined, message || 'Request was aborted.', undefined);
+    }
+}
+class APIConnectionError extends APIError {
+    constructor({ message, cause }) {
+        super(undefined, undefined, message || 'Connection error.', undefined);
+        // in some environments the 'cause' property is already declared
+        // @ts-ignore
+        if (cause)
+            this.cause = cause;
+    }
+}
+class APIConnectionTimeoutError extends APIConnectionError {
+    constructor({ message } = {}) {
+        super({
+            message: message !== null && message !== void 0 ? message : 'Request timed out. This is a client-side timeout. You can increase the timeout by setting the `timeout` argument in your request or client http options.',
+        });
+    }
+}
+class BadRequestError extends APIError {
+}
+class AuthenticationError extends APIError {
+}
+class PermissionDeniedError extends APIError {
+}
+class NotFoundError extends APIError {
+}
+class ConflictError extends APIError {
+}
+class UnprocessableEntityError extends APIError {
+}
+class RateLimitError extends APIError {
+}
+class InternalServerError extends APIError {
+}
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+// https://url.spec.whatwg.org/#url-scheme-string
+const startsWithSchemeRegexp = /^[a-z][a-z0-9+.-]*:/i;
+const isAbsoluteURL = (url) => {
+    return startsWithSchemeRegexp.test(url);
+};
+let isArrayInternal = (val) => ((isArrayInternal = Array.isArray), isArrayInternal(val));
+const isArray = isArrayInternal;
+let isReadonlyArrayInternal = isArray;
+const isReadonlyArray = isReadonlyArrayInternal;
+// https://stackoverflow.com/a/34491287
+function isEmptyObj(obj) {
+    if (!obj)
+        return true;
+    for (const _k in obj)
+        return false;
+    return true;
+}
+// https://eslint.org/docs/latest/rules/no-prototype-builtins
+function hasOwn(obj, key) {
+    return Object.prototype.hasOwnProperty.call(obj, key);
+}
+const validatePositiveInteger = (name, n) => {
+    if (typeof n !== 'number' || !Number.isInteger(n)) {
+        throw new GeminiNextGenAPIClientError(`${name} must be an integer`);
+    }
+    if (n < 0) {
+        throw new GeminiNextGenAPIClientError(`${name} must be a positive integer`);
+    }
+    return n;
+};
+const safeJSON = (text) => {
+    try {
+        return JSON.parse(text);
+    }
+    catch (err) {
+        return undefined;
+    }
+};
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+function getDefaultFetch() {
+    if (typeof fetch !== 'undefined') {
+        return fetch;
+    }
+    throw new Error('`fetch` is not defined as a global; Either pass `fetch` to the client, `new GeminiNextGenAPIClient({ fetch })` or polyfill the global, `globalThis.fetch = fetch`');
+}
+function makeReadableStream(...args) {
+    const ReadableStream = globalThis.ReadableStream;
+    if (typeof ReadableStream === 'undefined') {
+        // Note: All of the platforms / runtimes we officially support already define
+        // `ReadableStream` as a global, so this should only ever be hit on unsupported runtimes.
+        throw new Error('`ReadableStream` is not defined as a global; You will need to polyfill it, `globalThis.ReadableStream = ReadableStream`');
+    }
+    return new ReadableStream(...args);
+}
+function ReadableStreamFrom(iterable) {
+    let iter = Symbol.asyncIterator in iterable ? iterable[Symbol.asyncIterator]() : iterable[Symbol.iterator]();
+    return makeReadableStream({
+        start() { },
+        async pull(controller) {
+            const { done, value } = await iter.next();
+            if (done) {
+                controller.close();
+            }
+            else {
+                controller.enqueue(value);
+            }
+        },
+        async cancel() {
+            var _a;
+            await ((_a = iter.return) === null || _a === void 0 ? void 0 : _a.call(iter));
+        },
+    });
+}
+/**
+ * Most browsers don't yet have async iterable support for ReadableStream,
+ * and Node has a very different way of reading bytes from its "ReadableStream".
+ *
+ * This polyfill was pulled from https://github.com/MattiasBuelens/web-streams-polyfill/pull/122#issuecomment-1627354490
+ */
+function ReadableStreamToAsyncIterable(stream) {
+    if (stream[Symbol.asyncIterator])
+        return stream;
+    const reader = stream.getReader();
+    return {
+        async next() {
+            try {
+                const result = await reader.read();
+                if (result === null || result === void 0 ? void 0 : result.done)
+                    reader.releaseLock(); // release lock when stream becomes closed
+                return result;
+            }
+            catch (e) {
+                reader.releaseLock(); // release lock when stream becomes errored
+                throw e;
+            }
+        },
+        async return() {
+            const cancelPromise = reader.cancel();
+            reader.releaseLock();
+            await cancelPromise;
+            return { done: true, value: undefined };
+        },
+        [Symbol.asyncIterator]() {
+            return this;
+        },
+    };
+}
+/**
+ * Cancels a ReadableStream we don't need to consume.
+ * See https://undici.nodejs.org/#/?id=garbage-collection
+ */
+async function CancelReadableStream(stream) {
+    var _a, _b;
+    if (stream === null || typeof stream !== 'object')
+        return;
+    if (stream[Symbol.asyncIterator]) {
+        await ((_b = (_a = stream[Symbol.asyncIterator]()).return) === null || _b === void 0 ? void 0 : _b.call(_a));
+        return;
+    }
+    const reader = stream.getReader();
+    const cancelPromise = reader.cancel();
+    reader.releaseLock();
+    await cancelPromise;
+}
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+const FallbackEncoder = ({ headers, body }) => {
+    return {
+        bodyHeaders: {
+            'content-type': 'application/json',
+        },
+        body: JSON.stringify(body),
+    };
+};
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+/**
+ * Basic re-implementation of `qs.stringify` for primitive types.
+ */
+function stringifyQuery(query) {
+    return Object.entries(query)
+        .filter(([_, value]) => typeof value !== 'undefined')
+        .map(([key, value]) => {
+        if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+            return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+        }
+        if (value === null) {
+            return `${encodeURIComponent(key)}=`;
+        }
+        throw new GeminiNextGenAPIClientError(`Cannot stringify type ${typeof value}; Expected string, number, boolean, or null. If you need to pass nested query parameters, you can manually encode them, e.g. { query: { 'foo[key1]': value1, 'foo[key2]': value2 } }, and please open a GitHub issue requesting better support for your use case.`);
+    })
+        .join('&');
+}
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+const VERSION = '0.0.1';
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+const checkFileSupport = () => {
+    var _a;
+    if (typeof File === 'undefined') {
+        const { process } = globalThis;
+        const isOldNode = typeof ((_a = process === null || process === void 0 ? void 0 : process.versions) === null || _a === void 0 ? void 0 : _a.node) === 'string' && parseInt(process.versions.node.split('.')) < 20;
+        throw new Error('`File` is not defined as a global, which is required for file uploads.' +
+            (isOldNode ?
+                " Update to Node 20 LTS or newer, or set `globalThis.File` to `import('node:buffer').File`."
+                : ''));
+    }
+};
+/**
+ * Construct a `File` instance. This is used to ensure a helpful error is thrown
+ * for environments that don't define a global `File` yet.
+ */
+function makeFile(fileBits, fileName, options) {
+    checkFileSupport();
+    return new File(fileBits, fileName !== null && fileName !== void 0 ? fileName : 'unknown_file', options);
+}
+function getName(value) {
+    return (((typeof value === 'object' &&
+        value !== null &&
+        (('name' in value && value.name && String(value.name)) ||
+            ('url' in value && value.url && String(value.url)) ||
+            ('filename' in value && value.filename && String(value.filename)) ||
+            ('path' in value && value.path && String(value.path)))) ||
+        '')
+        .split(/[\\/]/)
+        .pop() || undefined);
+}
+const isAsyncIterable = (value) => value != null && typeof value === 'object' && typeof value[Symbol.asyncIterator] === 'function';
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/**
+ * This check adds the arrayBuffer() method type because it is available and used at runtime
+ */
+const isBlobLike = (value) => value != null &&
+    typeof value === 'object' &&
+    typeof value.size === 'number' &&
+    typeof value.type === 'string' &&
+    typeof value.text === 'function' &&
+    typeof value.slice === 'function' &&
+    typeof value.arrayBuffer === 'function';
+/**
+ * This check adds the arrayBuffer() method type because it is available and used at runtime
+ */
+const isFileLike = (value) => value != null &&
+    typeof value === 'object' &&
+    typeof value.name === 'string' &&
+    typeof value.lastModified === 'number' &&
+    isBlobLike(value);
+const isResponseLike = (value) => value != null &&
+    typeof value === 'object' &&
+    typeof value.url === 'string' &&
+    typeof value.blob === 'function';
+/**
+ * Helper for creating a {@link File} to pass to an SDK upload method from a variety of different data formats
+ * @param value the raw content of the file. Can be an {@link Uploadable}, BlobLikePart, or AsyncIterable of BlobLikeParts
+ * @param {string=} name the name of the file. If omitted, toFile will try to determine a file name from bits if possible
+ * @param {Object=} options additional properties
+ * @param {string=} options.type the MIME type of the content
+ * @param {number=} options.lastModified the last modified timestamp
+ * @returns a {@link File} with the given properties
+ */
+async function toFile(value, name, options) {
+    checkFileSupport();
+    // If it's a promise, resolve it.
+    value = await value;
+    // If we've been given a `File` we don't need to do anything
+    if (isFileLike(value)) {
+        if (value instanceof File) {
+            return value;
+        }
+        return makeFile([await value.arrayBuffer()], value.name);
+    }
+    if (isResponseLike(value)) {
+        const blob = await value.blob();
+        name || (name = new URL(value.url).pathname.split(/[\\/]/).pop());
+        return makeFile(await getBytes(blob), name, options);
+    }
+    const parts = await getBytes(value);
+    name || (name = getName(value));
+    if (!(options === null || options === void 0 ? void 0 : options.type)) {
+        const type = parts.find((part) => typeof part === 'object' && 'type' in part && part.type);
+        if (typeof type === 'string') {
+            options = Object.assign(Object.assign({}, options), { type });
+        }
+    }
+    return makeFile(parts, name, options);
+}
+async function getBytes(value) {
+    var _a, e_1, _b, _c;
+    var _d;
+    let parts = [];
+    if (typeof value === 'string' ||
+        ArrayBuffer.isView(value) || // includes Uint8Array, Buffer, etc.
+        value instanceof ArrayBuffer) {
+        parts.push(value);
+    }
+    else if (isBlobLike(value)) {
+        parts.push(value instanceof Blob ? value : await value.arrayBuffer());
+    }
+    else if (isAsyncIterable(value) // includes Readable, ReadableStream, etc.
+    ) {
+        try {
+            for (var _e = true, value_1 = __asyncValues(value), value_1_1; value_1_1 = await value_1.next(), _a = value_1_1.done, !_a; _e = true) {
+                _c = value_1_1.value;
+                _e = false;
+                const chunk = _c;
+                parts.push(...(await getBytes(chunk))); // TODO, consider validating?
+            }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (!_e && !_a && (_b = value_1.return)) await _b.call(value_1);
+            }
+            finally { if (e_1) throw e_1.error; }
+        }
+    }
+    else {
+        const constructor = (_d = value === null || value === void 0 ? void 0 : value.constructor) === null || _d === void 0 ? void 0 : _d.name;
+        throw new Error(`Unexpected data type: ${typeof value}${constructor ? `; constructor: ${constructor}` : ''}${propsForError(value)}`);
+    }
+    return parts;
+}
+function propsForError(value) {
+    if (typeof value !== 'object' || value === null)
+        return '';
+    const props = Object.getOwnPropertyNames(value);
+    return `; props: [${props.map((p) => `"${p}"`).join(', ')}]`;
+}
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+class APIResource {
+    constructor(client) {
+        this._client = client;
+    }
+}
+/**
+ * The key path from the client. For example, a resource accessible as `client.resource.subresource` would
+ * have a property `static override readonly _key = Object.freeze(['resource', 'subresource'] as const);`.
+ */
+APIResource._key = [];
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/**
+ * Percent-encode everything that isn't safe to have in a path without encoding safe chars.
+ *
+ * Taken from https://datatracker.ietf.org/doc/html/rfc3986#section-3.3:
+ * > unreserved  = ALPHA / DIGIT / "-" / "." / "_" / "~"
+ * > sub-delims  = "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / ";" / "="
+ * > pchar       = unreserved / pct-encoded / sub-delims / ":" / "@"
+ */
+function encodeURIPath(str) {
+    return str.replace(/[^A-Za-z0-9\-._~!$&'()*+,;=:@]+/g, encodeURIComponent);
+}
+const EMPTY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.create(null));
+const createPathTagFunction = (pathEncoder = encodeURIPath) => (function path(statics, ...params) {
+    // If there are no params, no processing is needed.
+    if (statics.length === 1)
+        return statics[0];
+    let postPath = false;
+    const invalidSegments = [];
+    const path = statics.reduce((previousValue, currentValue, index) => {
+        var _a, _b, _c;
+        if (/[?#]/.test(currentValue)) {
+            postPath = true;
+        }
+        const value = params[index];
+        let encoded = (postPath ? encodeURIComponent : pathEncoder)('' + value);
+        if (index !== params.length &&
+            (value == null ||
+                (typeof value === 'object' &&
+                    // handle values from other realms
+                    value.toString ===
+                        ((_c = Object.getPrototypeOf((_b = Object.getPrototypeOf((_a = value.hasOwnProperty) !== null && _a !== void 0 ? _a : EMPTY)) !== null && _b !== void 0 ? _b : EMPTY)) === null || _c === void 0 ? void 0 : _c.toString)))) {
+            encoded = value + '';
+            invalidSegments.push({
+                start: previousValue.length + currentValue.length,
+                length: encoded.length,
+                error: `Value of type ${Object.prototype.toString
+                    .call(value)
+                    .slice(8, -1)} is not a valid path parameter`,
+            });
+        }
+        return previousValue + currentValue + (index === params.length ? '' : encoded);
+    }, '');
+    const pathOnly = path.split(/[?#]/, 1)[0];
+    const invalidSegmentPattern = /(^|\/)(?:\.|%2e){1,2}(?=\/|$)/gi;
+    let match;
+    // Find all invalid segments
+    while ((match = invalidSegmentPattern.exec(pathOnly)) !== null) {
+        const hasLeadingSlash = match[0].startsWith('/');
+        const offset = hasLeadingSlash ? 1 : 0;
+        const cleanMatch = hasLeadingSlash ? match[0].slice(1) : match[0];
+        invalidSegments.push({
+            start: match.index + offset,
+            length: cleanMatch.length,
+            error: `Value "${cleanMatch}" can\'t be safely passed as a path parameter`,
+        });
+    }
+    invalidSegments.sort((a, b) => a.start - b.start);
+    if (invalidSegments.length > 0) {
+        let lastEnd = 0;
+        const underline = invalidSegments.reduce((acc, segment) => {
+            const spaces = ' '.repeat(segment.start - lastEnd);
+            const arrows = '^'.repeat(segment.length);
+            lastEnd = segment.start + segment.length;
+            return acc + spaces + arrows;
+        }, '');
+        throw new GeminiNextGenAPIClientError(`Path parameters result in path with invalid segments:\n${invalidSegments
+            .map((e) => e.error)
+            .join('\n')}\n${path}\n${underline}`);
+    }
+    return path;
+});
+/**
+ * URI-encodes path params and ensures no unsafe /./ or /../ path segments are introduced.
+ */
+const path = /* @__PURE__ */ createPathTagFunction(encodeURIPath);
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+class BaseAgents extends APIResource {
+    /**
+     * Creates a new Agent (Typed version for SDK).
+     */
+    create(params = {}, options) {
+        const _a = params !== null && params !== void 0 ? params : {}, { api_version = this._client.apiVersion } = _a, body = __rest(_a, ["api_version"]);
+        return this._client.post(path `/${api_version}/agents`, Object.assign({ body }, options));
+    }
+    /**
+     * Lists all Agents.
+     */
+    list(params = {}, options) {
+        const _a = params !== null && params !== void 0 ? params : {}, { api_version = this._client.apiVersion } = _a, query = __rest(_a, ["api_version"]);
+        return this._client.get(path `/${api_version}/agents`, Object.assign({ query }, options));
+    }
+    /**
+     * Deletes an Agent.
+     */
+    delete(id, params = {}, options) {
+        const { api_version = this._client.apiVersion } = params !== null && params !== void 0 ? params : {};
+        return this._client.delete(path `/${api_version}/agents/${id}`, options);
+    }
+    /**
+     * Gets a specific Agent.
+     */
+    get(id, params = {}, options) {
+        const { api_version = this._client.apiVersion } = params !== null && params !== void 0 ? params : {};
+        return this._client.get(path `/${api_version}/agents/${id}`, options);
+    }
+}
+BaseAgents._key = Object.freeze(['agents']);
+class Agents extends BaseAgents {
+}
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+function concatBytes(buffers) {
+    let length = 0;
+    for (const buffer of buffers) {
+        length += buffer.length;
+    }
+    const output = new Uint8Array(length);
+    let index = 0;
+    for (const buffer of buffers) {
+        output.set(buffer, index);
+        index += buffer.length;
+    }
+    return output;
+}
+let encodeUTF8_;
+function encodeUTF8(str) {
+    let encoder;
+    return (encodeUTF8_ !== null && encodeUTF8_ !== void 0 ? encodeUTF8_ : ((encoder = new globalThis.TextEncoder()), (encodeUTF8_ = encoder.encode.bind(encoder))))(str);
+}
+let decodeUTF8_;
+function decodeUTF8(bytes) {
+    let decoder;
+    return (decodeUTF8_ !== null && decodeUTF8_ !== void 0 ? decodeUTF8_ : ((decoder = new globalThis.TextDecoder()), (decodeUTF8_ = decoder.decode.bind(decoder))))(bytes);
+}
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/**
+ * A re-implementation of httpx's `LineDecoder` in Python that handles incrementally
+ * reading lines from text.
+ *
+ * https://github.com/encode/httpx/blob/920333ea98118e9cf617f246905d7b202510941c/httpx/_decoders.py#L258
+ */
+class LineDecoder {
+    constructor() {
+        this.buffer = new Uint8Array();
+        this.carriageReturnIndex = null;
+        this.searchIndex = 0;
+    }
+    decode(chunk) {
+        var _a;
+        if (chunk == null) {
+            return [];
+        }
+        const binaryChunk = chunk instanceof ArrayBuffer ? new Uint8Array(chunk)
+            : typeof chunk === 'string' ? encodeUTF8(chunk)
+                : chunk;
+        this.buffer = concatBytes([this.buffer, binaryChunk]);
+        const lines = [];
+        let patternIndex;
+        while ((patternIndex = findNewlineIndex(this.buffer, (_a = this.carriageReturnIndex) !== null && _a !== void 0 ? _a : this.searchIndex)) != null) {
+            if (patternIndex.carriage && this.carriageReturnIndex == null) {
+                // skip until we either get a corresponding `\n`, a new `\r` or nothing
+                this.carriageReturnIndex = patternIndex.index;
+                continue;
+            }
+            // we got double \r or \rtext\n
+            if (this.carriageReturnIndex != null &&
+                (patternIndex.index !== this.carriageReturnIndex + 1 || patternIndex.carriage)) {
+                lines.push(decodeUTF8(this.buffer.subarray(0, this.carriageReturnIndex - 1)));
+                this.buffer = this.buffer.subarray(this.carriageReturnIndex);
+                this.carriageReturnIndex = null;
+                this.searchIndex = 0;
+                continue;
+            }
+            const endIndex = this.carriageReturnIndex !== null ? patternIndex.preceding - 1 : patternIndex.preceding;
+            const line = decodeUTF8(this.buffer.subarray(0, endIndex));
+            lines.push(line);
+            this.buffer = this.buffer.subarray(patternIndex.index);
+            this.carriageReturnIndex = null;
+            this.searchIndex = 0;
+        }
+        this.searchIndex = Math.max(0, this.buffer.length - 1);
+        return lines;
+    }
+    flush() {
+        if (!this.buffer.length) {
+            return [];
+        }
+        return this.decode('\n');
+    }
+}
+// prettier-ignore
+LineDecoder.NEWLINE_CHARS = new Set(['\n', '\r']);
+LineDecoder.NEWLINE_REGEXP = /\r\n|[\n\r]/g;
+/**
+ * This function searches the buffer for the end patterns, (\r or \n)
+ * and returns an object with the index preceding the matched newline and the
+ * index after the newline char. `null` is returned if no new line is found.
+ *
+ * ```ts
+ * findNewLineIndex('abc\ndef') -> { preceding: 2, index: 3 }
+ * ```
+ */
+function findNewlineIndex(buffer, startIndex) {
+    const newline = 0x0a; // \n
+    const carriage = 0x0d; // \r
+    const start = startIndex !== null && startIndex !== void 0 ? startIndex : 0;
+    const nextNewline = buffer.indexOf(newline, start);
+    const nextCarriage = buffer.indexOf(carriage, start);
+    if (nextNewline === -1 && nextCarriage === -1) {
+        return null;
+    }
+    let i;
+    if (nextNewline !== -1 && nextCarriage !== -1) {
+        i = Math.min(nextNewline, nextCarriage);
+    }
+    else {
+        i = nextNewline !== -1 ? nextNewline : nextCarriage;
+    }
+    if (buffer[i] === newline) {
+        return { preceding: i, index: i + 1, carriage: false };
+    }
+    return { preceding: i, index: i + 1, carriage: true };
+}
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+const levelNumbers = {
+    off: 0,
+    error: 200,
+    warn: 300,
+    info: 400,
+    debug: 500,
+};
+const parseLogLevel = (maybeLevel, sourceName, client) => {
+    if (!maybeLevel) {
+        return undefined;
+    }
+    if (hasOwn(levelNumbers, maybeLevel)) {
+        return maybeLevel;
+    }
+    loggerFor(client).warn(`${sourceName} was set to ${JSON.stringify(maybeLevel)}, expected one of ${JSON.stringify(Object.keys(levelNumbers))}`);
+    return undefined;
+};
+function noop() { }
+function makeLogFn(fnLevel, logger, logLevel) {
+    if (!logger || levelNumbers[fnLevel] > levelNumbers[logLevel]) {
+        return noop;
+    }
+    else {
+        // Don't wrap logger functions, we want the stacktrace intact!
+        return logger[fnLevel].bind(logger);
+    }
+}
+const noopLogger = {
+    error: noop,
+    warn: noop,
+    info: noop,
+    debug: noop,
+};
+let cachedLoggers = /* @__PURE__ */ new WeakMap();
+function loggerFor(client) {
+    var _a;
+    const logger = client.logger;
+    const logLevel = (_a = client.logLevel) !== null && _a !== void 0 ? _a : 'off';
+    if (!logger) {
+        return noopLogger;
+    }
+    const cachedLogger = cachedLoggers.get(logger);
+    if (cachedLogger && cachedLogger[0] === logLevel) {
+        return cachedLogger[1];
+    }
+    const levelLogger = {
+        error: makeLogFn('error', logger, logLevel),
+        warn: makeLogFn('warn', logger, logLevel),
+        info: makeLogFn('info', logger, logLevel),
+        debug: makeLogFn('debug', logger, logLevel),
+    };
+    cachedLoggers.set(logger, [logLevel, levelLogger]);
+    return levelLogger;
+}
+const formatRequestDetails = (details) => {
+    if (details.options) {
+        details.options = Object.assign({}, details.options);
+        delete details.options['headers']; // redundant + leaks internals
+    }
+    if (details.headers) {
+        details.headers = Object.fromEntries((details.headers instanceof Headers ? [...details.headers] : Object.entries(details.headers)).map(([name, value]) => [
+            name,
+            (name.toLowerCase() === 'x-goog-api-key' ||
+                name.toLowerCase() === 'authorization' ||
+                name.toLowerCase() === 'cookie' ||
+                name.toLowerCase() === 'set-cookie') ?
+                '***'
+                : value,
+        ]));
+    }
+    if ('retryOfRequestLogID' in details) {
+        if (details.retryOfRequestLogID) {
+            details.retryOf = details.retryOfRequestLogID;
+        }
+        delete details.retryOfRequestLogID;
+    }
+    return details;
+};
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+class Stream {
+    constructor(iterator, controller, client) {
+        this.iterator = iterator;
+        this.controller = controller;
+        this.client = client;
+    }
+    static fromSSEResponse(response, controller, client) {
+        let consumed = false;
+        const logger = client ? loggerFor(client) : console;
+        function iterator() {
+            return __asyncGenerator(this, arguments, function* iterator_1() {
+                var _a, e_1, _b, _c;
+                if (consumed) {
+                    throw new GeminiNextGenAPIClientError('Cannot iterate over a consumed stream, use `.tee()` to split the stream.');
+                }
+                consumed = true;
+                let done = false;
+                try {
+                    try {
+                        for (var _d = true, _e = __asyncValues(_iterSSEMessages(response, controller)), _f; _f = yield __await(_e.next()), _a = _f.done, !_a; _d = true) {
+                            _c = _f.value;
+                            _d = false;
+                            const sse = _c;
+                            if (done)
+                                continue;
+                            if (sse.data.startsWith('[DONE]')) {
+                                done = true;
+                                continue;
+                            }
+                            else {
+                                try {
+                                    // @ts-ignore
+                                    yield yield __await(JSON.parse(sse.data));
+                                }
+                                catch (e) {
+                                    logger.error(`Could not parse message into JSON:`, sse.data);
+                                    logger.error(`From chunk:`, sse.raw);
+                                    throw e;
+                                }
+                            }
+                        }
+                    }
+                    catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                    finally {
+                        try {
+                            if (!_d && !_a && (_b = _e.return)) yield __await(_b.call(_e));
+                        }
+                        finally { if (e_1) throw e_1.error; }
+                    }
+                    done = true;
+                }
+                catch (e) {
+                    // If the user calls `stream.controller.abort()`, we should exit without throwing.
+                    if (isAbortError(e))
+                        return yield __await(void 0);
+                    throw e;
+                }
+                finally {
+                    // If the user `break`s, abort the ongoing request.
+                    if (!done)
+                        controller.abort();
+                }
+            });
+        }
+        return new Stream(iterator, controller, client);
+    }
+    /**
+     * Generates a Stream from a newline-separated ReadableStream
+     * where each item is a JSON value.
+     */
+    static fromReadableStream(readableStream, controller, client) {
+        let consumed = false;
+        function iterLines() {
+            return __asyncGenerator(this, arguments, function* iterLines_1() {
+                var _a, e_2, _b, _c;
+                const lineDecoder = new LineDecoder();
+                const iter = ReadableStreamToAsyncIterable(readableStream);
+                try {
+                    for (var _d = true, iter_1 = __asyncValues(iter), iter_1_1; iter_1_1 = yield __await(iter_1.next()), _a = iter_1_1.done, !_a; _d = true) {
+                        _c = iter_1_1.value;
+                        _d = false;
+                        const chunk = _c;
+                        for (const line of lineDecoder.decode(chunk)) {
+                            yield yield __await(line);
+                        }
+                    }
+                }
+                catch (e_2_1) { e_2 = { error: e_2_1 }; }
+                finally {
+                    try {
+                        if (!_d && !_a && (_b = iter_1.return)) yield __await(_b.call(iter_1));
+                    }
+                    finally { if (e_2) throw e_2.error; }
+                }
+                for (const line of lineDecoder.flush()) {
+                    yield yield __await(line);
+                }
+            });
+        }
+        function iterator() {
+            return __asyncGenerator(this, arguments, function* iterator_2() {
+                var _a, e_3, _b, _c;
+                if (consumed) {
+                    throw new GeminiNextGenAPIClientError('Cannot iterate over a consumed stream, use `.tee()` to split the stream.');
+                }
+                consumed = true;
+                let done = false;
+                try {
+                    try {
+                        for (var _d = true, _e = __asyncValues(iterLines()), _f; _f = yield __await(_e.next()), _a = _f.done, !_a; _d = true) {
+                            _c = _f.value;
+                            _d = false;
+                            const line = _c;
+                            if (done)
+                                continue;
+                            // @ts-ignore
+                            if (line)
+                                yield yield __await(JSON.parse(line));
+                        }
+                    }
+                    catch (e_3_1) { e_3 = { error: e_3_1 }; }
+                    finally {
+                        try {
+                            if (!_d && !_a && (_b = _e.return)) yield __await(_b.call(_e));
+                        }
+                        finally { if (e_3) throw e_3.error; }
+                    }
+                    done = true;
+                }
+                catch (e) {
+                    // If the user calls `stream.controller.abort()`, we should exit without throwing.
+                    if (isAbortError(e))
+                        return yield __await(void 0);
+                    throw e;
+                }
+                finally {
+                    // If the user `break`s, abort the ongoing request.
+                    if (!done)
+                        controller.abort();
+                }
+            });
+        }
+        return new Stream(iterator, controller, client);
+    }
+    [Symbol.asyncIterator]() {
+        return this.iterator();
+    }
+    /**
+     * Splits the stream into two streams which can be
+     * independently read from at different speeds.
+     */
+    tee() {
+        const left = [];
+        const right = [];
+        const iterator = this.iterator();
+        const teeIterator = (queue) => {
+            return {
+                next: () => {
+                    if (queue.length === 0) {
+                        const result = iterator.next();
+                        left.push(result);
+                        right.push(result);
+                    }
+                    return queue.shift();
+                },
+            };
+        };
+        return [
+            new Stream(() => teeIterator(left), this.controller, this.client),
+            new Stream(() => teeIterator(right), this.controller, this.client),
+        ];
+    }
+    /**
+     * Converts this stream to a newline-separated ReadableStream of
+     * JSON stringified values in the stream
+     * which can be turned back into a Stream with `Stream.fromReadableStream()`.
+     */
+    toReadableStream() {
+        const self = this;
+        let iter;
+        return makeReadableStream({
+            async start() {
+                iter = self[Symbol.asyncIterator]();
+            },
+            async pull(ctrl) {
+                try {
+                    const { value, done } = await iter.next();
+                    if (done)
+                        return ctrl.close();
+                    const bytes = encodeUTF8(JSON.stringify(value) + '\n');
+                    ctrl.enqueue(bytes);
+                }
+                catch (err) {
+                    ctrl.error(err);
+                }
+            },
+            async cancel() {
+                var _a;
+                await ((_a = iter.return) === null || _a === void 0 ? void 0 : _a.call(iter));
+            },
+        });
+    }
+}
+function _iterSSEMessages(response, controller) {
+    return __asyncGenerator(this, arguments, function* _iterSSEMessages_1() {
+        var _a, e_4, _b, _c;
+        if (!response.body) {
+            controller.abort();
+            if (typeof globalThis.navigator !== 'undefined' &&
+                globalThis.navigator.product === 'ReactNative') {
+                throw new GeminiNextGenAPIClientError(`The default react-native fetch implementation does not support streaming. Please use expo/fetch: https://docs.expo.dev/versions/latest/sdk/expo/#expofetch-api`);
+            }
+            throw new GeminiNextGenAPIClientError(`Attempted to iterate over a response with no body`);
+        }
+        const sseDecoder = new SSEDecoder();
+        const lineDecoder = new LineDecoder();
+        const iter = ReadableStreamToAsyncIterable(response.body);
+        try {
+            for (var _d = true, _e = __asyncValues(iterBinaryChunks(iter)), _f; _f = yield __await(_e.next()), _a = _f.done, !_a; _d = true) {
+                _c = _f.value;
+                _d = false;
+                const sseChunk = _c;
+                for (const line of lineDecoder.decode(sseChunk)) {
+                    const sse = sseDecoder.decode(line);
+                    if (sse)
+                        yield yield __await(sse);
+                }
+            }
+        }
+        catch (e_4_1) { e_4 = { error: e_4_1 }; }
+        finally {
+            try {
+                if (!_d && !_a && (_b = _e.return)) yield __await(_b.call(_e));
+            }
+            finally { if (e_4) throw e_4.error; }
+        }
+        for (const line of lineDecoder.flush()) {
+            const sse = sseDecoder.decode(line);
+            if (sse)
+                yield yield __await(sse);
+        }
+    });
+}
+/**
+ * Given an async iterable iterator, normalizes each chunk to a
+ * Uint8Array and yields it.
+ */
+function iterBinaryChunks(iterator) {
+    return __asyncGenerator(this, arguments, function* iterBinaryChunks_1() {
+        var _a, e_5, _b, _c;
+        try {
+            for (var _d = true, iterator_3 = __asyncValues(iterator), iterator_3_1; iterator_3_1 = yield __await(iterator_3.next()), _a = iterator_3_1.done, !_a; _d = true) {
+                _c = iterator_3_1.value;
+                _d = false;
+                const chunk = _c;
+                if (chunk == null) {
+                    continue;
+                }
+                const binaryChunk = chunk instanceof ArrayBuffer ? new Uint8Array(chunk)
+                    : typeof chunk === 'string' ? encodeUTF8(chunk)
+                        : chunk;
+                yield yield __await(binaryChunk);
+            }
+        }
+        catch (e_5_1) { e_5 = { error: e_5_1 }; }
+        finally {
+            try {
+                if (!_d && !_a && (_b = iterator_3.return)) yield __await(_b.call(iterator_3));
+            }
+            finally { if (e_5) throw e_5.error; }
+        }
+    });
+}
+class SSEDecoder {
+    constructor() {
+        this.event = null;
+        this.data = [];
+        this.chunks = [];
+    }
+    decode(line) {
+        if (line.endsWith('\r')) {
+            line = line.substring(0, line.length - 1);
+        }
+        if (!line) {
+            // empty line and we didn't previously encounter any messages
+            if (!this.event && !this.data.length)
+                return null;
+            const sse = {
+                event: this.event,
+                data: this.data.join('\n'),
+                raw: this.chunks,
+            };
+            this.event = null;
+            this.data = [];
+            this.chunks = [];
+            return sse;
+        }
+        this.chunks.push(line);
+        if (line.startsWith(':')) {
+            return null;
+        }
+        let [fieldname, _, value] = partition(line, ':');
+        if (value.startsWith(' ')) {
+            value = value.substring(1);
+        }
+        if (fieldname === 'event') {
+            this.event = value;
+        }
+        else if (fieldname === 'data') {
+            this.data.push(value);
+        }
+        return null;
+    }
+}
+function partition(str, delimiter) {
+    const index = str.indexOf(delimiter);
+    if (index !== -1) {
+        return [str.substring(0, index), delimiter, str.substring(index + delimiter.length)];
+    }
+    return [str, '', ''];
+}
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+const LEGACY_LYRIA_MODELS = new Set([
+    'lyria-3-pro-preview',
+    'lyria-3-clip-preview',
+]);
+const LEGACY_EVENT_TYPE_RENAMES = {
+    'interaction.start': 'interaction.created',
+    'content.start': 'step.start',
+    'content.delta': 'step.delta',
+    'content.stop': 'step.stop',
+    'interaction.complete': 'interaction.completed',
+};
+function isLegacyLyriaRequest({ isVertex, model }) {
+    return Boolean(isVertex) && typeof model === 'string' && LEGACY_LYRIA_MODELS.has(model);
+}
+/**
+ * Detect whether a client is in vertex mode. Reads the `clientAdapter` field
+ * directly because `BaseGeminiNextGenAPIClient` keeps it `private`; centralizing
+ * the runtime cast here avoids leaking it into resource files.
+ */
+function isVertexClient(client) {
+    const adapter = client.clientAdapter;
+    return Boolean(adapter && adapter.isVertexAI());
+}
+function isPlainObject(value) {
+    return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+/**
+ * Wrap a legacy `outputs: Array<Content>` payload into the modern
+ * `steps: [{type: 'model_output', content: outputs}]` shape. Returns the input
+ * unchanged when `steps` already wins or `outputs` is absent.
+ */
+function wrapOutputsAsSteps(data) {
+    if (!('outputs' in data) || 'steps' in data) {
+        return data;
+    }
+    const { outputs } = data, rest = __rest(data, ["outputs"]);
+    return Object.assign(Object.assign({}, rest), { steps: [{ type: 'model_output', content: outputs }] });
+}
+/**
+ * Non-streaming: rewrite a legacy interaction response so consumers see the
+ * modern `steps` shape.
+ */
+function coerceLegacyInteractionResponse(data) {
+    if (!isPlainObject(data))
+        return data;
+    return wrapOutputsAsSteps(data);
+}
+/**
+ * Streaming: translate one legacy SSE event to its modern equivalent.
+ *
+ * Returns the input unchanged when the `event_type` is not one of the legacy
+ * ones we know how to map. Two non-trivial cases:
+ *   1. `content.start` carries `content: <Content>` — the modern `step.start`
+ *      expects `step: {type: 'model_output', content: [<Content>]}`.
+ *   2. `interaction.start` / `interaction.complete` wrap an `interaction`
+ *      object that may itself carry the legacy `outputs` field; recurse.
+ */
+function maybeRemapLegacyStreamEvent(data) {
+    if (!isPlainObject(data))
+        return data;
+    const eventType = data['event_type'];
+    if (typeof eventType !== 'string' || !(eventType in LEGACY_EVENT_TYPE_RENAMES)) {
+        return data;
+    }
+    const renamed = Object.assign(Object.assign({}, data), { event_type: LEGACY_EVENT_TYPE_RENAMES[eventType] });
+    if (eventType === 'content.start') {
+        const { content } = renamed, rest = __rest(renamed, ["content"]);
+        let stepContent;
+        if (content == null) {
+            stepContent = [];
+        }
+        else if (Array.isArray(content)) {
+            stepContent = content;
+        }
+        else {
+            stepContent = [content];
+        }
+        return Object.assign(Object.assign({}, rest), { step: { type: 'model_output', content: stepContent } });
+    }
+    if (eventType === 'interaction.start' || eventType === 'interaction.complete') {
+        const inner = renamed['interaction'];
+        if (isPlainObject(inner)) {
+            renamed['interaction'] = wrapOutputsAsSteps(inner);
+        }
+    }
+    return renamed;
+}
+/**
+ * Stream subclass that runs each yielded SSE event through
+ * `maybeRemapLegacyStreamEvent` so consumers always see modern event shapes.
+ *
+ * Wired in via the `__streamClass` request option from `resources/interactions.ts`
+ * (read by `src/internal/parse.ts:defaultParseResponse`).
+ */
+class LegacyLyriaStream extends Stream {
+    static fromSSEResponse(response, controller, client) {
+        const base = Stream.fromSSEResponse(response, controller, client);
+        function wrappedIterator() {
+            return __asyncGenerator(this, arguments, function* wrappedIterator_1() {
+                var _a, e_1, _b, _c;
+                try {
+                    for (var _d = true, base_1 = __asyncValues(base), base_1_1; base_1_1 = yield __await(base_1.next()), _a = base_1_1.done, !_a; _d = true) {
+                        _c = base_1_1.value;
+                        _d = false;
+                        const item = _c;
+                        yield yield __await(maybeRemapLegacyStreamEvent(item));
+                    }
+                }
+                catch (e_1_1) { e_1 = { error: e_1_1 }; }
+                finally {
+                    try {
+                        if (!_d && !_a && (_b = base_1.return)) yield __await(_b.call(base_1));
+                    }
+                    finally { if (e_1) throw e_1.error; }
+                }
+            });
+        }
+        return new LegacyLyriaStream(wrappedIterator, controller, client);
+    }
+}
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+class BaseInteractions extends APIResource {
+    create(params, options) {
+        var _a;
+        const { api_version = this._client.apiVersion } = params, body = __rest(params, ["api_version"]);
+        if ('model' in body && 'agent_config' in body) {
+            throw new GeminiNextGenAPIClientError(`Invalid request: specified \`model\` and \`agent_config\`. If specifying \`model\`, use \`generation_config\`.`);
+        }
+        if ('agent' in body && 'generation_config' in body) {
+            throw new GeminiNextGenAPIClientError(`Invalid request: specified \`agent\` and \`generation_config\`. If specifying \`agent\`, use \`agent_config\`.`);
+        }
+        const needsLegacyLyriaShim = isLegacyLyriaRequest({
+            isVertex: isVertexClient(this._client),
+            model: 'model' in body ? body.model : undefined,
+        });
+        const isStreaming = (_a = params.stream) !== null && _a !== void 0 ? _a : false;
+        const promise = this._client.post(path `/${api_version}/interactions`, Object.assign(Object.assign(Object.assign({ body }, options), { stream: isStreaming }), (needsLegacyLyriaShim && isStreaming ? { __streamClass: LegacyLyriaStream } : {})));
+        if (isStreaming) {
+            return promise;
+        }
+        let nonStreaming = promise;
+        if (needsLegacyLyriaShim) {
+            nonStreaming = nonStreaming._thenUnwrap((data) => coerceLegacyInteractionResponse(data));
+        }
+        return nonStreaming._thenUnwrap(addOutputProperties);
+    }
+    /**
+     * Deletes the interaction by id.
+     *
+     * @example
+     * ```ts
+     * const interaction = await client.interactions.delete('id', {
+     *   api_version: 'api_version',
+     * });
+     * ```
+     */
+    delete(id, params = {}, options) {
+        const { api_version = this._client.apiVersion } = params !== null && params !== void 0 ? params : {};
+        return this._client.delete(path `/${api_version}/interactions/${id}`, options);
+    }
+    /**
+     * Cancels an interaction by id. This only applies to background interactions that
+     * are still running.
+     *
+     * @example
+     * ```ts
+     * const interaction = await client.interactions.cancel('id', {
+     *   api_version: 'api_version',
+     * });
+     * ```
+     */
+    cancel(id, params = {}, options) {
+        const { api_version = this._client.apiVersion } = params !== null && params !== void 0 ? params : {};
+        return this._client.post(path `/${api_version}/interactions/${id}/cancel`, options)._thenUnwrap(addOutputProperties);
+    }
+    get(id, params = {}, options) {
+        var _a;
+        const _b = params !== null && params !== void 0 ? params : {}, { api_version = this._client.apiVersion } = _b, query = __rest(_b, ["api_version"]);
+        const response = this._client.get(path `/${api_version}/interactions/${id}`, Object.assign(Object.assign({ query }, options), { stream: (_a = params === null || params === void 0 ? void 0 : params.stream) !== null && _a !== void 0 ? _a : false }));
+        if (params === null || params === void 0 ? void 0 : params.stream) {
+            return response;
+        }
+        return response._thenUnwrap(addOutputProperties);
+    }
+}
+BaseInteractions._key = Object.freeze(['interactions']);
+class Interactions extends BaseInteractions {
+}
+function addOutputProperties(interaction) {
+    var _a, _b;
+    const steps = (_a = interaction.steps) !== null && _a !== void 0 ? _a : [];
+    // output_text: scan backwards across all steps (stopping at user_input),
+    // skip non-text content until the first text item is found, then collect
+    // text until a non-text barrier is hit.
+    const textParts = [];
+    let collecting = false;
+    outer: for (let i = steps.length - 1; i >= 0; i--) {
+        const step = steps[i];
+        if (step.type === 'user_input')
+            break;
+        if (step.type !== 'model_output' || !step.content) {
+            if (collecting)
+                break outer;
+            continue;
+        }
+        const content = step.content;
+        for (let j = content.length - 1; j >= 0; j--) {
+            const item = content[j];
+            if (item.type === 'text') {
+                collecting = true;
+                textParts.push((_b = item.text) !== null && _b !== void 0 ? _b : '');
+            }
+            else if (collecting) {
+                // Hit a non-text barrier after we started collecting.
+                break outer;
+            }
+        }
+    }
+    const output_text = textParts.reverse().join('');
+    let output_image;
+    let output_audio;
+    let output_video;
+    for (let i = steps.length - 1; i >= 0; i--) {
+        const step = steps[i];
+        const anyStep = step;
+        if (anyStep.type === 'user_input') {
+            break;
+        }
+        if (anyStep.type === 'model_output' && anyStep.content) {
+            for (let j = anyStep.content.length - 1; j >= 0; j--) {
+                const content = anyStep.content[j];
+                if (content.type === 'image' && !output_image) {
+                    output_image = content;
+                }
+                if (content.type === 'audio' && !output_audio) {
+                    output_audio = content;
+                }
+                if (content.type === 'video' && !output_video) {
+                    output_video = content;
+                }
+            }
+        }
+    }
+    return Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({}, interaction), (output_text && { output_text })), (output_image && { output_image })), (output_audio && { output_audio })), (output_video && { output_video }));
+}
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+class BaseWebhooks extends APIResource {
+    /**
+     * Creates a new Webhook.
+     */
+    create(params, options) {
+        const { api_version = this._client.apiVersion } = params, body = __rest(params, ["api_version"]);
+        return this._client.post(path `/${api_version}/webhooks`, Object.assign({ body }, options));
+    }
+    /**
+     * Updates an existing Webhook.
+     */
+    update(id, params = {}, options) {
+        const _a = params !== null && params !== void 0 ? params : {}, { api_version = this._client.apiVersion, update_mask } = _a, body = __rest(_a, ["api_version", "update_mask"]);
+        return this._client.patch(path `/${api_version}/webhooks/${id}`, Object.assign({ query: { update_mask }, body }, options));
+    }
+    /**
+     * Lists all Webhooks.
+     */
+    list(params = {}, options) {
+        const _a = params !== null && params !== void 0 ? params : {}, { api_version = this._client.apiVersion } = _a, query = __rest(_a, ["api_version"]);
+        return this._client.get(path `/${api_version}/webhooks`, Object.assign({ query }, options));
+    }
+    /**
+     * Deletes a Webhook.
+     */
+    delete(id, params = {}, options) {
+        const { api_version = this._client.apiVersion } = params !== null && params !== void 0 ? params : {};
+        return this._client.delete(path `/${api_version}/webhooks/${id}`, options);
+    }
+    /**
+     * Gets a specific Webhook.
+     */
+    get(id, params = {}, options) {
+        const { api_version = this._client.apiVersion } = params !== null && params !== void 0 ? params : {};
+        return this._client.get(path `/${api_version}/webhooks/${id}`, options);
+    }
+    /**
+     * Sends a ping event to a Webhook.
+     */
+    ping(id, params = undefined, options) {
+        const { api_version = this._client.apiVersion, body } = params !== null && params !== void 0 ? params : {};
+        return this._client.post(path `/${api_version}/webhooks/${id}:ping`, Object.assign({ body: body }, options));
+    }
+    /**
+     * Generates a new signing secret for a Webhook.
+     */
+    rotateSigningSecret(id, params = {}, options) {
+        const _a = params !== null && params !== void 0 ? params : {}, { api_version = this._client.apiVersion } = _a, body = __rest(_a, ["api_version"]);
+        return this._client.post(path `/${api_version}/webhooks/${id}:rotateSigningSecret`, Object.assign({ body }, options));
+    }
+}
+BaseWebhooks._key = Object.freeze(['webhooks']);
+class Webhooks extends BaseWebhooks {
+}
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+async function defaultParseResponse(client, props) {
+    const { response, requestLogID, retryOfRequestLogID, startTime } = props;
+    const body = await (async () => {
+        var _a;
+        if (props.options.stream) {
+            loggerFor(client).debug('response', response.status, response.url, response.headers, response.body);
+            // Note: there is an invariant here that isn't represented in the type system
+            // that if you set `stream: true` the response type must also be `Stream<T>`
+            if (props.options.__streamClass) {
+                return props.options.__streamClass.fromSSEResponse(response, props.controller, client);
+            }
+            return Stream.fromSSEResponse(response, props.controller, client);
+        }
+        // fetch refuses to read the body when the status code is 204.
+        if (response.status === 204) {
+            return null;
+        }
+        if (props.options.__binaryResponse) {
+            return response;
+        }
+        const contentType = response.headers.get('content-type');
+        const mediaType = (_a = contentType === null || contentType === void 0 ? void 0 : contentType.split(';')[0]) === null || _a === void 0 ? void 0 : _a.trim();
+        const isJSON = (mediaType === null || mediaType === void 0 ? void 0 : mediaType.includes('application/json')) || (mediaType === null || mediaType === void 0 ? void 0 : mediaType.endsWith('+json'));
+        if (isJSON) {
+            const contentLength = response.headers.get('content-length');
+            if (contentLength === '0') {
+                // if there is no content we can't do anything
+                return undefined;
+            }
+            const json = await response.json();
+            return json;
+        }
+        const text = await response.text();
+        return text;
+    })();
+    loggerFor(client).debug(`[${requestLogID}] response parsed`, formatRequestDetails({
+        retryOfRequestLogID,
+        url: response.url,
+        status: response.status,
+        body,
+        durationMs: Date.now() - startTime,
+    }));
+    return body;
+}
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+/**
+ * A subclass of `Promise` providing additional helper methods
+ * for interacting with the SDK.
+ */
+class APIPromise extends Promise {
+    constructor(client, responsePromise, parseResponse = defaultParseResponse) {
+        super((resolve) => {
+            // this is maybe a bit weird but this has to be a no-op to not implicitly
+            // parse the response body; instead .then, .catch, .finally are overridden
+            // to parse the response
+            resolve(null);
+        });
+        this.responsePromise = responsePromise;
+        this.parseResponse = parseResponse;
+        this.client = client;
+    }
+    _thenUnwrap(transform) {
+        return new APIPromise(this.client, this.responsePromise, async (client, props) => transform(await this.parseResponse(client, props), props));
+    }
+    /**
+     * Gets the raw `Response` instance instead of parsing the response
+     * data.
+     *
+     * If you want to parse the response body but still get the `Response`
+     * instance, you can use {@link withResponse()}.
+     *
+     * 👋 Getting the wrong TypeScript type for `Response`?
+     * Try setting `"moduleResolution": "NodeNext"` or add `"lib": ["DOM"]`
+     * to your `tsconfig.json`.
+     */
+    asResponse() {
+        return this.responsePromise.then((p) => p.response);
+    }
+    /**
+     * Gets the parsed response data and the raw `Response` instance.
+     *
+     * If you just want to get the raw `Response` instance without parsing it,
+     * you can use {@link asResponse()}.
+     *
+     * 👋 Getting the wrong TypeScript type for `Response`?
+     * Try setting `"moduleResolution": "NodeNext"` or add `"lib": ["DOM"]`
+     * to your `tsconfig.json`.
+     */
+    async withResponse() {
+        const [data, response] = await Promise.all([this.parse(), this.asResponse()]);
+        return { data, response };
+    }
+    parse() {
+        if (!this.parsedPromise) {
+            this.parsedPromise = this.responsePromise.then((data) => this.parseResponse(this.client, data));
+        }
+        return this.parsedPromise;
+    }
+    then(onfulfilled, onrejected) {
+        return this.parse().then(onfulfilled, onrejected);
+    }
+    catch(onrejected) {
+        return this.parse().catch(onrejected);
+    }
+    finally(onfinally) {
+        return this.parse().finally(onfinally);
+    }
+}
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+const brand_privateNullableHeaders = /* @__PURE__ */ Symbol('brand.privateNullableHeaders');
+function* iterateHeaders(headers) {
+    if (!headers)
+        return;
+    if (brand_privateNullableHeaders in headers) {
+        const { values, nulls } = headers;
+        yield* values.entries();
+        for (const name of nulls) {
+            yield [name, null];
+        }
+        return;
+    }
+    let shouldClear = false;
+    let iter;
+    if (headers instanceof Headers) {
+        iter = headers.entries();
+    }
+    else if (isReadonlyArray(headers)) {
+        iter = headers;
+    }
+    else {
+        shouldClear = true;
+        iter = Object.entries(headers !== null && headers !== void 0 ? headers : {});
+    }
+    for (let row of iter) {
+        const name = row[0];
+        if (typeof name !== 'string')
+            throw new TypeError('expected header name to be a string');
+        const values = isReadonlyArray(row[1]) ? row[1] : [row[1]];
+        let didClear = false;
+        for (const value of values) {
+            if (value === undefined)
+                continue;
+            // Objects keys always overwrite older headers, they never append.
+            // Yield a null to clear the header before adding the new values.
+            if (shouldClear && !didClear) {
+                didClear = true;
+                yield [name, null];
+            }
+            yield [name, value];
+        }
+    }
+}
+const buildHeaders = (newHeaders) => {
+    const targetHeaders = new Headers();
+    const nullHeaders = new Set();
+    for (const headers of newHeaders) {
+        const seenHeaders = new Set();
+        for (const [name, value] of iterateHeaders(headers)) {
+            const lowerName = name.toLowerCase();
+            if (!seenHeaders.has(lowerName)) {
+                targetHeaders.delete(name);
+                seenHeaders.add(lowerName);
+            }
+            if (value === null) {
+                targetHeaders.delete(name);
+                nullHeaders.add(lowerName);
+            }
+            else {
+                targetHeaders.append(name, value);
+                nullHeaders.delete(lowerName);
+            }
+        }
+    }
+    return { [brand_privateNullableHeaders]: true, values: targetHeaders, nulls: nullHeaders };
+};
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+/**
+ * Read an environment variable.
+ *
+ * Trims beginning and trailing whitespace.
+ *
+ * Will return undefined if the environment variable doesn't exist or cannot be accessed.
+ */
+const readEnv = (env) => {
+    var _a, _b, _c, _d, _e;
+    if (typeof globalThis.process !== 'undefined') {
+        return ((_b = (_a = globalThis.process.env) === null || _a === void 0 ? void 0 : _a[env]) === null || _b === void 0 ? void 0 : _b.trim()) || undefined;
+    }
+    if (typeof globalThis.Deno !== 'undefined') {
+        return ((_e = (_d = (_c = globalThis.Deno.env) === null || _c === void 0 ? void 0 : _c.get) === null || _d === void 0 ? void 0 : _d.call(_c, env)) === null || _e === void 0 ? void 0 : _e.trim()) || undefined;
+    }
+    return undefined;
+};
+
+/**
+ * @license
+ * Copyright 2025 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+var _a;
+/**
+ * Base class for Gemini Next Gen API API clients.
+ */
+class BaseGeminiNextGenAPIClient {
+    /**
+     * API Client for interfacing with the Gemini Next Gen API API.
+     *
+     * @param {string | null | undefined} [opts.apiKey=process.env['GEMINI_API_KEY'] ?? null]
+     * @param {string | undefined} [opts.apiVersion=v1beta]
+     * @param {string} [opts.baseURL=process.env['GEMINI_NEXT_GEN_API_BASE_URL'] ?? https://generativelanguage.googleapis.com] - Override the default base URL for the API.
+     * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
+     * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
+     * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
+     * @param {number} [opts.maxRetries=2] - The maximum number of times the client will retry a request.
+     * @param {HeadersLike} opts.defaultHeaders - Default headers to include with every request to the API.
+     * @param {Record<string, string | undefined>} opts.defaultQuery - Default query parameters to include with every request to the API.
+     */
+    constructor(_b) {
+        var _c, _d, _e, _f, _g, _h, _j;
+        var { baseURL = readEnv('GEMINI_NEXT_GEN_API_BASE_URL'), apiKey = (_c = readEnv('GEMINI_API_KEY')) !== null && _c !== void 0 ? _c : null, apiVersion = 'v1beta' } = _b, opts = __rest(_b, ["baseURL", "apiKey", "apiVersion"]);
+        const options = Object.assign(Object.assign({ apiKey,
+            apiVersion }, opts), { baseURL: baseURL || `https://generativelanguage.googleapis.com` });
+        this.baseURL = options.baseURL;
+        this.timeout = (_d = options.timeout) !== null && _d !== void 0 ? _d : BaseGeminiNextGenAPIClient.DEFAULT_TIMEOUT /* 1 minute */;
+        this.logger = (_e = options.logger) !== null && _e !== void 0 ? _e : console;
+        const defaultLogLevel = 'warn';
+        // Set default logLevel early so that we can log a warning in parseLogLevel.
+        this.logLevel = defaultLogLevel;
+        this.logLevel =
+            (_g = (_f = parseLogLevel(options.logLevel, 'ClientOptions.logLevel', this)) !== null && _f !== void 0 ? _f : parseLogLevel(readEnv('GEMINI_NEXT_GEN_API_LOG'), "process.env['GEMINI_NEXT_GEN_API_LOG']", this)) !== null && _g !== void 0 ? _g : defaultLogLevel;
+        this.fetchOptions = options.fetchOptions;
+        this.maxRetries = (_h = options.maxRetries) !== null && _h !== void 0 ? _h : 2;
+        this.fetch = (_j = options.fetch) !== null && _j !== void 0 ? _j : getDefaultFetch();
+        this.encoder = FallbackEncoder;
+        this._options = options;
+        this.apiKey = apiKey;
+        this.apiVersion = apiVersion;
+        this.clientAdapter = options.clientAdapter;
+    }
+    /**
+     * Create a new client instance re-using the same options given to the current client with optional overriding.
+     */
+    withOptions(options) {
+        const client = new this.constructor(Object.assign(Object.assign(Object.assign({}, this._options), { baseURL: this.baseURL, maxRetries: this.maxRetries, timeout: this.timeout, logger: this.logger, logLevel: this.logLevel, fetch: this.fetch, fetchOptions: this.fetchOptions, apiKey: this.apiKey, apiVersion: this.apiVersion }), options));
+        return client;
+    }
+    /**
+     * Check whether the base URL is set to its default.
+     */
+    baseURLOverridden() {
+        return this.baseURL !== 'https://generativelanguage.googleapis.com';
+    }
+    defaultQuery() {
+        return this._options.defaultQuery;
+    }
+    validateHeaders({ values, nulls }) {
+        // The headers object handles case insensitivity.
+        if (values.has('authorization') || values.has('x-goog-api-key')) {
+            return;
+        }
+        if (this.apiKey && values.get('x-goog-api-key')) {
+            return;
+        }
+        if (nulls.has('x-goog-api-key')) {
+            return;
+        }
+        throw new Error('Could not resolve authentication method. Expected the apiKey to be set. Or for the "x-goog-api-key" headers to be explicitly omitted');
+    }
+    async authHeaders(opts) {
+        const existingHeaders = buildHeaders([opts.headers]);
+        if (existingHeaders.values.has('authorization') || existingHeaders.values.has('x-goog-api-key')) {
+            return undefined;
+        }
+        if (this.apiKey) {
+            return buildHeaders([{ 'x-goog-api-key': this.apiKey }]);
+        }
+        if (this.clientAdapter && this.clientAdapter.isVertexAI()) {
+            return buildHeaders([await this.clientAdapter.getAuthHeaders()]);
+        }
+        return undefined;
+    }
+    /**
+     * Basic re-implementation of `qs.stringify` for primitive types.
+     */
+    stringifyQuery(query) {
+        return stringifyQuery(query);
+    }
+    getUserAgent() {
+        return `${this.constructor.name}/JS ${VERSION}`;
+    }
+    defaultIdempotencyKey() {
+        return `stainless-node-retry-${uuid4()}`;
+    }
+    makeStatusError(status, error, message, headers) {
+        return APIError.generate(status, error, message, headers);
+    }
+    buildURL(path, query, defaultBaseURL) {
+        const baseURL = (!this.baseURLOverridden() && defaultBaseURL) || this.baseURL;
+        const url = isAbsoluteURL(path) ?
+            new URL(path)
+            : new URL(baseURL + (baseURL.endsWith('/') && path.startsWith('/') ? path.slice(1) : path));
+        const defaultQuery = this.defaultQuery();
+        const pathQuery = Object.fromEntries(url.searchParams);
+        if (!isEmptyObj(defaultQuery) || !isEmptyObj(pathQuery)) {
+            query = Object.assign(Object.assign(Object.assign({}, pathQuery), defaultQuery), query);
+        }
+        if (typeof query === 'object' && query && !Array.isArray(query)) {
+            url.search = this.stringifyQuery(query);
+        }
+        return url.toString();
+    }
+    /**
+     * Used as a callback for mutating the given `FinalRequestOptions` object.
+  
+     */
+    async prepareOptions(options) {
+        if (this.clientAdapter &&
+            this.clientAdapter.isVertexAI() &&
+            !options.path.startsWith(`/${this.apiVersion}/projects/`)) {
+            const oldPath = options.path.slice(this.apiVersion.length + 1);
+            options.path = `/${this.apiVersion}/projects/${this.clientAdapter.getProject()}/locations/${this.clientAdapter.getLocation()}${oldPath}`;
+        }
+    }
+    /**
+     * Used as a callback for mutating the given `RequestInit` object.
+     *
+     * This is useful for cases where you want to add certain headers based off of
+     * the request properties, e.g. `method` or `url`.
+     */
+    async prepareRequest(request, { url, options }) { }
+    get(path, opts) {
+        return this.methodRequest('get', path, opts);
+    }
+    post(path, opts) {
+        return this.methodRequest('post', path, opts);
+    }
+    patch(path, opts) {
+        return this.methodRequest('patch', path, opts);
+    }
+    put(path, opts) {
+        return this.methodRequest('put', path, opts);
+    }
+    delete(path, opts) {
+        return this.methodRequest('delete', path, opts);
+    }
+    methodRequest(method, path, opts) {
+        return this.request(Promise.resolve(opts).then((opts) => {
+            return Object.assign({ method, path }, opts);
+        }));
+    }
+    request(options, remainingRetries = null) {
+        return new APIPromise(this, this.makeRequest(options, remainingRetries, undefined));
+    }
+    async makeRequest(optionsInput, retriesRemaining, retryOfRequestLogID) {
+        var _b, _c, _d;
+        const options = await optionsInput;
+        const maxRetries = (_b = options.maxRetries) !== null && _b !== void 0 ? _b : this.maxRetries;
+        if (retriesRemaining == null) {
+            retriesRemaining = maxRetries;
+        }
+        await this.prepareOptions(options);
+        const { req, url, timeout } = await this.buildRequest(options, {
+            retryCount: maxRetries - retriesRemaining,
+        });
+        await this.prepareRequest(req, { url, options });
+        /** Not an API request ID, just for correlating local log entries. */
+        const requestLogID = 'log_' + ((Math.random() * (1 << 24)) | 0).toString(16).padStart(6, '0');
+        const retryLogStr = retryOfRequestLogID === undefined ? '' : `, retryOf: ${retryOfRequestLogID}`;
+        const startTime = Date.now();
+        loggerFor(this).debug(`[${requestLogID}] sending request`, formatRequestDetails({
+            retryOfRequestLogID,
+            method: options.method,
+            url,
+            options,
+            headers: req.headers,
+        }));
+        if ((_c = options.signal) === null || _c === void 0 ? void 0 : _c.aborted) {
+            throw new APIUserAbortError();
+        }
+        const controller = new AbortController();
+        const response = await this.fetchWithTimeout(url, req, timeout, controller).catch(castToError);
+        const headersTime = Date.now();
+        if (response instanceof globalThis.Error) {
+            const retryMessage = `retrying, ${retriesRemaining} attempts remaining`;
+            if ((_d = options.signal) === null || _d === void 0 ? void 0 : _d.aborted) {
+                throw new APIUserAbortError();
+            }
+            // detect native connection timeout errors
+            // deno throws "TypeError: error sending request for url (https://example/): client error (Connect): tcp connect error: Operation timed out (os error 60): Operation timed out (os error 60)"
+            // undici throws "TypeError: fetch failed" with cause "ConnectTimeoutError: Connect Timeout Error (attempted address: example:443, timeout: 1ms)"
+            // others do not provide enough information to distinguish timeouts from other connection errors
+            const isTimeout = isAbortError(response) ||
+                /timed? ?out/i.test(String(response) + ('cause' in response ? String(response.cause) : ''));
+            if (retriesRemaining) {
+                loggerFor(this).info(`[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} - ${retryMessage}`);
+                loggerFor(this).debug(`[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} (${retryMessage})`, formatRequestDetails({
+                    retryOfRequestLogID,
+                    url,
+                    durationMs: headersTime - startTime,
+                    message: response.message,
+                }));
+                return this.retryRequest(options, retriesRemaining, retryOfRequestLogID !== null && retryOfRequestLogID !== void 0 ? retryOfRequestLogID : requestLogID);
+            }
+            loggerFor(this).info(`[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} - error; no more retries left`);
+            loggerFor(this).debug(`[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} (error; no more retries left)`, formatRequestDetails({
+                retryOfRequestLogID,
+                url,
+                durationMs: headersTime - startTime,
+                message: response.message,
+            }));
+            if (isTimeout) {
+                throw new APIConnectionTimeoutError();
+            }
+            throw new APIConnectionError({ cause: response });
+        }
+        const responseInfo = `[${requestLogID}${retryLogStr}] ${req.method} ${url} ${response.ok ? 'succeeded' : 'failed'} with status ${response.status} in ${headersTime - startTime}ms`;
+        if (!response.ok) {
+            const shouldRetry = await this.shouldRetry(response);
+            if (retriesRemaining && shouldRetry) {
+                const retryMessage = `retrying, ${retriesRemaining} attempts remaining`;
+                // We don't need the body of this response.
+                await CancelReadableStream(response.body);
+                loggerFor(this).info(`${responseInfo} - ${retryMessage}`);
+                loggerFor(this).debug(`[${requestLogID}] response error (${retryMessage})`, formatRequestDetails({
+                    retryOfRequestLogID,
+                    url: response.url,
+                    status: response.status,
+                    headers: response.headers,
+                    durationMs: headersTime - startTime,
+                }));
+                return this.retryRequest(options, retriesRemaining, retryOfRequestLogID !== null && retryOfRequestLogID !== void 0 ? retryOfRequestLogID : requestLogID, response.headers);
+            }
+            const retryMessage = shouldRetry ? `error; no more retries left` : `error; not retryable`;
+            loggerFor(this).info(`${responseInfo} - ${retryMessage}`);
+            const errText = await response.text().catch((err) => castToError(err).message);
+            const errJSON = safeJSON(errText);
+            const errMessage = errJSON ? undefined : errText;
+            loggerFor(this).debug(`[${requestLogID}] response error (${retryMessage})`, formatRequestDetails({
+                retryOfRequestLogID,
+                url: response.url,
+                status: response.status,
+                headers: response.headers,
+                message: errMessage,
+                durationMs: Date.now() - startTime,
+            }));
+            // @ts-ignore
+            const err = this.makeStatusError(response.status, errJSON, errMessage, response.headers);
+            throw err;
+        }
+        loggerFor(this).info(responseInfo);
+        loggerFor(this).debug(`[${requestLogID}] response start`, formatRequestDetails({
+            retryOfRequestLogID,
+            url: response.url,
+            status: response.status,
+            headers: response.headers,
+            durationMs: headersTime - startTime,
+        }));
+        return { response, options, controller, requestLogID, retryOfRequestLogID, startTime };
+    }
+    async fetchWithTimeout(url, init, ms, controller) {
+        const _b = init || {}, { signal, method } = _b, options = __rest(_b, ["signal", "method"]);
+        const abort = this._makeAbort(controller);
+        if (signal)
+            signal.addEventListener('abort', abort, { once: true });
+        const timeout = setTimeout(abort, ms);
+        const isReadableBody = (globalThis.ReadableStream && options.body instanceof globalThis.ReadableStream) ||
+            (typeof options.body === 'object' && options.body !== null && Symbol.asyncIterator in options.body);
+        const fetchOptions = Object.assign(Object.assign(Object.assign({ signal: controller.signal }, (isReadableBody ? { duplex: 'half' } : {})), { method: 'GET' }), options);
+        if (method) {
+            // Custom methods like 'patch' need to be uppercased
+            // See https://github.com/nodejs/undici/issues/2294
+            fetchOptions.method = method.toUpperCase();
+        }
+        try {
+            // use undefined this binding; fetch errors if bound to something else in browser/cloudflare
+            return await this.fetch.call(undefined, url, fetchOptions);
+        }
+        finally {
+            clearTimeout(timeout);
+        }
+    }
+    async shouldRetry(response) {
+        // Note this is not a standard header.
+        const shouldRetryHeader = response.headers.get('x-should-retry');
+        // If the server explicitly says whether or not to retry, obey.
+        if (shouldRetryHeader === 'true')
+            return true;
+        if (shouldRetryHeader === 'false')
+            return false;
+        // Retry on request timeouts.
+        if (response.status === 408)
+            return true;
+        // Retry on lock timeouts.
+        if (response.status === 409)
+            return true;
+        // Retry on rate limits.
+        if (response.status === 429)
+            return true;
+        // Retry internal errors.
+        if (response.status >= 500)
+            return true;
+        return false;
+    }
+    async retryRequest(options, retriesRemaining, requestLogID, responseHeaders) {
+        var _b;
+        let timeoutMillis;
+        // Note the `retry-after-ms` header may not be standard, but is a good idea and we'd like proactive support for it.
+        const retryAfterMillisHeader = responseHeaders === null || responseHeaders === void 0 ? void 0 : responseHeaders.get('retry-after-ms');
+        if (retryAfterMillisHeader) {
+            const timeoutMs = parseFloat(retryAfterMillisHeader);
+            if (!Number.isNaN(timeoutMs)) {
+                timeoutMillis = timeoutMs;
+            }
+        }
+        // About the Retry-After header: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After
+        const retryAfterHeader = responseHeaders === null || responseHeaders === void 0 ? void 0 : responseHeaders.get('retry-after');
+        if (retryAfterHeader && !timeoutMillis) {
+            const timeoutSeconds = parseFloat(retryAfterHeader);
+            if (!Number.isNaN(timeoutSeconds)) {
+                timeoutMillis = timeoutSeconds * 1000;
+            }
+            else {
+                timeoutMillis = Date.parse(retryAfterHeader) - Date.now();
+            }
+        }
+        // If the API asks us to wait a certain amount of time, just do what it
+        // says, but otherwise calculate a default
+        if (timeoutMillis === undefined) {
+            const maxRetries = (_b = options.maxRetries) !== null && _b !== void 0 ? _b : this.maxRetries;
+            timeoutMillis = this.calculateDefaultRetryTimeoutMillis(retriesRemaining, maxRetries);
+        }
+        await sleep(timeoutMillis);
+        return this.makeRequest(options, retriesRemaining - 1, requestLogID);
+    }
+    calculateDefaultRetryTimeoutMillis(retriesRemaining, maxRetries) {
+        const initialRetryDelay = 0.5;
+        const maxRetryDelay = 8.0;
+        const numRetries = maxRetries - retriesRemaining;
+        // Apply exponential backoff, but not more than the max.
+        const sleepSeconds = Math.min(initialRetryDelay * Math.pow(2, numRetries), maxRetryDelay);
+        // Apply some jitter, take up to at most 25 percent of the retry time.
+        const jitter = 1 - Math.random() * 0.25;
+        return sleepSeconds * jitter * 1000;
+    }
+    async buildRequest(inputOptions, { retryCount = 0 } = {}) {
+        var _b, _c, _d;
+        const options = Object.assign({}, inputOptions);
+        const { method, path, query, defaultBaseURL } = options;
+        const url = this.buildURL(path, query, defaultBaseURL);
+        if ('timeout' in options)
+            validatePositiveInteger('timeout', options.timeout);
+        options.timeout = (_b = options.timeout) !== null && _b !== void 0 ? _b : this.timeout;
+        const { bodyHeaders, body } = this.buildBody({ options });
+        const reqHeaders = await this.buildHeaders({ options: inputOptions, method, bodyHeaders, retryCount });
+        const req = Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({ method, headers: reqHeaders }, (options.signal && { signal: options.signal })), (globalThis.ReadableStream &&
+            body instanceof globalThis.ReadableStream && { duplex: 'half' })), (body && { body })), ((_c = this.fetchOptions) !== null && _c !== void 0 ? _c : {})), ((_d = options.fetchOptions) !== null && _d !== void 0 ? _d : {}));
+        return { req, url, timeout: options.timeout };
+    }
+    async buildHeaders({ options, method, bodyHeaders, retryCount, }) {
+        let idempotencyHeaders = {};
+        if (this.idempotencyHeader && method !== 'get') {
+            if (!options.idempotencyKey)
+                options.idempotencyKey = this.defaultIdempotencyKey();
+            idempotencyHeaders[this.idempotencyHeader] = options.idempotencyKey;
+        }
+        const authHeaders = await this.authHeaders(options);
+        let headers = buildHeaders([
+            idempotencyHeaders,
+            { Accept: 'application/json', 'User-Agent': this.getUserAgent(), 'Api-Revision': '2026-05-20' },
+            this._options.defaultHeaders,
+            bodyHeaders,
+            options.headers,
+            authHeaders,
+        ]);
+        this.validateHeaders(headers);
+        return headers.values;
+    }
+    _makeAbort(controller) {
+        // note: we can't just inline this method inside `fetchWithTimeout()` because then the closure
+        //       would capture all request options, and cause a memory leak.
+        return () => controller.abort();
+    }
+    buildBody({ options: { body, headers: rawHeaders } }) {
+        if (!body) {
+            return { bodyHeaders: undefined, body: undefined };
+        }
+        const headers = buildHeaders([rawHeaders]);
+        if (
+        // Pass raw type verbatim
+        ArrayBuffer.isView(body) ||
+            body instanceof ArrayBuffer ||
+            body instanceof DataView ||
+            (typeof body === 'string' &&
+                // Preserve legacy string encoding behavior for now
+                headers.values.has('content-type')) ||
+            // `Blob` is superset of `File`
+            (globalThis.Blob && body instanceof globalThis.Blob) ||
+            // `FormData` -> `multipart/form-data`
+            body instanceof FormData ||
+            // `URLSearchParams` -> `application/x-www-form-urlencoded`
+            body instanceof URLSearchParams ||
+            // Send chunked stream (each chunk has own `length`)
+            (globalThis.ReadableStream && body instanceof globalThis.ReadableStream)) {
+            return { bodyHeaders: undefined, body: body };
+        }
+        else if (typeof body === 'object' &&
+            (Symbol.asyncIterator in body ||
+                (Symbol.iterator in body && 'next' in body && typeof body.next === 'function'))) {
+            return { bodyHeaders: undefined, body: ReadableStreamFrom(body) };
+        }
+        else if (typeof body === 'object' &&
+            headers.values.get('content-type') === 'application/x-www-form-urlencoded') {
+            return {
+                bodyHeaders: { 'content-type': 'application/x-www-form-urlencoded' },
+                body: this.stringifyQuery(body),
+            };
+        }
+        else {
+            return this.encoder({ body, headers });
+        }
+    }
+}
+BaseGeminiNextGenAPIClient.DEFAULT_TIMEOUT = 60000; // 1 minute
+/**
+ * API Client for interfacing with the Gemini Next Gen API API.
+ */
+class GeminiNextGenAPIClient extends BaseGeminiNextGenAPIClient {
+    constructor() {
+        super(...arguments);
+        this.interactions = new Interactions(this);
+        this.webhooks = new Webhooks(this);
+        this.agents = new Agents(this);
+    }
+}
+_a = GeminiNextGenAPIClient;
+GeminiNextGenAPIClient.GeminiNextGenAPIClient = _a;
+GeminiNextGenAPIClient.GeminiNextGenAPIClientError = GeminiNextGenAPIClientError;
+GeminiNextGenAPIClient.APIError = APIError;
+GeminiNextGenAPIClient.APIConnectionError = APIConnectionError;
+GeminiNextGenAPIClient.APIConnectionTimeoutError = APIConnectionTimeoutError;
+GeminiNextGenAPIClient.APIUserAbortError = APIUserAbortError;
+GeminiNextGenAPIClient.NotFoundError = NotFoundError;
+GeminiNextGenAPIClient.ConflictError = ConflictError;
+GeminiNextGenAPIClient.RateLimitError = RateLimitError;
+GeminiNextGenAPIClient.BadRequestError = BadRequestError;
+GeminiNextGenAPIClient.AuthenticationError = AuthenticationError;
+GeminiNextGenAPIClient.InternalServerError = InternalServerError;
+GeminiNextGenAPIClient.PermissionDeniedError = PermissionDeniedError;
+GeminiNextGenAPIClient.UnprocessableEntityError = UnprocessableEntityError;
+GeminiNextGenAPIClient.toFile = toFile;
+GeminiNextGenAPIClient.Interactions = Interactions;
+GeminiNextGenAPIClient.Webhooks = Webhooks;
+GeminiNextGenAPIClient.Agents = Agents;
 
 /**
  * @license
@@ -12788,948 +16547,6 @@ function videoToVertex(fromObject, _rootObject) {
  * Copyright 2025 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
-function createFileSearchStoreConfigToMldev(apiClient, fromObject, parentObject) {
-    const toObject = {};
-    const fromDisplayName = getValueByPath(fromObject, ['displayName']);
-    if (parentObject !== undefined && fromDisplayName != null) {
-        setValueByPath(parentObject, ['displayName'], fromDisplayName);
-    }
-    const fromEmbeddingModel = getValueByPath(fromObject, [
-        'embeddingModel',
-    ]);
-    if (parentObject !== undefined && fromEmbeddingModel != null) {
-        setValueByPath(parentObject, ['embeddingModel'], tModel(apiClient, fromEmbeddingModel));
-    }
-    return toObject;
-}
-function createFileSearchStoreParametersToMldev(apiClient, fromObject) {
-    const toObject = {};
-    const fromConfig = getValueByPath(fromObject, ['config']);
-    if (fromConfig != null) {
-        createFileSearchStoreConfigToMldev(apiClient, fromConfig, toObject);
-    }
-    return toObject;
-}
-function deleteFileSearchStoreConfigToMldev(fromObject, parentObject) {
-    const toObject = {};
-    const fromForce = getValueByPath(fromObject, ['force']);
-    if (parentObject !== undefined && fromForce != null) {
-        setValueByPath(parentObject, ['_query', 'force'], fromForce);
-    }
-    return toObject;
-}
-function deleteFileSearchStoreParametersToMldev(fromObject) {
-    const toObject = {};
-    const fromName = getValueByPath(fromObject, ['name']);
-    if (fromName != null) {
-        setValueByPath(toObject, ['_url', 'name'], fromName);
-    }
-    const fromConfig = getValueByPath(fromObject, ['config']);
-    if (fromConfig != null) {
-        deleteFileSearchStoreConfigToMldev(fromConfig, toObject);
-    }
-    return toObject;
-}
-function getFileSearchStoreParametersToMldev(fromObject) {
-    const toObject = {};
-    const fromName = getValueByPath(fromObject, ['name']);
-    if (fromName != null) {
-        setValueByPath(toObject, ['_url', 'name'], fromName);
-    }
-    return toObject;
-}
-function importFileConfigToMldev(fromObject, parentObject) {
-    const toObject = {};
-    const fromCustomMetadata = getValueByPath(fromObject, [
-        'customMetadata',
-    ]);
-    if (parentObject !== undefined && fromCustomMetadata != null) {
-        let transformedList = fromCustomMetadata;
-        if (Array.isArray(transformedList)) {
-            transformedList = transformedList.map((item) => {
-                return item;
-            });
-        }
-        setValueByPath(parentObject, ['customMetadata'], transformedList);
-    }
-    const fromChunkingConfig = getValueByPath(fromObject, [
-        'chunkingConfig',
-    ]);
-    if (parentObject !== undefined && fromChunkingConfig != null) {
-        setValueByPath(parentObject, ['chunkingConfig'], fromChunkingConfig);
-    }
-    return toObject;
-}
-function importFileOperationFromMldev(fromObject) {
-    const toObject = {};
-    const fromName = getValueByPath(fromObject, ['name']);
-    if (fromName != null) {
-        setValueByPath(toObject, ['name'], fromName);
-    }
-    const fromMetadata = getValueByPath(fromObject, ['metadata']);
-    if (fromMetadata != null) {
-        setValueByPath(toObject, ['metadata'], fromMetadata);
-    }
-    const fromDone = getValueByPath(fromObject, ['done']);
-    if (fromDone != null) {
-        setValueByPath(toObject, ['done'], fromDone);
-    }
-    const fromError = getValueByPath(fromObject, ['error']);
-    if (fromError != null) {
-        setValueByPath(toObject, ['error'], fromError);
-    }
-    const fromResponse = getValueByPath(fromObject, ['response']);
-    if (fromResponse != null) {
-        setValueByPath(toObject, ['response'], importFileResponseFromMldev(fromResponse));
-    }
-    return toObject;
-}
-function importFileParametersToMldev(fromObject) {
-    const toObject = {};
-    const fromFileSearchStoreName = getValueByPath(fromObject, [
-        'fileSearchStoreName',
-    ]);
-    if (fromFileSearchStoreName != null) {
-        setValueByPath(toObject, ['_url', 'file_search_store_name'], fromFileSearchStoreName);
-    }
-    const fromFileName = getValueByPath(fromObject, ['fileName']);
-    if (fromFileName != null) {
-        setValueByPath(toObject, ['fileName'], fromFileName);
-    }
-    const fromConfig = getValueByPath(fromObject, ['config']);
-    if (fromConfig != null) {
-        importFileConfigToMldev(fromConfig, toObject);
-    }
-    return toObject;
-}
-function importFileResponseFromMldev(fromObject) {
-    const toObject = {};
-    const fromSdkHttpResponse = getValueByPath(fromObject, [
-        'sdkHttpResponse',
-    ]);
-    if (fromSdkHttpResponse != null) {
-        setValueByPath(toObject, ['sdkHttpResponse'], fromSdkHttpResponse);
-    }
-    const fromParent = getValueByPath(fromObject, ['parent']);
-    if (fromParent != null) {
-        setValueByPath(toObject, ['parent'], fromParent);
-    }
-    const fromDocumentName = getValueByPath(fromObject, ['documentName']);
-    if (fromDocumentName != null) {
-        setValueByPath(toObject, ['documentName'], fromDocumentName);
-    }
-    return toObject;
-}
-function listFileSearchStoresConfigToMldev(fromObject, parentObject) {
-    const toObject = {};
-    const fromPageSize = getValueByPath(fromObject, ['pageSize']);
-    if (parentObject !== undefined && fromPageSize != null) {
-        setValueByPath(parentObject, ['_query', 'pageSize'], fromPageSize);
-    }
-    const fromPageToken = getValueByPath(fromObject, ['pageToken']);
-    if (parentObject !== undefined && fromPageToken != null) {
-        setValueByPath(parentObject, ['_query', 'pageToken'], fromPageToken);
-    }
-    return toObject;
-}
-function listFileSearchStoresParametersToMldev(fromObject) {
-    const toObject = {};
-    const fromConfig = getValueByPath(fromObject, ['config']);
-    if (fromConfig != null) {
-        listFileSearchStoresConfigToMldev(fromConfig, toObject);
-    }
-    return toObject;
-}
-function listFileSearchStoresResponseFromMldev(fromObject) {
-    const toObject = {};
-    const fromSdkHttpResponse = getValueByPath(fromObject, [
-        'sdkHttpResponse',
-    ]);
-    if (fromSdkHttpResponse != null) {
-        setValueByPath(toObject, ['sdkHttpResponse'], fromSdkHttpResponse);
-    }
-    const fromNextPageToken = getValueByPath(fromObject, [
-        'nextPageToken',
-    ]);
-    if (fromNextPageToken != null) {
-        setValueByPath(toObject, ['nextPageToken'], fromNextPageToken);
-    }
-    const fromFileSearchStores = getValueByPath(fromObject, [
-        'fileSearchStores',
-    ]);
-    if (fromFileSearchStores != null) {
-        let transformedList = fromFileSearchStores;
-        if (Array.isArray(transformedList)) {
-            transformedList = transformedList.map((item) => {
-                return item;
-            });
-        }
-        setValueByPath(toObject, ['fileSearchStores'], transformedList);
-    }
-    return toObject;
-}
-function uploadToFileSearchStoreConfigToMldev(fromObject, parentObject) {
-    const toObject = {};
-    const fromMimeType = getValueByPath(fromObject, ['mimeType']);
-    if (parentObject !== undefined && fromMimeType != null) {
-        setValueByPath(parentObject, ['mimeType'], fromMimeType);
-    }
-    const fromDisplayName = getValueByPath(fromObject, ['displayName']);
-    if (parentObject !== undefined && fromDisplayName != null) {
-        setValueByPath(parentObject, ['displayName'], fromDisplayName);
-    }
-    const fromCustomMetadata = getValueByPath(fromObject, [
-        'customMetadata',
-    ]);
-    if (parentObject !== undefined && fromCustomMetadata != null) {
-        let transformedList = fromCustomMetadata;
-        if (Array.isArray(transformedList)) {
-            transformedList = transformedList.map((item) => {
-                return item;
-            });
-        }
-        setValueByPath(parentObject, ['customMetadata'], transformedList);
-    }
-    const fromChunkingConfig = getValueByPath(fromObject, [
-        'chunkingConfig',
-    ]);
-    if (parentObject !== undefined && fromChunkingConfig != null) {
-        setValueByPath(parentObject, ['chunkingConfig'], fromChunkingConfig);
-    }
-    return toObject;
-}
-function uploadToFileSearchStoreParametersToMldev(fromObject) {
-    const toObject = {};
-    const fromFileSearchStoreName = getValueByPath(fromObject, [
-        'fileSearchStoreName',
-    ]);
-    if (fromFileSearchStoreName != null) {
-        setValueByPath(toObject, ['_url', 'file_search_store_name'], fromFileSearchStoreName);
-    }
-    const fromConfig = getValueByPath(fromObject, ['config']);
-    if (fromConfig != null) {
-        uploadToFileSearchStoreConfigToMldev(fromConfig, toObject);
-    }
-    return toObject;
-}
-function uploadToFileSearchStoreResumableResponseFromMldev(fromObject) {
-    const toObject = {};
-    const fromSdkHttpResponse = getValueByPath(fromObject, [
-        'sdkHttpResponse',
-    ]);
-    if (fromSdkHttpResponse != null) {
-        setValueByPath(toObject, ['sdkHttpResponse'], fromSdkHttpResponse);
-    }
-    return toObject;
-}
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-const CONTENT_TYPE_HEADER = 'Content-Type';
-const SERVER_TIMEOUT_HEADER = 'X-Server-Timeout';
-const USER_AGENT_HEADER = 'User-Agent';
-const GOOGLE_API_CLIENT_HEADER = 'x-goog-api-client';
-const SDK_VERSION = '2.8.0'; // x-release-please-version
-const LIBRARY_LABEL = `google-genai-sdk/${SDK_VERSION}`;
-const VERTEX_AI_API_DEFAULT_VERSION = 'v1beta1';
-const GOOGLE_AI_API_DEFAULT_VERSION = 'v1beta';
-const MULTI_REGIONAL_LOCATIONS = new Set(['us', 'eu']);
-// Default retry options.
-// The config is based on https://cloud.google.com/storage/docs/retry-strategy.
-const DEFAULT_RETRY_ATTEMPTS = 5; // Including the initial call
-// LINT.IfChange
-const DEFAULT_RETRY_HTTP_STATUS_CODES = [
-    408, // Request timeout
-    429, // Too many requests
-    500, // Internal server error
-    502, // Bad gateway
-    503, // Service unavailable
-    504, // Gateway timeout
-];
-/**
- * The ApiClient class is used to send requests to the Gemini API or Vertex AI
- * endpoints.
- *
- * WARNING: This is an internal API and may change without notice. Direct usage
- * is not supported and may break your application.
- */
-class ApiClient {
-    constructor(opts) {
-        var _a, _b, _c;
-        this.clientOptions = Object.assign({}, opts);
-        this.customBaseUrl = (_a = opts.httpOptions) === null || _a === void 0 ? void 0 : _a.baseUrl;
-        if (this.clientOptions.vertexai) {
-            if (this.clientOptions.project && this.clientOptions.location) {
-                this.clientOptions.apiKey = undefined;
-            }
-            else if (this.clientOptions.apiKey) {
-                this.clientOptions.project = undefined;
-                this.clientOptions.location = undefined;
-            }
-        }
-        const initHttpOptions = {};
-        if (this.clientOptions.vertexai) {
-            if (!this.clientOptions.location &&
-                !this.clientOptions.apiKey &&
-                !this.customBaseUrl) {
-                this.clientOptions.location = 'global';
-            }
-            const hasSufficientAuth = (this.clientOptions.project && this.clientOptions.location) ||
-                this.clientOptions.apiKey;
-            if (!hasSufficientAuth && !this.customBaseUrl) {
-                throw new Error('Authentication is not set up. Please provide either a project and location, or an API key, or a custom base URL.');
-            }
-            const hasConstructorAuth = (opts.project && opts.location) || !!opts.apiKey;
-            if (this.customBaseUrl && !hasConstructorAuth) {
-                initHttpOptions.baseUrl = this.customBaseUrl;
-                this.clientOptions.project = undefined;
-                this.clientOptions.location = undefined;
-            }
-            else if (this.clientOptions.apiKey ||
-                this.clientOptions.location === 'global') {
-                // Vertex Express or global endpoint case.
-                initHttpOptions.baseUrl = 'https://aiplatform.googleapis.com/';
-            }
-            else if (this.clientOptions.project &&
-                this.clientOptions.location &&
-                MULTI_REGIONAL_LOCATIONS.has(this.clientOptions.location)) {
-                initHttpOptions.baseUrl = `https://aiplatform.${this.clientOptions.location}.rep.googleapis.com/`;
-            }
-            else if (this.clientOptions.project && this.clientOptions.location) {
-                initHttpOptions.baseUrl = `https://${this.clientOptions.location}-aiplatform.googleapis.com/`;
-            }
-            initHttpOptions.apiVersion =
-                (_b = this.clientOptions.apiVersion) !== null && _b !== void 0 ? _b : VERTEX_AI_API_DEFAULT_VERSION;
-        }
-        else {
-            // Gemini API
-            if (!this.clientOptions.apiKey) {
-                console.warn('API key should be set when using the Gemini API.');
-            }
-            initHttpOptions.apiVersion =
-                (_c = this.clientOptions.apiVersion) !== null && _c !== void 0 ? _c : GOOGLE_AI_API_DEFAULT_VERSION;
-            initHttpOptions.baseUrl = `https://generativelanguage.googleapis.com/`;
-        }
-        initHttpOptions.headers = this.getDefaultHeaders();
-        this.clientOptions.httpOptions = initHttpOptions;
-        if (opts.httpOptions) {
-            this.clientOptions.httpOptions = this.patchHttpOptions(initHttpOptions, opts.httpOptions);
-        }
-    }
-    isVertexAI() {
-        var _a;
-        return (_a = this.clientOptions.vertexai) !== null && _a !== void 0 ? _a : false;
-    }
-    getProject() {
-        return this.clientOptions.project;
-    }
-    getLocation() {
-        return this.clientOptions.location;
-    }
-    getCustomBaseUrl() {
-        return this.customBaseUrl;
-    }
-    async getAuthHeaders() {
-        const headers = new Headers();
-        await this.clientOptions.auth.addAuthHeaders(headers);
-        return headers;
-    }
-    getApiVersion() {
-        if (this.clientOptions.httpOptions &&
-            this.clientOptions.httpOptions.apiVersion !== undefined) {
-            return this.clientOptions.httpOptions.apiVersion;
-        }
-        throw new Error('API version is not set.');
-    }
-    getBaseUrl() {
-        if (this.clientOptions.httpOptions &&
-            this.clientOptions.httpOptions.baseUrl !== undefined) {
-            return this.clientOptions.httpOptions.baseUrl;
-        }
-        throw new Error('Base URL is not set.');
-    }
-    getRequestUrl() {
-        return this.getRequestUrlInternal(this.clientOptions.httpOptions);
-    }
-    getHeaders() {
-        if (this.clientOptions.httpOptions &&
-            this.clientOptions.httpOptions.headers !== undefined) {
-            return this.clientOptions.httpOptions.headers;
-        }
-        else {
-            throw new Error('Headers are not set.');
-        }
-    }
-    getRequestUrlInternal(httpOptions) {
-        if (!httpOptions ||
-            httpOptions.baseUrl === undefined ||
-            httpOptions.apiVersion === undefined) {
-            throw new Error('HTTP options are not correctly set.');
-        }
-        const baseUrl = httpOptions.baseUrl.endsWith('/')
-            ? httpOptions.baseUrl.slice(0, -1)
-            : httpOptions.baseUrl;
-        const urlElement = [baseUrl];
-        if (httpOptions.apiVersion && httpOptions.apiVersion !== '') {
-            urlElement.push(httpOptions.apiVersion);
-        }
-        return urlElement.join('/');
-    }
-    getBaseResourcePath() {
-        return `projects/${this.clientOptions.project}/locations/${this.clientOptions.location}`;
-    }
-    getApiKey() {
-        return this.clientOptions.apiKey;
-    }
-    getWebsocketBaseUrl() {
-        const baseUrl = this.getBaseUrl();
-        const urlParts = new URL(baseUrl);
-        urlParts.protocol = urlParts.protocol == 'http:' ? 'ws' : 'wss';
-        return urlParts.toString();
-    }
-    setBaseUrl(url) {
-        if (this.clientOptions.httpOptions) {
-            this.clientOptions.httpOptions.baseUrl = url;
-        }
-        else {
-            throw new Error('HTTP options are not correctly set.');
-        }
-    }
-    constructUrl(path, httpOptions, prependProjectLocation) {
-        const urlElement = [this.getRequestUrlInternal(httpOptions)];
-        if (prependProjectLocation) {
-            urlElement.push(this.getBaseResourcePath());
-        }
-        if (path !== '') {
-            urlElement.push(path);
-        }
-        const url = new URL(`${urlElement.join('/')}`);
-        return url;
-    }
-    shouldPrependVertexProjectPath(request, httpOptions) {
-        if (httpOptions.baseUrl &&
-            httpOptions.baseUrlResourceScope === ResourceScope.COLLECTION) {
-            return false;
-        }
-        if (this.clientOptions.apiKey) {
-            return false;
-        }
-        if (!this.clientOptions.vertexai) {
-            return false;
-        }
-        if (request.path.startsWith('projects/')) {
-            // Assume the path already starts with
-            // `projects/<project>/location/<location>`.
-            return false;
-        }
-        if (request.httpMethod === 'GET' &&
-            request.path.startsWith('publishers/google/models')) {
-            // These paths are used by Vertex's models.get and models.list
-            // calls. For base models Vertex does not accept a project/location
-            // prefix (for tuned model the prefix is required).
-            return false;
-        }
-        return true;
-    }
-    async request(request) {
-        let patchedHttpOptions = this.clientOptions.httpOptions;
-        if (request.httpOptions) {
-            patchedHttpOptions = this.patchHttpOptions(this.clientOptions.httpOptions, request.httpOptions);
-        }
-        const prependProjectLocation = this.shouldPrependVertexProjectPath(request, patchedHttpOptions);
-        const url = this.constructUrl(request.path, patchedHttpOptions, prependProjectLocation);
-        if (request.queryParams) {
-            for (const [key, value] of Object.entries(request.queryParams)) {
-                url.searchParams.append(key, String(value));
-            }
-        }
-        let requestInit = {};
-        if (request.httpMethod === 'GET') {
-            if (request.body && request.body !== '{}') {
-                throw new Error('Request body should be empty for GET request, but got non empty request body');
-            }
-        }
-        else {
-            requestInit.body = request.body;
-        }
-        requestInit = await this.includeExtraHttpOptionsToRequestInit(requestInit, patchedHttpOptions, url.toString(), request.abortSignal);
-        return this.unaryApiCall(url, requestInit, request.httpMethod);
-    }
-    patchHttpOptions(baseHttpOptions, requestHttpOptions) {
-        const patchedHttpOptions = JSON.parse(JSON.stringify(baseHttpOptions));
-        for (const [key, value] of Object.entries(requestHttpOptions)) {
-            // Records compile to objects.
-            if (typeof value === 'object') {
-                // @ts-expect-error TS2345TS7053: Element implicitly has an 'any' type
-                // because expression of type 'string' can't be used to index type
-                // 'HttpOptions'.
-                patchedHttpOptions[key] = Object.assign(Object.assign({}, patchedHttpOptions[key]), value);
-            }
-            else if (value !== undefined) {
-                // @ts-expect-error TS2345TS7053: Element implicitly has an 'any' type
-                // because expression of type 'string' can't be used to index type
-                // 'HttpOptions'.
-                patchedHttpOptions[key] = value;
-            }
-        }
-        return patchedHttpOptions;
-    }
-    async requestStream(request) {
-        let patchedHttpOptions = this.clientOptions.httpOptions;
-        if (request.httpOptions) {
-            patchedHttpOptions = this.patchHttpOptions(this.clientOptions.httpOptions, request.httpOptions);
-        }
-        const prependProjectLocation = this.shouldPrependVertexProjectPath(request, patchedHttpOptions);
-        const url = this.constructUrl(request.path, patchedHttpOptions, prependProjectLocation);
-        if (!url.searchParams.has('alt') || url.searchParams.get('alt') !== 'sse') {
-            url.searchParams.set('alt', 'sse');
-        }
-        let requestInit = {};
-        requestInit.body = request.body;
-        requestInit = await this.includeExtraHttpOptionsToRequestInit(requestInit, patchedHttpOptions, url.toString(), request.abortSignal);
-        return this.streamApiCall(url, requestInit, request.httpMethod);
-    }
-    async includeExtraHttpOptionsToRequestInit(requestInit, httpOptions, url, abortSignal) {
-        if ((httpOptions && httpOptions.timeout) || abortSignal) {
-            const abortController = new AbortController();
-            const signal = abortController.signal;
-            if (httpOptions.timeout && (httpOptions === null || httpOptions === void 0 ? void 0 : httpOptions.timeout) > 0) {
-                // In Node > 18, the built-in fetch is backed by Undici. Undici sets a global
-                // dispatcher on the global scope which tracks its internal headersTimeout and
-                // bodyTimeout using Symbol properties.
-                const dispatcherSymbol = Symbol.for('undici.globalDispatcher.1');
-                const globalDispatcher = globalThis[dispatcherSymbol];
-                if (globalDispatcher) {
-                    const symbols = Object.getOwnPropertySymbols(globalDispatcher);
-                    for (const sym of symbols) {
-                        const desc = sym.description;
-                        if ((desc === null || desc === void 0 ? void 0 : desc.includes('headers timeout')) ||
-                            (desc === null || desc === void 0 ? void 0 : desc.includes('body timeout'))) {
-                            const currentTimeout = globalDispatcher[sym];
-                            if (typeof currentTimeout === 'number') {
-                                globalDispatcher[sym] = Math.max(currentTimeout, httpOptions.timeout);
-                            }
-                        }
-                    }
-                }
-                const timeoutHandle = setTimeout(() => abortController.abort(), httpOptions.timeout);
-                if (timeoutHandle &&
-                    typeof timeoutHandle.unref ===
-                        'function') {
-                    // call unref to prevent nodejs process from hanging, see
-                    // https://nodejs.org/api/timers.html#timeoutunref
-                    timeoutHandle.unref();
-                }
-            }
-            if (abortSignal) {
-                abortSignal.addEventListener('abort', () => {
-                    abortController.abort();
-                });
-            }
-            requestInit.signal = signal;
-        }
-        if (httpOptions && httpOptions.extraBody !== null) {
-            includeExtraBodyToRequestInit(requestInit, httpOptions.extraBody);
-        }
-        requestInit.headers = await this.getHeadersInternal(httpOptions, url);
-        return requestInit;
-    }
-    async unaryApiCall(url, requestInit, httpMethod) {
-        return this.apiCall(url.toString(), Object.assign(Object.assign({}, requestInit), { method: httpMethod }))
-            .then(async (response) => {
-            await throwErrorIfNotOK(response);
-            return new HttpResponse(response);
-        })
-            .catch((e) => {
-            if (e instanceof Error) {
-                throw e;
-            }
-            else {
-                throw new Error(`exception ${e} sending request`, { cause: e });
-            }
-        });
-    }
-    async streamApiCall(url, requestInit, httpMethod) {
-        return this.apiCall(url.toString(), Object.assign(Object.assign({}, requestInit), { method: httpMethod }))
-            .then(async (response) => {
-            await throwErrorIfNotOK(response);
-            return this.processStreamResponse(response);
-        })
-            .catch((e) => {
-            if (e instanceof Error) {
-                throw e;
-            }
-            else {
-                throw new Error(`exception ${e} sending request`, { cause: e });
-            }
-        });
-    }
-    processStreamResponse(response) {
-        return __asyncGenerator(this, arguments, function* processStreamResponse_1() {
-            var _a;
-            const reader = (_a = response === null || response === void 0 ? void 0 : response.body) === null || _a === void 0 ? void 0 : _a.getReader();
-            const decoder = new TextDecoder('utf-8');
-            if (!reader) {
-                throw new Error('Response body is empty');
-            }
-            try {
-                let buffer = '';
-                const dataPrefix = 'data:';
-                const delimiters = ['\n\n', '\r\r', '\r\n\r\n'];
-                while (true) {
-                    const { done, value } = yield __await(reader.read());
-                    if (done) {
-                        if (buffer.trim().length > 0) {
-                            throw new Error('Incomplete JSON segment at the end');
-                        }
-                        break;
-                    }
-                    const chunkString = decoder.decode(value, { stream: true });
-                    // Parse and throw an error if the chunk contains an error.
-                    try {
-                        const chunkJson = JSON.parse(chunkString);
-                        if ('error' in chunkJson) {
-                            const errorJson = JSON.parse(JSON.stringify(chunkJson['error']));
-                            const status = errorJson['status'];
-                            const code = errorJson['code'];
-                            const errorMessage = `got status: ${status}. ${JSON.stringify(chunkJson)}`;
-                            if (code >= 400 && code < 600) {
-                                const apiError = new ApiError({
-                                    message: errorMessage,
-                                    status: code,
-                                });
-                                throw apiError;
-                            }
-                        }
-                    }
-                    catch (e) {
-                        const error = e;
-                        if (error.name === 'ApiError') {
-                            throw e;
-                        }
-                    }
-                    buffer += chunkString;
-                    let delimiterIndex = -1;
-                    let delimiterLength = 0;
-                    while (true) {
-                        delimiterIndex = -1;
-                        delimiterLength = 0;
-                        for (const delimiter of delimiters) {
-                            const index = buffer.indexOf(delimiter);
-                            if (index !== -1 &&
-                                (delimiterIndex === -1 || index < delimiterIndex)) {
-                                delimiterIndex = index;
-                                delimiterLength = delimiter.length;
-                            }
-                        }
-                        if (delimiterIndex === -1) {
-                            break; // No complete event in buffer
-                        }
-                        const eventString = buffer.substring(0, delimiterIndex);
-                        buffer = buffer.substring(delimiterIndex + delimiterLength);
-                        const trimmedEvent = eventString.trim();
-                        if (trimmedEvent.startsWith(dataPrefix)) {
-                            const processedChunkString = trimmedEvent
-                                .substring(dataPrefix.length)
-                                .trim();
-                            try {
-                                const partialResponse = new Response(processedChunkString, {
-                                    headers: response === null || response === void 0 ? void 0 : response.headers,
-                                    status: response === null || response === void 0 ? void 0 : response.status,
-                                    statusText: response === null || response === void 0 ? void 0 : response.statusText,
-                                });
-                                yield yield __await(new HttpResponse(partialResponse));
-                            }
-                            catch (e) {
-                                throw new Error(`exception parsing stream chunk ${processedChunkString}. ${e}`);
-                            }
-                        }
-                    }
-                }
-            }
-            finally {
-                reader.releaseLock();
-            }
-        });
-    }
-    async apiCall(url, requestInit) {
-        var _a;
-        if (!this.clientOptions.httpOptions ||
-            !this.clientOptions.httpOptions.retryOptions) {
-            return fetch(url, requestInit);
-        }
-        const retryOptions = this.clientOptions.httpOptions.retryOptions;
-        const runFetch = async () => {
-            const response = await fetch(url, requestInit);
-            if (response.ok) {
-                return response;
-            }
-            if (DEFAULT_RETRY_HTTP_STATUS_CODES.includes(response.status)) {
-                throw new Error(`Retryable HTTP Error: ${response.statusText}`);
-            }
-            throw new AbortError(`Non-retryable exception ${response.statusText} sending request`);
-        };
-        return pRetry(runFetch, {
-            // Retry attempts is one less than the number of total attempts.
-            retries: ((_a = retryOptions.attempts) !== null && _a !== void 0 ? _a : DEFAULT_RETRY_ATTEMPTS) - 1,
-        });
-    }
-    getDefaultHeaders() {
-        const headers = {};
-        const versionHeaderValue = LIBRARY_LABEL + ' ' + this.clientOptions.userAgentExtra;
-        headers[USER_AGENT_HEADER] = versionHeaderValue;
-        headers[GOOGLE_API_CLIENT_HEADER] = versionHeaderValue;
-        headers[CONTENT_TYPE_HEADER] = 'application/json';
-        return headers;
-    }
-    async getHeadersInternal(httpOptions, url) {
-        const headers = new Headers();
-        if (httpOptions && httpOptions.headers) {
-            for (const [key, value] of Object.entries(httpOptions.headers)) {
-                headers.append(key, value);
-            }
-        }
-        // Append a timeout header if it is set, note that the timeout option is
-        // in milliseconds but the header is in seconds.
-        // NOTE: This is intentionally outside the httpOptions.headers guard above
-        // so that the X-Server-Timeout header is always sent whenever a timeout
-        // is configured, even if the caller did not supply any custom headers.
-        if ((httpOptions === null || httpOptions === void 0 ? void 0 : httpOptions.timeout) && httpOptions.timeout > 0) {
-            headers.append(SERVER_TIMEOUT_HEADER, String(Math.ceil(httpOptions.timeout / 1000)));
-        }
-        await this.clientOptions.auth.addAuthHeaders(headers, url);
-        return headers;
-    }
-    getFileName(file) {
-        var _a;
-        let fileName = '';
-        if (typeof file === 'string') {
-            fileName = file.replace(/[/\\]+$/, '');
-            fileName = (_a = fileName.split(/[/\\]/).pop()) !== null && _a !== void 0 ? _a : '';
-        }
-        return fileName;
-    }
-    /**
-     * Uploads a file asynchronously using Gemini API only, this is not supported
-     * in Vertex AI.
-     *
-     * @param file The string path to the file to be uploaded or a Blob object.
-     * @param config Optional parameters specified in the `UploadFileConfig`
-     *     interface. @see {@link types.UploadFileConfig}
-     * @return A promise that resolves to a `File` object.
-     * @throws An error if called on a Vertex AI client.
-     * @throws An error if the `mimeType` is not provided and can not be inferred,
-     */
-    async uploadFile(file, config) {
-        var _a;
-        const fileToUpload = {};
-        if (config != null) {
-            fileToUpload.mimeType = config.mimeType;
-            fileToUpload.name = config.name;
-            fileToUpload.displayName = config.displayName;
-        }
-        if (fileToUpload.name && !fileToUpload.name.startsWith('files/')) {
-            fileToUpload.name = `files/${fileToUpload.name}`;
-        }
-        const uploader = this.clientOptions.uploader;
-        const fileStat = await uploader.stat(file);
-        fileToUpload.sizeBytes = String(fileStat.size);
-        const mimeType = (_a = config === null || config === void 0 ? void 0 : config.mimeType) !== null && _a !== void 0 ? _a : fileStat.type;
-        if (mimeType === undefined || mimeType === '') {
-            throw new Error('Can not determine mimeType. Please provide mimeType in the config.');
-        }
-        fileToUpload.mimeType = mimeType;
-        const body = {
-            file: fileToUpload,
-        };
-        const fileName = this.getFileName(file);
-        const path = formatMap('upload/v1beta/files', body['_url']);
-        const uploadUrl = await this.fetchUploadUrl(path, fileToUpload.sizeBytes, fileToUpload.mimeType, fileName, body, config === null || config === void 0 ? void 0 : config.httpOptions);
-        return uploader.upload(file, uploadUrl, this);
-    }
-    /**
-     * Uploads a file to a given file search store asynchronously using Gemini API only, this is not supported
-     * in Vertex AI.
-     *
-     * @param fileSearchStoreName The name of the file search store to upload the file to.
-     * @param file The string path to the file to be uploaded or a Blob object.
-     * @param config Optional parameters specified in the `UploadFileConfig`
-     *     interface. @see {@link UploadFileConfig}
-     * @return A promise that resolves to a `File` object.
-     * @throws An error if called on a Vertex AI client.
-     * @throws An error if the `mimeType` is not provided and can not be inferred,
-     */
-    async uploadFileToFileSearchStore(fileSearchStoreName, file, config) {
-        var _a;
-        const uploader = this.clientOptions.uploader;
-        const fileStat = await uploader.stat(file);
-        const sizeBytes = String(fileStat.size);
-        const mimeType = (_a = config === null || config === void 0 ? void 0 : config.mimeType) !== null && _a !== void 0 ? _a : fileStat.type;
-        if (mimeType === undefined || mimeType === '') {
-            throw new Error('Can not determine mimeType. Please provide mimeType in the config.');
-        }
-        const path = `upload/v1beta/${fileSearchStoreName}:uploadToFileSearchStore`;
-        const fileName = this.getFileName(file);
-        const body = {};
-        if (config != null) {
-            uploadToFileSearchStoreConfigToMldev(config, body);
-        }
-        const uploadUrl = await this.fetchUploadUrl(path, sizeBytes, mimeType, fileName, body, config === null || config === void 0 ? void 0 : config.httpOptions);
-        return uploader.uploadToFileSearchStore(file, uploadUrl, this);
-    }
-    /**
-     * Downloads a file asynchronously to the specified path.
-     *
-     * @params params - The parameters for the download request, see {@link
-     * types.DownloadFileParameters}
-     */
-    async downloadFile(params) {
-        const downloader = this.clientOptions.downloader;
-        await downloader.download(params, this);
-    }
-    async fetchUploadUrl(path, sizeBytes, mimeType, fileName, body, configHttpOptions) {
-        var _a;
-        let httpOptions = {};
-        if (configHttpOptions) {
-            httpOptions = configHttpOptions;
-        }
-        else {
-            httpOptions = {
-                apiVersion: '', // api-version is set in the path.
-                headers: Object.assign({ 'Content-Type': 'application/json', 'X-Goog-Upload-Protocol': 'resumable', 'X-Goog-Upload-Command': 'start', 'X-Goog-Upload-Header-Content-Length': `${sizeBytes}`, 'X-Goog-Upload-Header-Content-Type': `${mimeType}` }, (fileName ? { 'X-Goog-Upload-File-Name': fileName } : {})),
-            };
-        }
-        const httpResponse = await this.request({
-            path,
-            body: JSON.stringify(body),
-            httpMethod: 'POST',
-            httpOptions,
-        });
-        if (!httpResponse || !(httpResponse === null || httpResponse === void 0 ? void 0 : httpResponse.headers)) {
-            throw new Error('Server did not return an HttpResponse or the returned HttpResponse did not have headers.');
-        }
-        const uploadUrl = (_a = httpResponse === null || httpResponse === void 0 ? void 0 : httpResponse.headers) === null || _a === void 0 ? void 0 : _a['x-goog-upload-url'];
-        if (uploadUrl === undefined) {
-            throw new Error('Failed to get upload url. Server did not return the x-google-upload-url in the headers');
-        }
-        return uploadUrl;
-    }
-}
-async function throwErrorIfNotOK(response) {
-    var _a;
-    if (response === undefined) {
-        throw new Error('response is undefined');
-    }
-    if (!response.ok) {
-        const status = response.status;
-        let errorBody;
-        if ((_a = response.headers.get('content-type')) === null || _a === void 0 ? void 0 : _a.includes('application/json')) {
-            errorBody = await response.json();
-        }
-        else {
-            errorBody = {
-                error: {
-                    message: await response.text(),
-                    code: response.status,
-                    status: response.statusText,
-                },
-            };
-        }
-        const errorMessage = JSON.stringify(errorBody);
-        if (status >= 400 && status < 600) {
-            const apiError = new ApiError({
-                message: errorMessage,
-                status: status,
-            });
-            throw apiError;
-        }
-        throw new Error(errorMessage);
-    }
-}
-/**
- * Recursively updates the `requestInit.body` with values from an `extraBody` object.
- *
- * If `requestInit.body` is a string, it's assumed to be JSON and will be parsed.
- * The `extraBody` is then deeply merged into this parsed object.
- * If `requestInit.body` is a Blob, `extraBody` will be ignored, and a warning logged,
- * as merging structured data into an opaque Blob is not supported.
- *
- * The function does not enforce that updated values from `extraBody` have the
- * same type as existing values in `requestInit.body`. Type mismatches during
- * the merge will result in a warning, but the value from `extraBody` will overwrite
- * the original. `extraBody` users are responsible for ensuring `extraBody` has the correct structure.
- *
- * @param requestInit The RequestInit object whose body will be updated.
- * @param extraBody The object containing updates to be merged into `requestInit.body`.
- */
-function includeExtraBodyToRequestInit(requestInit, extraBody) {
-    if (!extraBody || Object.keys(extraBody).length === 0) {
-        return;
-    }
-    if (requestInit.body instanceof Blob) {
-        console.warn('includeExtraBodyToRequestInit: extraBody provided but current request body is a Blob. extraBody will be ignored as merging is not supported for Blob bodies.');
-        return;
-    }
-    let currentBodyObject = {};
-    // If adding new type to HttpRequest.body, please check the code below to
-    // see if we need to update the logic.
-    if (typeof requestInit.body === 'string' && requestInit.body.length > 0) {
-        try {
-            const parsedBody = JSON.parse(requestInit.body);
-            if (typeof parsedBody === 'object' &&
-                parsedBody !== null &&
-                !Array.isArray(parsedBody)) {
-                currentBodyObject = parsedBody;
-            }
-            else {
-                console.warn('includeExtraBodyToRequestInit: Original request body is valid JSON but not a non-array object. Skip applying extraBody to the request body.');
-                return;
-            }
-            /*  eslint-disable-next-line @typescript-eslint/no-unused-vars */
-        }
-        catch (e) {
-            console.warn('includeExtraBodyToRequestInit: Original request body is not valid JSON. Skip applying extraBody to the request body.');
-            return;
-        }
-    }
-    function deepMerge(target, source) {
-        const output = Object.assign({}, target);
-        for (const key in source) {
-            if (Object.prototype.hasOwnProperty.call(source, key)) {
-                const sourceValue = source[key];
-                const targetValue = output[key];
-                if (sourceValue &&
-                    typeof sourceValue === 'object' &&
-                    !Array.isArray(sourceValue) &&
-                    targetValue &&
-                    typeof targetValue === 'object' &&
-                    !Array.isArray(targetValue)) {
-                    output[key] = deepMerge(targetValue, sourceValue);
-                }
-                else {
-                    if (targetValue &&
-                        sourceValue &&
-                        typeof targetValue !== typeof sourceValue) {
-                        console.warn(`includeExtraBodyToRequestInit:deepMerge: Type mismatch for key "${key}". Original type: ${typeof targetValue}, New type: ${typeof sourceValue}. Overwriting.`);
-                    }
-                    output[key] = sourceValue;
-                }
-            }
-        }
-        return output;
-    }
-    const mergedBody = deepMerge(currentBodyObject, extraBody);
-    requestInit.body = JSON.stringify(mergedBody);
-}
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
 // TODO: b/416041229 - Determine how to retrieve the MCP package version.
 const MCP_LABEL = 'mcp_used/unknown';
 // Whether MCP tool usage is detected from mcpToTool. This is used for
@@ -17144,2702 +19961,6 @@ class Tokens extends BaseModule {
  * SPDX-License-Identifier: Apache-2.0
  */
 // Code generated by the Google Gen AI SDK generator DO NOT EDIT.
-function deleteDocumentConfigToMldev(fromObject, parentObject) {
-    const toObject = {};
-    const fromForce = getValueByPath(fromObject, ['force']);
-    if (parentObject !== undefined && fromForce != null) {
-        setValueByPath(parentObject, ['_query', 'force'], fromForce);
-    }
-    return toObject;
-}
-function deleteDocumentParametersToMldev(fromObject) {
-    const toObject = {};
-    const fromName = getValueByPath(fromObject, ['name']);
-    if (fromName != null) {
-        setValueByPath(toObject, ['_url', 'name'], fromName);
-    }
-    const fromConfig = getValueByPath(fromObject, ['config']);
-    if (fromConfig != null) {
-        deleteDocumentConfigToMldev(fromConfig, toObject);
-    }
-    return toObject;
-}
-function getDocumentParametersToMldev(fromObject) {
-    const toObject = {};
-    const fromName = getValueByPath(fromObject, ['name']);
-    if (fromName != null) {
-        setValueByPath(toObject, ['_url', 'name'], fromName);
-    }
-    return toObject;
-}
-function listDocumentsConfigToMldev(fromObject, parentObject) {
-    const toObject = {};
-    const fromPageSize = getValueByPath(fromObject, ['pageSize']);
-    if (parentObject !== undefined && fromPageSize != null) {
-        setValueByPath(parentObject, ['_query', 'pageSize'], fromPageSize);
-    }
-    const fromPageToken = getValueByPath(fromObject, ['pageToken']);
-    if (parentObject !== undefined && fromPageToken != null) {
-        setValueByPath(parentObject, ['_query', 'pageToken'], fromPageToken);
-    }
-    return toObject;
-}
-function listDocumentsParametersToMldev(fromObject) {
-    const toObject = {};
-    const fromParent = getValueByPath(fromObject, ['parent']);
-    if (fromParent != null) {
-        setValueByPath(toObject, ['_url', 'parent'], fromParent);
-    }
-    const fromConfig = getValueByPath(fromObject, ['config']);
-    if (fromConfig != null) {
-        listDocumentsConfigToMldev(fromConfig, toObject);
-    }
-    return toObject;
-}
-function listDocumentsResponseFromMldev(fromObject) {
-    const toObject = {};
-    const fromSdkHttpResponse = getValueByPath(fromObject, [
-        'sdkHttpResponse',
-    ]);
-    if (fromSdkHttpResponse != null) {
-        setValueByPath(toObject, ['sdkHttpResponse'], fromSdkHttpResponse);
-    }
-    const fromNextPageToken = getValueByPath(fromObject, [
-        'nextPageToken',
-    ]);
-    if (fromNextPageToken != null) {
-        setValueByPath(toObject, ['nextPageToken'], fromNextPageToken);
-    }
-    const fromDocuments = getValueByPath(fromObject, ['documents']);
-    if (fromDocuments != null) {
-        let transformedList = fromDocuments;
-        if (Array.isArray(transformedList)) {
-            transformedList = transformedList.map((item) => {
-                return item;
-            });
-        }
-        setValueByPath(toObject, ['documents'], transformedList);
-    }
-    return toObject;
-}
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-class Documents extends BaseModule {
-    constructor(apiClient) {
-        super();
-        this.apiClient = apiClient;
-        /**
-         * Lists documents.
-         *
-         * @param params - The parameters for the list request.
-         * @return - A pager of documents.
-         *
-         * @example
-         * ```ts
-         * const documents = await ai.documents.list({parent:'rag_store_name', config: {'pageSize': 2}});
-         * for await (const document of documents) {
-         *   console.log(document);
-         * }
-         * ```
-         */
-        this.list = async (params) => {
-            return new Pager(PagedItem.PAGED_ITEM_DOCUMENTS, (x) => this.listInternal({ parent: params.parent, config: x.config }), await this.listInternal(params), params);
-        };
-    }
-    /**
-     * Gets a Document.
-     *
-     * @param params - The parameters for getting a document.
-     * @return Document.
-     */
-    async get(params) {
-        var _a, _b;
-        let response;
-        let path = '';
-        let queryParams = {};
-        if (this.apiClient.isVertexAI()) {
-            throw new Error('This method is only supported by the Gemini Developer API.');
-        }
-        else {
-            const body = getDocumentParametersToMldev(params);
-            path = formatMap('{name}', body['_url']);
-            queryParams = body['_query'];
-            delete body['_url'];
-            delete body['_query'];
-            response = this.apiClient
-                .request({
-                path: path,
-                queryParams: queryParams,
-                body: JSON.stringify(body),
-                httpMethod: 'GET',
-                httpOptions: (_a = params.config) === null || _a === void 0 ? void 0 : _a.httpOptions,
-                abortSignal: (_b = params.config) === null || _b === void 0 ? void 0 : _b.abortSignal,
-            })
-                .then((httpResponse) => {
-                return httpResponse.json();
-            });
-            return response.then((resp) => {
-                return resp;
-            });
-        }
-    }
-    /**
-     * Deletes a Document.
-     *
-     * @param params - The parameters for deleting a document.
-     */
-    async delete(params) {
-        var _a, _b;
-        let path = '';
-        let queryParams = {};
-        if (this.apiClient.isVertexAI()) {
-            throw new Error('This method is only supported by the Gemini Developer API.');
-        }
-        else {
-            const body = deleteDocumentParametersToMldev(params);
-            path = formatMap('{name}', body['_url']);
-            queryParams = body['_query'];
-            delete body['_url'];
-            delete body['_query'];
-            await this.apiClient.request({
-                path: path,
-                queryParams: queryParams,
-                body: JSON.stringify(body),
-                httpMethod: 'DELETE',
-                httpOptions: (_a = params.config) === null || _a === void 0 ? void 0 : _a.httpOptions,
-                abortSignal: (_b = params.config) === null || _b === void 0 ? void 0 : _b.abortSignal,
-            });
-        }
-    }
-    async listInternal(params) {
-        var _a, _b;
-        let response;
-        let path = '';
-        let queryParams = {};
-        if (this.apiClient.isVertexAI()) {
-            throw new Error('This method is only supported by the Gemini Developer API.');
-        }
-        else {
-            const body = listDocumentsParametersToMldev(params);
-            path = formatMap('{parent}/documents', body['_url']);
-            queryParams = body['_query'];
-            delete body['_url'];
-            delete body['_query'];
-            response = this.apiClient
-                .request({
-                path: path,
-                queryParams: queryParams,
-                body: JSON.stringify(body),
-                httpMethod: 'GET',
-                httpOptions: (_a = params.config) === null || _a === void 0 ? void 0 : _a.httpOptions,
-                abortSignal: (_b = params.config) === null || _b === void 0 ? void 0 : _b.abortSignal,
-            })
-                .then((httpResponse) => {
-                return httpResponse.json();
-            });
-            return response.then((apiResponse) => {
-                const resp = listDocumentsResponseFromMldev(apiResponse);
-                const typedResp = new ListDocumentsResponse();
-                Object.assign(typedResp, resp);
-                return typedResp;
-            });
-        }
-    }
-}
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-class FileSearchStores extends BaseModule {
-    constructor(apiClient, documents = new Documents(apiClient)) {
-        super();
-        this.apiClient = apiClient;
-        this.documents = documents;
-        /**
-         * Lists file search stores.
-         *
-         * @param params - The parameters for the list request.
-         * @return - A pager of file search stores.
-         *
-         * @example
-         * ```ts
-         * const fileSearchStores = await ai.fileSearchStores.list({config: {'pageSize': 2}});
-         * for await (const fileSearchStore of fileSearchStores) {
-         *   console.log(fileSearchStore);
-         * }
-         * ```
-         */
-        this.list = async (params = {}) => {
-            return new Pager(PagedItem.PAGED_ITEM_FILE_SEARCH_STORES, (x) => this.listInternal(x), await this.listInternal(params), params);
-        };
-    }
-    /**
-     * Uploads a file asynchronously to a given File Search Store.
-     * This method is not available in Gemini Enterprise Agent Platform (previously known as Vertex AI).
-     * Supported upload sources:
-     * - Node.js: File path (string) or Blob object.
-     * - Browser: Blob object (e.g., File).
-     *
-     * @remarks
-     * The `mimeType` can be specified in the `config` parameter. If omitted:
-     *  - For file path (string) inputs, the `mimeType` will be inferred from the
-     *     file extension.
-     *  - For Blob object inputs, the `mimeType` will be set to the Blob's `type`
-     *     property.
-     *
-     * This section can contain multiple paragraphs and code examples.
-     *
-     * @param params - Optional parameters specified in the
-     *        `types.UploadToFileSearchStoreParameters` interface.
-     *         @see {@link types.UploadToFileSearchStoreParameters#config} for the optional
-     *         config in the parameters.
-     * @return A promise that resolves to a long running operation.
-     * @throws An error if called on a Gemini Enterprise Agent Platform (previously known as Vertex AI) client.
-     * @throws An error if the `mimeType` is not provided and can not be inferred,
-     * the `mimeType` can be provided in the `params.config` parameter.
-     * @throws An error occurs if a suitable upload location cannot be established.
-     *
-     * @example
-     * The following code uploads a file to a given file search store.
-     *
-     * ```ts
-     * const operation = await ai.fileSearchStores.upload({fileSearchStoreName: 'fileSearchStores/foo-bar', file: 'file.txt', config: {
-     *   mimeType: 'text/plain',
-     * }});
-     * console.log(operation.name);
-     * ```
-     */
-    async uploadToFileSearchStore(params) {
-        if (this.apiClient.isVertexAI()) {
-            throw new Error('Gemini Enterprise Agent Platform (previously known as Vertex AI) does not support uploading files to a file search store.');
-        }
-        return this.apiClient.uploadFileToFileSearchStore(params.fileSearchStoreName, params.file, params.config);
-    }
-    /**
-     * Downloads media using a Media ID or URI.
-     * This method is only supported in the Gemini Developer client.
-     *
-     * @param uri - The URI or Media ID of the blob.
-     * @param config - Optional configuration for the download.
-     * @returns A promise that resolves to the blob data as a Uint8Array.
-     */
-    async downloadMedia(uri, config) {
-        if (this.apiClient.isVertexAI()) {
-            throw new Error('This method is only supported in the Gemini Developer client.');
-        }
-        const parsedUri = new URL(uri, 'http://dummy.com');
-        let pathname = parsedUri.pathname;
-        if (pathname.startsWith('/')) {
-            pathname = pathname.slice(1);
-        }
-        if (!pathname.includes('/media/')) {
-            throw new Error(`Invalid uri format: ${uri}. Expected to contain /media/`);
-        }
-        const queryParams = {};
-        parsedUri.searchParams.forEach((value, key) => {
-            queryParams[key] = value;
-        });
-        queryParams['alt'] = 'media';
-        const httpOptions = Object.assign({}, config === null || config === void 0 ? void 0 : config.httpOptions);
-        const response = await this.apiClient.request({
-            path: pathname,
-            httpMethod: 'GET',
-            queryParams: queryParams,
-            httpOptions: httpOptions,
-        });
-        if (response instanceof HttpResponse) {
-            const arrayBuffer = await response.responseInternal.arrayBuffer();
-            return new Uint8Array(arrayBuffer);
-        }
-        else {
-            throw new Error('Unexpected response type from downloadMedia');
-        }
-    }
-    /**
-     * Creates a File Search Store.
-     *
-     * @param params - The parameters for creating a File Search Store.
-     * @return FileSearchStore.
-     */
-    async create(params) {
-        var _a, _b;
-        let response;
-        let path = '';
-        let queryParams = {};
-        if (this.apiClient.isVertexAI()) {
-            throw new Error('This method is only supported by the Gemini Developer API.');
-        }
-        else {
-            const body = createFileSearchStoreParametersToMldev(this.apiClient, params);
-            path = formatMap('fileSearchStores', body['_url']);
-            queryParams = body['_query'];
-            delete body['_url'];
-            delete body['_query'];
-            response = this.apiClient
-                .request({
-                path: path,
-                queryParams: queryParams,
-                body: JSON.stringify(body),
-                httpMethod: 'POST',
-                httpOptions: (_a = params.config) === null || _a === void 0 ? void 0 : _a.httpOptions,
-                abortSignal: (_b = params.config) === null || _b === void 0 ? void 0 : _b.abortSignal,
-            })
-                .then((httpResponse) => {
-                return httpResponse.json();
-            });
-            return response.then((resp) => {
-                return resp;
-            });
-        }
-    }
-    /**
-     * Gets a File Search Store.
-     *
-     * @param params - The parameters for getting a File Search Store.
-     * @return FileSearchStore.
-     */
-    async get(params) {
-        var _a, _b;
-        let response;
-        let path = '';
-        let queryParams = {};
-        if (this.apiClient.isVertexAI()) {
-            throw new Error('This method is only supported by the Gemini Developer API.');
-        }
-        else {
-            const body = getFileSearchStoreParametersToMldev(params);
-            path = formatMap('{name}', body['_url']);
-            queryParams = body['_query'];
-            delete body['_url'];
-            delete body['_query'];
-            response = this.apiClient
-                .request({
-                path: path,
-                queryParams: queryParams,
-                body: JSON.stringify(body),
-                httpMethod: 'GET',
-                httpOptions: (_a = params.config) === null || _a === void 0 ? void 0 : _a.httpOptions,
-                abortSignal: (_b = params.config) === null || _b === void 0 ? void 0 : _b.abortSignal,
-            })
-                .then((httpResponse) => {
-                return httpResponse.json();
-            });
-            return response.then((resp) => {
-                return resp;
-            });
-        }
-    }
-    /**
-     * Deletes a File Search Store.
-     *
-     * @param params - The parameters for deleting a File Search Store.
-     */
-    async delete(params) {
-        var _a, _b;
-        let path = '';
-        let queryParams = {};
-        if (this.apiClient.isVertexAI()) {
-            throw new Error('This method is only supported by the Gemini Developer API.');
-        }
-        else {
-            const body = deleteFileSearchStoreParametersToMldev(params);
-            path = formatMap('{name}', body['_url']);
-            queryParams = body['_query'];
-            delete body['_url'];
-            delete body['_query'];
-            await this.apiClient.request({
-                path: path,
-                queryParams: queryParams,
-                body: JSON.stringify(body),
-                httpMethod: 'DELETE',
-                httpOptions: (_a = params.config) === null || _a === void 0 ? void 0 : _a.httpOptions,
-                abortSignal: (_b = params.config) === null || _b === void 0 ? void 0 : _b.abortSignal,
-            });
-        }
-    }
-    async listInternal(params) {
-        var _a, _b;
-        let response;
-        let path = '';
-        let queryParams = {};
-        if (this.apiClient.isVertexAI()) {
-            throw new Error('This method is only supported by the Gemini Developer API.');
-        }
-        else {
-            const body = listFileSearchStoresParametersToMldev(params);
-            path = formatMap('fileSearchStores', body['_url']);
-            queryParams = body['_query'];
-            delete body['_url'];
-            delete body['_query'];
-            response = this.apiClient
-                .request({
-                path: path,
-                queryParams: queryParams,
-                body: JSON.stringify(body),
-                httpMethod: 'GET',
-                httpOptions: (_a = params.config) === null || _a === void 0 ? void 0 : _a.httpOptions,
-                abortSignal: (_b = params.config) === null || _b === void 0 ? void 0 : _b.abortSignal,
-            })
-                .then((httpResponse) => {
-                return httpResponse.json();
-            });
-            return response.then((apiResponse) => {
-                const resp = listFileSearchStoresResponseFromMldev(apiResponse);
-                const typedResp = new ListFileSearchStoresResponse();
-                Object.assign(typedResp, resp);
-                return typedResp;
-            });
-        }
-    }
-    async uploadToFileSearchStoreInternal(params) {
-        var _a, _b;
-        let response;
-        let path = '';
-        let queryParams = {};
-        if (this.apiClient.isVertexAI()) {
-            throw new Error('This method is only supported by the Gemini Developer API.');
-        }
-        else {
-            const body = uploadToFileSearchStoreParametersToMldev(params);
-            path = formatMap('upload/v1beta/{file_search_store_name}:uploadToFileSearchStore', body['_url']);
-            queryParams = body['_query'];
-            delete body['_url'];
-            delete body['_query'];
-            response = this.apiClient
-                .request({
-                path: path,
-                queryParams: queryParams,
-                body: JSON.stringify(body),
-                httpMethod: 'POST',
-                httpOptions: (_a = params.config) === null || _a === void 0 ? void 0 : _a.httpOptions,
-                abortSignal: (_b = params.config) === null || _b === void 0 ? void 0 : _b.abortSignal,
-            })
-                .then((httpResponse) => {
-                return httpResponse.json();
-            });
-            return response.then((apiResponse) => {
-                const resp = uploadToFileSearchStoreResumableResponseFromMldev(apiResponse);
-                const typedResp = new UploadToFileSearchStoreResumableResponse();
-                Object.assign(typedResp, resp);
-                return typedResp;
-            });
-        }
-    }
-    /**
-     * Imports a File from File Service to a FileSearchStore.
-     *
-     * This is a long-running operation, see aip.dev/151
-     *
-     * @param params - The parameters for importing a file to a file search store.
-     * @return ImportFileOperation.
-     */
-    async importFile(params) {
-        var _a, _b;
-        let response;
-        let path = '';
-        let queryParams = {};
-        if (this.apiClient.isVertexAI()) {
-            throw new Error('This method is only supported by the Gemini Developer API.');
-        }
-        else {
-            const body = importFileParametersToMldev(params);
-            path = formatMap('{file_search_store_name}:importFile', body['_url']);
-            queryParams = body['_query'];
-            delete body['_url'];
-            delete body['_query'];
-            response = this.apiClient
-                .request({
-                path: path,
-                queryParams: queryParams,
-                body: JSON.stringify(body),
-                httpMethod: 'POST',
-                httpOptions: (_a = params.config) === null || _a === void 0 ? void 0 : _a.httpOptions,
-                abortSignal: (_b = params.config) === null || _b === void 0 ? void 0 : _b.abortSignal,
-            })
-                .then((httpResponse) => {
-                return httpResponse.json();
-            });
-            return response.then((apiResponse) => {
-                const resp = importFileOperationFromMldev(apiResponse);
-                const typedResp = new ImportFileOperation();
-                Object.assign(typedResp, resp);
-                return typedResp;
-            });
-        }
-    }
-}
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-/**
- * https://stackoverflow.com/a/2117523
- */
-let uuid4Internal = function () {
-    const { crypto } = globalThis;
-    if (crypto === null || crypto === void 0 ? void 0 : crypto.randomUUID) {
-        uuid4Internal = crypto.randomUUID.bind(crypto);
-        return crypto.randomUUID();
-    }
-    const u8 = new Uint8Array(1);
-    const randomByte = crypto ? () => crypto.getRandomValues(u8)[0] : () => (Math.random() * 0xff) & 0xff;
-    return '10000000-1000-4000-8000-100000000000'.replace(/[018]/g, (c) => (+c ^ (randomByte() & (15 >> (+c / 4)))).toString(16));
-};
-const uuid4 = () => uuid4Internal();
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-function isAbortError(err) {
-    return (typeof err === 'object' &&
-        err !== null &&
-        // Spec-compliant fetch implementations
-        (('name' in err && err.name === 'AbortError') ||
-            // Expo fetch
-            ('message' in err && String(err.message).includes('FetchRequestCanceledException'))));
-}
-const castToError = (err) => {
-    if (err instanceof Error)
-        return err;
-    if (typeof err === 'object' && err !== null) {
-        try {
-            if (Object.prototype.toString.call(err) === '[object Error]') {
-                // @ts-ignore - not all envs have native support for cause yet
-                const error = new Error(err.message, err.cause ? { cause: err.cause } : {});
-                if (err.stack)
-                    error.stack = err.stack;
-                // @ts-ignore - not all envs have native support for cause yet
-                if (err.cause && !error.cause)
-                    error.cause = err.cause;
-                if (err.name)
-                    error.name = err.name;
-                return error;
-            }
-        }
-        catch (_a) { }
-        try {
-            return new Error(JSON.stringify(err));
-        }
-        catch (_b) { }
-    }
-    return new Error(err);
-};
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-class GeminiNextGenAPIClientError extends Error {
-}
-class APIError extends GeminiNextGenAPIClientError {
-    constructor(status, error, message, headers) {
-        super(`${APIError.makeMessage(status, error, message)}`);
-        this.status = status;
-        this.headers = headers;
-        this.error = error;
-    }
-    static makeMessage(status, error, message) {
-        const msg = (error === null || error === void 0 ? void 0 : error.message) ?
-            typeof error.message === 'string' ?
-                error.message
-                : JSON.stringify(error.message)
-            : error ? JSON.stringify(error)
-                : message;
-        if (status && msg) {
-            return `${status} ${msg}`;
-        }
-        if (status) {
-            return `${status} status code (no body)`;
-        }
-        if (msg) {
-            return msg;
-        }
-        return '(no status code or body)';
-    }
-    static generate(status, errorResponse, message, headers) {
-        if (!status || !headers) {
-            return new APIConnectionError({ message, cause: castToError(errorResponse) });
-        }
-        const error = errorResponse;
-        if (status === 400) {
-            return new BadRequestError(status, error, message, headers);
-        }
-        if (status === 401) {
-            return new AuthenticationError(status, error, message, headers);
-        }
-        if (status === 403) {
-            return new PermissionDeniedError(status, error, message, headers);
-        }
-        if (status === 404) {
-            return new NotFoundError(status, error, message, headers);
-        }
-        if (status === 409) {
-            return new ConflictError(status, error, message, headers);
-        }
-        if (status === 422) {
-            return new UnprocessableEntityError(status, error, message, headers);
-        }
-        if (status === 429) {
-            return new RateLimitError(status, error, message, headers);
-        }
-        if (status >= 500) {
-            return new InternalServerError(status, error, message, headers);
-        }
-        return new APIError(status, error, message, headers);
-    }
-}
-class APIUserAbortError extends APIError {
-    constructor({ message } = {}) {
-        super(undefined, undefined, message || 'Request was aborted.', undefined);
-    }
-}
-class APIConnectionError extends APIError {
-    constructor({ message, cause }) {
-        super(undefined, undefined, message || 'Connection error.', undefined);
-        // in some environments the 'cause' property is already declared
-        // @ts-ignore
-        if (cause)
-            this.cause = cause;
-    }
-}
-class APIConnectionTimeoutError extends APIConnectionError {
-    constructor({ message } = {}) {
-        super({
-            message: message !== null && message !== void 0 ? message : 'Request timed out. This is a client-side timeout. You can increase the timeout by setting the `timeout` argument in your request or client http options.',
-        });
-    }
-}
-class BadRequestError extends APIError {
-}
-class AuthenticationError extends APIError {
-}
-class PermissionDeniedError extends APIError {
-}
-class NotFoundError extends APIError {
-}
-class ConflictError extends APIError {
-}
-class UnprocessableEntityError extends APIError {
-}
-class RateLimitError extends APIError {
-}
-class InternalServerError extends APIError {
-}
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-// https://url.spec.whatwg.org/#url-scheme-string
-const startsWithSchemeRegexp = /^[a-z][a-z0-9+.-]*:/i;
-const isAbsoluteURL = (url) => {
-    return startsWithSchemeRegexp.test(url);
-};
-let isArrayInternal = (val) => ((isArrayInternal = Array.isArray), isArrayInternal(val));
-const isArray = isArrayInternal;
-let isReadonlyArrayInternal = isArray;
-const isReadonlyArray = isReadonlyArrayInternal;
-// https://stackoverflow.com/a/34491287
-function isEmptyObj(obj) {
-    if (!obj)
-        return true;
-    for (const _k in obj)
-        return false;
-    return true;
-}
-// https://eslint.org/docs/latest/rules/no-prototype-builtins
-function hasOwn(obj, key) {
-    return Object.prototype.hasOwnProperty.call(obj, key);
-}
-const validatePositiveInteger = (name, n) => {
-    if (typeof n !== 'number' || !Number.isInteger(n)) {
-        throw new GeminiNextGenAPIClientError(`${name} must be an integer`);
-    }
-    if (n < 0) {
-        throw new GeminiNextGenAPIClientError(`${name} must be a positive integer`);
-    }
-    return n;
-};
-const safeJSON = (text) => {
-    try {
-        return JSON.parse(text);
-    }
-    catch (err) {
-        return undefined;
-    }
-};
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-const sleep$1 = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-function getDefaultFetch() {
-    if (typeof fetch !== 'undefined') {
-        return fetch;
-    }
-    throw new Error('`fetch` is not defined as a global; Either pass `fetch` to the client, `new GeminiNextGenAPIClient({ fetch })` or polyfill the global, `globalThis.fetch = fetch`');
-}
-function makeReadableStream(...args) {
-    const ReadableStream = globalThis.ReadableStream;
-    if (typeof ReadableStream === 'undefined') {
-        // Note: All of the platforms / runtimes we officially support already define
-        // `ReadableStream` as a global, so this should only ever be hit on unsupported runtimes.
-        throw new Error('`ReadableStream` is not defined as a global; You will need to polyfill it, `globalThis.ReadableStream = ReadableStream`');
-    }
-    return new ReadableStream(...args);
-}
-function ReadableStreamFrom(iterable) {
-    let iter = Symbol.asyncIterator in iterable ? iterable[Symbol.asyncIterator]() : iterable[Symbol.iterator]();
-    return makeReadableStream({
-        start() { },
-        async pull(controller) {
-            const { done, value } = await iter.next();
-            if (done) {
-                controller.close();
-            }
-            else {
-                controller.enqueue(value);
-            }
-        },
-        async cancel() {
-            var _a;
-            await ((_a = iter.return) === null || _a === void 0 ? void 0 : _a.call(iter));
-        },
-    });
-}
-/**
- * Most browsers don't yet have async iterable support for ReadableStream,
- * and Node has a very different way of reading bytes from its "ReadableStream".
- *
- * This polyfill was pulled from https://github.com/MattiasBuelens/web-streams-polyfill/pull/122#issuecomment-1627354490
- */
-function ReadableStreamToAsyncIterable(stream) {
-    if (stream[Symbol.asyncIterator])
-        return stream;
-    const reader = stream.getReader();
-    return {
-        async next() {
-            try {
-                const result = await reader.read();
-                if (result === null || result === void 0 ? void 0 : result.done)
-                    reader.releaseLock(); // release lock when stream becomes closed
-                return result;
-            }
-            catch (e) {
-                reader.releaseLock(); // release lock when stream becomes errored
-                throw e;
-            }
-        },
-        async return() {
-            const cancelPromise = reader.cancel();
-            reader.releaseLock();
-            await cancelPromise;
-            return { done: true, value: undefined };
-        },
-        [Symbol.asyncIterator]() {
-            return this;
-        },
-    };
-}
-/**
- * Cancels a ReadableStream we don't need to consume.
- * See https://undici.nodejs.org/#/?id=garbage-collection
- */
-async function CancelReadableStream(stream) {
-    var _a, _b;
-    if (stream === null || typeof stream !== 'object')
-        return;
-    if (stream[Symbol.asyncIterator]) {
-        await ((_b = (_a = stream[Symbol.asyncIterator]()).return) === null || _b === void 0 ? void 0 : _b.call(_a));
-        return;
-    }
-    const reader = stream.getReader();
-    const cancelPromise = reader.cancel();
-    reader.releaseLock();
-    await cancelPromise;
-}
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-const FallbackEncoder = ({ headers, body }) => {
-    return {
-        bodyHeaders: {
-            'content-type': 'application/json',
-        },
-        body: JSON.stringify(body),
-    };
-};
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-/**
- * Basic re-implementation of `qs.stringify` for primitive types.
- */
-function stringifyQuery(query) {
-    return Object.entries(query)
-        .filter(([_, value]) => typeof value !== 'undefined')
-        .map(([key, value]) => {
-        if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
-            return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
-        }
-        if (value === null) {
-            return `${encodeURIComponent(key)}=`;
-        }
-        throw new GeminiNextGenAPIClientError(`Cannot stringify type ${typeof value}; Expected string, number, boolean, or null. If you need to pass nested query parameters, you can manually encode them, e.g. { query: { 'foo[key1]': value1, 'foo[key2]': value2 } }, and please open a GitHub issue requesting better support for your use case.`);
-    })
-        .join('&');
-}
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-const VERSION = '0.0.1';
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-const checkFileSupport = () => {
-    var _a;
-    if (typeof File === 'undefined') {
-        const { process } = globalThis;
-        const isOldNode = typeof ((_a = process === null || process === void 0 ? void 0 : process.versions) === null || _a === void 0 ? void 0 : _a.node) === 'string' && parseInt(process.versions.node.split('.')) < 20;
-        throw new Error('`File` is not defined as a global, which is required for file uploads.' +
-            (isOldNode ?
-                " Update to Node 20 LTS or newer, or set `globalThis.File` to `import('node:buffer').File`."
-                : ''));
-    }
-};
-/**
- * Construct a `File` instance. This is used to ensure a helpful error is thrown
- * for environments that don't define a global `File` yet.
- */
-function makeFile(fileBits, fileName, options) {
-    checkFileSupport();
-    return new File(fileBits, fileName !== null && fileName !== void 0 ? fileName : 'unknown_file', options);
-}
-function getName(value) {
-    return (((typeof value === 'object' &&
-        value !== null &&
-        (('name' in value && value.name && String(value.name)) ||
-            ('url' in value && value.url && String(value.url)) ||
-            ('filename' in value && value.filename && String(value.filename)) ||
-            ('path' in value && value.path && String(value.path)))) ||
-        '')
-        .split(/[\\/]/)
-        .pop() || undefined);
-}
-const isAsyncIterable = (value) => value != null && typeof value === 'object' && typeof value[Symbol.asyncIterator] === 'function';
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-/**
- * This check adds the arrayBuffer() method type because it is available and used at runtime
- */
-const isBlobLike = (value) => value != null &&
-    typeof value === 'object' &&
-    typeof value.size === 'number' &&
-    typeof value.type === 'string' &&
-    typeof value.text === 'function' &&
-    typeof value.slice === 'function' &&
-    typeof value.arrayBuffer === 'function';
-/**
- * This check adds the arrayBuffer() method type because it is available and used at runtime
- */
-const isFileLike = (value) => value != null &&
-    typeof value === 'object' &&
-    typeof value.name === 'string' &&
-    typeof value.lastModified === 'number' &&
-    isBlobLike(value);
-const isResponseLike = (value) => value != null &&
-    typeof value === 'object' &&
-    typeof value.url === 'string' &&
-    typeof value.blob === 'function';
-/**
- * Helper for creating a {@link File} to pass to an SDK upload method from a variety of different data formats
- * @param value the raw content of the file. Can be an {@link Uploadable}, BlobLikePart, or AsyncIterable of BlobLikeParts
- * @param {string=} name the name of the file. If omitted, toFile will try to determine a file name from bits if possible
- * @param {Object=} options additional properties
- * @param {string=} options.type the MIME type of the content
- * @param {number=} options.lastModified the last modified timestamp
- * @returns a {@link File} with the given properties
- */
-async function toFile(value, name, options) {
-    checkFileSupport();
-    // If it's a promise, resolve it.
-    value = await value;
-    // If we've been given a `File` we don't need to do anything
-    if (isFileLike(value)) {
-        if (value instanceof File) {
-            return value;
-        }
-        return makeFile([await value.arrayBuffer()], value.name);
-    }
-    if (isResponseLike(value)) {
-        const blob = await value.blob();
-        name || (name = new URL(value.url).pathname.split(/[\\/]/).pop());
-        return makeFile(await getBytes(blob), name, options);
-    }
-    const parts = await getBytes(value);
-    name || (name = getName(value));
-    if (!(options === null || options === void 0 ? void 0 : options.type)) {
-        const type = parts.find((part) => typeof part === 'object' && 'type' in part && part.type);
-        if (typeof type === 'string') {
-            options = Object.assign(Object.assign({}, options), { type });
-        }
-    }
-    return makeFile(parts, name, options);
-}
-async function getBytes(value) {
-    var _a, e_1, _b, _c;
-    var _d;
-    let parts = [];
-    if (typeof value === 'string' ||
-        ArrayBuffer.isView(value) || // includes Uint8Array, Buffer, etc.
-        value instanceof ArrayBuffer) {
-        parts.push(value);
-    }
-    else if (isBlobLike(value)) {
-        parts.push(value instanceof Blob ? value : await value.arrayBuffer());
-    }
-    else if (isAsyncIterable(value) // includes Readable, ReadableStream, etc.
-    ) {
-        try {
-            for (var _e = true, value_1 = __asyncValues(value), value_1_1; value_1_1 = await value_1.next(), _a = value_1_1.done, !_a; _e = true) {
-                _c = value_1_1.value;
-                _e = false;
-                const chunk = _c;
-                parts.push(...(await getBytes(chunk))); // TODO, consider validating?
-            }
-        }
-        catch (e_1_1) { e_1 = { error: e_1_1 }; }
-        finally {
-            try {
-                if (!_e && !_a && (_b = value_1.return)) await _b.call(value_1);
-            }
-            finally { if (e_1) throw e_1.error; }
-        }
-    }
-    else {
-        const constructor = (_d = value === null || value === void 0 ? void 0 : value.constructor) === null || _d === void 0 ? void 0 : _d.name;
-        throw new Error(`Unexpected data type: ${typeof value}${constructor ? `; constructor: ${constructor}` : ''}${propsForError(value)}`);
-    }
-    return parts;
-}
-function propsForError(value) {
-    if (typeof value !== 'object' || value === null)
-        return '';
-    const props = Object.getOwnPropertyNames(value);
-    return `; props: [${props.map((p) => `"${p}"`).join(', ')}]`;
-}
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-class APIResource {
-    constructor(client) {
-        this._client = client;
-    }
-}
-/**
- * The key path from the client. For example, a resource accessible as `client.resource.subresource` would
- * have a property `static override readonly _key = Object.freeze(['resource', 'subresource'] as const);`.
- */
-APIResource._key = [];
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-/**
- * Percent-encode everything that isn't safe to have in a path without encoding safe chars.
- *
- * Taken from https://datatracker.ietf.org/doc/html/rfc3986#section-3.3:
- * > unreserved  = ALPHA / DIGIT / "-" / "." / "_" / "~"
- * > sub-delims  = "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / ";" / "="
- * > pchar       = unreserved / pct-encoded / sub-delims / ":" / "@"
- */
-function encodeURIPath(str) {
-    return str.replace(/[^A-Za-z0-9\-._~!$&'()*+,;=:@]+/g, encodeURIComponent);
-}
-const EMPTY = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.create(null));
-const createPathTagFunction = (pathEncoder = encodeURIPath) => (function path(statics, ...params) {
-    // If there are no params, no processing is needed.
-    if (statics.length === 1)
-        return statics[0];
-    let postPath = false;
-    const invalidSegments = [];
-    const path = statics.reduce((previousValue, currentValue, index) => {
-        var _a, _b, _c;
-        if (/[?#]/.test(currentValue)) {
-            postPath = true;
-        }
-        const value = params[index];
-        let encoded = (postPath ? encodeURIComponent : pathEncoder)('' + value);
-        if (index !== params.length &&
-            (value == null ||
-                (typeof value === 'object' &&
-                    // handle values from other realms
-                    value.toString ===
-                        ((_c = Object.getPrototypeOf((_b = Object.getPrototypeOf((_a = value.hasOwnProperty) !== null && _a !== void 0 ? _a : EMPTY)) !== null && _b !== void 0 ? _b : EMPTY)) === null || _c === void 0 ? void 0 : _c.toString)))) {
-            encoded = value + '';
-            invalidSegments.push({
-                start: previousValue.length + currentValue.length,
-                length: encoded.length,
-                error: `Value of type ${Object.prototype.toString
-                    .call(value)
-                    .slice(8, -1)} is not a valid path parameter`,
-            });
-        }
-        return previousValue + currentValue + (index === params.length ? '' : encoded);
-    }, '');
-    const pathOnly = path.split(/[?#]/, 1)[0];
-    const invalidSegmentPattern = /(^|\/)(?:\.|%2e){1,2}(?=\/|$)/gi;
-    let match;
-    // Find all invalid segments
-    while ((match = invalidSegmentPattern.exec(pathOnly)) !== null) {
-        const hasLeadingSlash = match[0].startsWith('/');
-        const offset = hasLeadingSlash ? 1 : 0;
-        const cleanMatch = hasLeadingSlash ? match[0].slice(1) : match[0];
-        invalidSegments.push({
-            start: match.index + offset,
-            length: cleanMatch.length,
-            error: `Value "${cleanMatch}" can\'t be safely passed as a path parameter`,
-        });
-    }
-    invalidSegments.sort((a, b) => a.start - b.start);
-    if (invalidSegments.length > 0) {
-        let lastEnd = 0;
-        const underline = invalidSegments.reduce((acc, segment) => {
-            const spaces = ' '.repeat(segment.start - lastEnd);
-            const arrows = '^'.repeat(segment.length);
-            lastEnd = segment.start + segment.length;
-            return acc + spaces + arrows;
-        }, '');
-        throw new GeminiNextGenAPIClientError(`Path parameters result in path with invalid segments:\n${invalidSegments
-            .map((e) => e.error)
-            .join('\n')}\n${path}\n${underline}`);
-    }
-    return path;
-});
-/**
- * URI-encodes path params and ensures no unsafe /./ or /../ path segments are introduced.
- */
-const path = /* @__PURE__ */ createPathTagFunction(encodeURIPath);
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-class BaseAgents extends APIResource {
-    /**
-     * Creates a new Agent (Typed version for SDK).
-     */
-    create(params = {}, options) {
-        const _a = params !== null && params !== void 0 ? params : {}, { api_version = this._client.apiVersion } = _a, body = __rest(_a, ["api_version"]);
-        return this._client.post(path `/${api_version}/agents`, Object.assign({ body }, options));
-    }
-    /**
-     * Lists all Agents.
-     */
-    list(params = {}, options) {
-        const _a = params !== null && params !== void 0 ? params : {}, { api_version = this._client.apiVersion } = _a, query = __rest(_a, ["api_version"]);
-        return this._client.get(path `/${api_version}/agents`, Object.assign({ query }, options));
-    }
-    /**
-     * Deletes an Agent.
-     */
-    delete(id, params = {}, options) {
-        const { api_version = this._client.apiVersion } = params !== null && params !== void 0 ? params : {};
-        return this._client.delete(path `/${api_version}/agents/${id}`, options);
-    }
-    /**
-     * Gets a specific Agent.
-     */
-    get(id, params = {}, options) {
-        const { api_version = this._client.apiVersion } = params !== null && params !== void 0 ? params : {};
-        return this._client.get(path `/${api_version}/agents/${id}`, options);
-    }
-}
-BaseAgents._key = Object.freeze(['agents']);
-class Agents extends BaseAgents {
-}
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-function concatBytes(buffers) {
-    let length = 0;
-    for (const buffer of buffers) {
-        length += buffer.length;
-    }
-    const output = new Uint8Array(length);
-    let index = 0;
-    for (const buffer of buffers) {
-        output.set(buffer, index);
-        index += buffer.length;
-    }
-    return output;
-}
-let encodeUTF8_;
-function encodeUTF8(str) {
-    let encoder;
-    return (encodeUTF8_ !== null && encodeUTF8_ !== void 0 ? encodeUTF8_ : ((encoder = new globalThis.TextEncoder()), (encodeUTF8_ = encoder.encode.bind(encoder))))(str);
-}
-let decodeUTF8_;
-function decodeUTF8(bytes) {
-    let decoder;
-    return (decodeUTF8_ !== null && decodeUTF8_ !== void 0 ? decodeUTF8_ : ((decoder = new globalThis.TextDecoder()), (decodeUTF8_ = decoder.decode.bind(decoder))))(bytes);
-}
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-/**
- * A re-implementation of httpx's `LineDecoder` in Python that handles incrementally
- * reading lines from text.
- *
- * https://github.com/encode/httpx/blob/920333ea98118e9cf617f246905d7b202510941c/httpx/_decoders.py#L258
- */
-class LineDecoder {
-    constructor() {
-        this.buffer = new Uint8Array();
-        this.carriageReturnIndex = null;
-        this.searchIndex = 0;
-    }
-    decode(chunk) {
-        var _a;
-        if (chunk == null) {
-            return [];
-        }
-        const binaryChunk = chunk instanceof ArrayBuffer ? new Uint8Array(chunk)
-            : typeof chunk === 'string' ? encodeUTF8(chunk)
-                : chunk;
-        this.buffer = concatBytes([this.buffer, binaryChunk]);
-        const lines = [];
-        let patternIndex;
-        while ((patternIndex = findNewlineIndex(this.buffer, (_a = this.carriageReturnIndex) !== null && _a !== void 0 ? _a : this.searchIndex)) != null) {
-            if (patternIndex.carriage && this.carriageReturnIndex == null) {
-                // skip until we either get a corresponding `\n`, a new `\r` or nothing
-                this.carriageReturnIndex = patternIndex.index;
-                continue;
-            }
-            // we got double \r or \rtext\n
-            if (this.carriageReturnIndex != null &&
-                (patternIndex.index !== this.carriageReturnIndex + 1 || patternIndex.carriage)) {
-                lines.push(decodeUTF8(this.buffer.subarray(0, this.carriageReturnIndex - 1)));
-                this.buffer = this.buffer.subarray(this.carriageReturnIndex);
-                this.carriageReturnIndex = null;
-                this.searchIndex = 0;
-                continue;
-            }
-            const endIndex = this.carriageReturnIndex !== null ? patternIndex.preceding - 1 : patternIndex.preceding;
-            const line = decodeUTF8(this.buffer.subarray(0, endIndex));
-            lines.push(line);
-            this.buffer = this.buffer.subarray(patternIndex.index);
-            this.carriageReturnIndex = null;
-            this.searchIndex = 0;
-        }
-        this.searchIndex = Math.max(0, this.buffer.length - 1);
-        return lines;
-    }
-    flush() {
-        if (!this.buffer.length) {
-            return [];
-        }
-        return this.decode('\n');
-    }
-}
-// prettier-ignore
-LineDecoder.NEWLINE_CHARS = new Set(['\n', '\r']);
-LineDecoder.NEWLINE_REGEXP = /\r\n|[\n\r]/g;
-/**
- * This function searches the buffer for the end patterns, (\r or \n)
- * and returns an object with the index preceding the matched newline and the
- * index after the newline char. `null` is returned if no new line is found.
- *
- * ```ts
- * findNewLineIndex('abc\ndef') -> { preceding: 2, index: 3 }
- * ```
- */
-function findNewlineIndex(buffer, startIndex) {
-    const newline = 0x0a; // \n
-    const carriage = 0x0d; // \r
-    const start = startIndex !== null && startIndex !== void 0 ? startIndex : 0;
-    const nextNewline = buffer.indexOf(newline, start);
-    const nextCarriage = buffer.indexOf(carriage, start);
-    if (nextNewline === -1 && nextCarriage === -1) {
-        return null;
-    }
-    let i;
-    if (nextNewline !== -1 && nextCarriage !== -1) {
-        i = Math.min(nextNewline, nextCarriage);
-    }
-    else {
-        i = nextNewline !== -1 ? nextNewline : nextCarriage;
-    }
-    if (buffer[i] === newline) {
-        return { preceding: i, index: i + 1, carriage: false };
-    }
-    return { preceding: i, index: i + 1, carriage: true };
-}
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-const levelNumbers = {
-    off: 0,
-    error: 200,
-    warn: 300,
-    info: 400,
-    debug: 500,
-};
-const parseLogLevel = (maybeLevel, sourceName, client) => {
-    if (!maybeLevel) {
-        return undefined;
-    }
-    if (hasOwn(levelNumbers, maybeLevel)) {
-        return maybeLevel;
-    }
-    loggerFor(client).warn(`${sourceName} was set to ${JSON.stringify(maybeLevel)}, expected one of ${JSON.stringify(Object.keys(levelNumbers))}`);
-    return undefined;
-};
-function noop() { }
-function makeLogFn(fnLevel, logger, logLevel) {
-    if (!logger || levelNumbers[fnLevel] > levelNumbers[logLevel]) {
-        return noop;
-    }
-    else {
-        // Don't wrap logger functions, we want the stacktrace intact!
-        return logger[fnLevel].bind(logger);
-    }
-}
-const noopLogger = {
-    error: noop,
-    warn: noop,
-    info: noop,
-    debug: noop,
-};
-let cachedLoggers = /* @__PURE__ */ new WeakMap();
-function loggerFor(client) {
-    var _a;
-    const logger = client.logger;
-    const logLevel = (_a = client.logLevel) !== null && _a !== void 0 ? _a : 'off';
-    if (!logger) {
-        return noopLogger;
-    }
-    const cachedLogger = cachedLoggers.get(logger);
-    if (cachedLogger && cachedLogger[0] === logLevel) {
-        return cachedLogger[1];
-    }
-    const levelLogger = {
-        error: makeLogFn('error', logger, logLevel),
-        warn: makeLogFn('warn', logger, logLevel),
-        info: makeLogFn('info', logger, logLevel),
-        debug: makeLogFn('debug', logger, logLevel),
-    };
-    cachedLoggers.set(logger, [logLevel, levelLogger]);
-    return levelLogger;
-}
-const formatRequestDetails = (details) => {
-    if (details.options) {
-        details.options = Object.assign({}, details.options);
-        delete details.options['headers']; // redundant + leaks internals
-    }
-    if (details.headers) {
-        details.headers = Object.fromEntries((details.headers instanceof Headers ? [...details.headers] : Object.entries(details.headers)).map(([name, value]) => [
-            name,
-            (name.toLowerCase() === 'x-goog-api-key' ||
-                name.toLowerCase() === 'authorization' ||
-                name.toLowerCase() === 'cookie' ||
-                name.toLowerCase() === 'set-cookie') ?
-                '***'
-                : value,
-        ]));
-    }
-    if ('retryOfRequestLogID' in details) {
-        if (details.retryOfRequestLogID) {
-            details.retryOf = details.retryOfRequestLogID;
-        }
-        delete details.retryOfRequestLogID;
-    }
-    return details;
-};
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-class Stream {
-    constructor(iterator, controller, client) {
-        this.iterator = iterator;
-        this.controller = controller;
-        this.client = client;
-    }
-    static fromSSEResponse(response, controller, client) {
-        let consumed = false;
-        const logger = client ? loggerFor(client) : console;
-        function iterator() {
-            return __asyncGenerator(this, arguments, function* iterator_1() {
-                var _a, e_1, _b, _c;
-                if (consumed) {
-                    throw new GeminiNextGenAPIClientError('Cannot iterate over a consumed stream, use `.tee()` to split the stream.');
-                }
-                consumed = true;
-                let done = false;
-                try {
-                    try {
-                        for (var _d = true, _e = __asyncValues(_iterSSEMessages(response, controller)), _f; _f = yield __await(_e.next()), _a = _f.done, !_a; _d = true) {
-                            _c = _f.value;
-                            _d = false;
-                            const sse = _c;
-                            if (done)
-                                continue;
-                            if (sse.data.startsWith('[DONE]')) {
-                                done = true;
-                                continue;
-                            }
-                            else {
-                                try {
-                                    // @ts-ignore
-                                    yield yield __await(JSON.parse(sse.data));
-                                }
-                                catch (e) {
-                                    logger.error(`Could not parse message into JSON:`, sse.data);
-                                    logger.error(`From chunk:`, sse.raw);
-                                    throw e;
-                                }
-                            }
-                        }
-                    }
-                    catch (e_1_1) { e_1 = { error: e_1_1 }; }
-                    finally {
-                        try {
-                            if (!_d && !_a && (_b = _e.return)) yield __await(_b.call(_e));
-                        }
-                        finally { if (e_1) throw e_1.error; }
-                    }
-                    done = true;
-                }
-                catch (e) {
-                    // If the user calls `stream.controller.abort()`, we should exit without throwing.
-                    if (isAbortError(e))
-                        return yield __await(void 0);
-                    throw e;
-                }
-                finally {
-                    // If the user `break`s, abort the ongoing request.
-                    if (!done)
-                        controller.abort();
-                }
-            });
-        }
-        return new Stream(iterator, controller, client);
-    }
-    /**
-     * Generates a Stream from a newline-separated ReadableStream
-     * where each item is a JSON value.
-     */
-    static fromReadableStream(readableStream, controller, client) {
-        let consumed = false;
-        function iterLines() {
-            return __asyncGenerator(this, arguments, function* iterLines_1() {
-                var _a, e_2, _b, _c;
-                const lineDecoder = new LineDecoder();
-                const iter = ReadableStreamToAsyncIterable(readableStream);
-                try {
-                    for (var _d = true, iter_1 = __asyncValues(iter), iter_1_1; iter_1_1 = yield __await(iter_1.next()), _a = iter_1_1.done, !_a; _d = true) {
-                        _c = iter_1_1.value;
-                        _d = false;
-                        const chunk = _c;
-                        for (const line of lineDecoder.decode(chunk)) {
-                            yield yield __await(line);
-                        }
-                    }
-                }
-                catch (e_2_1) { e_2 = { error: e_2_1 }; }
-                finally {
-                    try {
-                        if (!_d && !_a && (_b = iter_1.return)) yield __await(_b.call(iter_1));
-                    }
-                    finally { if (e_2) throw e_2.error; }
-                }
-                for (const line of lineDecoder.flush()) {
-                    yield yield __await(line);
-                }
-            });
-        }
-        function iterator() {
-            return __asyncGenerator(this, arguments, function* iterator_2() {
-                var _a, e_3, _b, _c;
-                if (consumed) {
-                    throw new GeminiNextGenAPIClientError('Cannot iterate over a consumed stream, use `.tee()` to split the stream.');
-                }
-                consumed = true;
-                let done = false;
-                try {
-                    try {
-                        for (var _d = true, _e = __asyncValues(iterLines()), _f; _f = yield __await(_e.next()), _a = _f.done, !_a; _d = true) {
-                            _c = _f.value;
-                            _d = false;
-                            const line = _c;
-                            if (done)
-                                continue;
-                            // @ts-ignore
-                            if (line)
-                                yield yield __await(JSON.parse(line));
-                        }
-                    }
-                    catch (e_3_1) { e_3 = { error: e_3_1 }; }
-                    finally {
-                        try {
-                            if (!_d && !_a && (_b = _e.return)) yield __await(_b.call(_e));
-                        }
-                        finally { if (e_3) throw e_3.error; }
-                    }
-                    done = true;
-                }
-                catch (e) {
-                    // If the user calls `stream.controller.abort()`, we should exit without throwing.
-                    if (isAbortError(e))
-                        return yield __await(void 0);
-                    throw e;
-                }
-                finally {
-                    // If the user `break`s, abort the ongoing request.
-                    if (!done)
-                        controller.abort();
-                }
-            });
-        }
-        return new Stream(iterator, controller, client);
-    }
-    [Symbol.asyncIterator]() {
-        return this.iterator();
-    }
-    /**
-     * Splits the stream into two streams which can be
-     * independently read from at different speeds.
-     */
-    tee() {
-        const left = [];
-        const right = [];
-        const iterator = this.iterator();
-        const teeIterator = (queue) => {
-            return {
-                next: () => {
-                    if (queue.length === 0) {
-                        const result = iterator.next();
-                        left.push(result);
-                        right.push(result);
-                    }
-                    return queue.shift();
-                },
-            };
-        };
-        return [
-            new Stream(() => teeIterator(left), this.controller, this.client),
-            new Stream(() => teeIterator(right), this.controller, this.client),
-        ];
-    }
-    /**
-     * Converts this stream to a newline-separated ReadableStream of
-     * JSON stringified values in the stream
-     * which can be turned back into a Stream with `Stream.fromReadableStream()`.
-     */
-    toReadableStream() {
-        const self = this;
-        let iter;
-        return makeReadableStream({
-            async start() {
-                iter = self[Symbol.asyncIterator]();
-            },
-            async pull(ctrl) {
-                try {
-                    const { value, done } = await iter.next();
-                    if (done)
-                        return ctrl.close();
-                    const bytes = encodeUTF8(JSON.stringify(value) + '\n');
-                    ctrl.enqueue(bytes);
-                }
-                catch (err) {
-                    ctrl.error(err);
-                }
-            },
-            async cancel() {
-                var _a;
-                await ((_a = iter.return) === null || _a === void 0 ? void 0 : _a.call(iter));
-            },
-        });
-    }
-}
-function _iterSSEMessages(response, controller) {
-    return __asyncGenerator(this, arguments, function* _iterSSEMessages_1() {
-        var _a, e_4, _b, _c;
-        if (!response.body) {
-            controller.abort();
-            if (typeof globalThis.navigator !== 'undefined' &&
-                globalThis.navigator.product === 'ReactNative') {
-                throw new GeminiNextGenAPIClientError(`The default react-native fetch implementation does not support streaming. Please use expo/fetch: https://docs.expo.dev/versions/latest/sdk/expo/#expofetch-api`);
-            }
-            throw new GeminiNextGenAPIClientError(`Attempted to iterate over a response with no body`);
-        }
-        const sseDecoder = new SSEDecoder();
-        const lineDecoder = new LineDecoder();
-        const iter = ReadableStreamToAsyncIterable(response.body);
-        try {
-            for (var _d = true, _e = __asyncValues(iterBinaryChunks(iter)), _f; _f = yield __await(_e.next()), _a = _f.done, !_a; _d = true) {
-                _c = _f.value;
-                _d = false;
-                const sseChunk = _c;
-                for (const line of lineDecoder.decode(sseChunk)) {
-                    const sse = sseDecoder.decode(line);
-                    if (sse)
-                        yield yield __await(sse);
-                }
-            }
-        }
-        catch (e_4_1) { e_4 = { error: e_4_1 }; }
-        finally {
-            try {
-                if (!_d && !_a && (_b = _e.return)) yield __await(_b.call(_e));
-            }
-            finally { if (e_4) throw e_4.error; }
-        }
-        for (const line of lineDecoder.flush()) {
-            const sse = sseDecoder.decode(line);
-            if (sse)
-                yield yield __await(sse);
-        }
-    });
-}
-/**
- * Given an async iterable iterator, normalizes each chunk to a
- * Uint8Array and yields it.
- */
-function iterBinaryChunks(iterator) {
-    return __asyncGenerator(this, arguments, function* iterBinaryChunks_1() {
-        var _a, e_5, _b, _c;
-        try {
-            for (var _d = true, iterator_3 = __asyncValues(iterator), iterator_3_1; iterator_3_1 = yield __await(iterator_3.next()), _a = iterator_3_1.done, !_a; _d = true) {
-                _c = iterator_3_1.value;
-                _d = false;
-                const chunk = _c;
-                if (chunk == null) {
-                    continue;
-                }
-                const binaryChunk = chunk instanceof ArrayBuffer ? new Uint8Array(chunk)
-                    : typeof chunk === 'string' ? encodeUTF8(chunk)
-                        : chunk;
-                yield yield __await(binaryChunk);
-            }
-        }
-        catch (e_5_1) { e_5 = { error: e_5_1 }; }
-        finally {
-            try {
-                if (!_d && !_a && (_b = iterator_3.return)) yield __await(_b.call(iterator_3));
-            }
-            finally { if (e_5) throw e_5.error; }
-        }
-    });
-}
-class SSEDecoder {
-    constructor() {
-        this.event = null;
-        this.data = [];
-        this.chunks = [];
-    }
-    decode(line) {
-        if (line.endsWith('\r')) {
-            line = line.substring(0, line.length - 1);
-        }
-        if (!line) {
-            // empty line and we didn't previously encounter any messages
-            if (!this.event && !this.data.length)
-                return null;
-            const sse = {
-                event: this.event,
-                data: this.data.join('\n'),
-                raw: this.chunks,
-            };
-            this.event = null;
-            this.data = [];
-            this.chunks = [];
-            return sse;
-        }
-        this.chunks.push(line);
-        if (line.startsWith(':')) {
-            return null;
-        }
-        let [fieldname, _, value] = partition(line, ':');
-        if (value.startsWith(' ')) {
-            value = value.substring(1);
-        }
-        if (fieldname === 'event') {
-            this.event = value;
-        }
-        else if (fieldname === 'data') {
-            this.data.push(value);
-        }
-        return null;
-    }
-}
-function partition(str, delimiter) {
-    const index = str.indexOf(delimiter);
-    if (index !== -1) {
-        return [str.substring(0, index), delimiter, str.substring(index + delimiter.length)];
-    }
-    return [str, '', ''];
-}
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-const LEGACY_LYRIA_MODELS = new Set([
-    'lyria-3-pro-preview',
-    'lyria-3-clip-preview',
-]);
-const LEGACY_EVENT_TYPE_RENAMES = {
-    'interaction.start': 'interaction.created',
-    'content.start': 'step.start',
-    'content.delta': 'step.delta',
-    'content.stop': 'step.stop',
-    'interaction.complete': 'interaction.completed',
-};
-function isLegacyLyriaRequest({ isVertex, model }) {
-    return Boolean(isVertex) && typeof model === 'string' && LEGACY_LYRIA_MODELS.has(model);
-}
-/**
- * Detect whether a client is in vertex mode. Reads the `clientAdapter` field
- * directly because `BaseGeminiNextGenAPIClient` keeps it `private`; centralizing
- * the runtime cast here avoids leaking it into resource files.
- */
-function isVertexClient(client) {
-    const adapter = client.clientAdapter;
-    return Boolean(adapter && adapter.isVertexAI());
-}
-function isPlainObject(value) {
-    return typeof value === 'object' && value !== null && !Array.isArray(value);
-}
-/**
- * Wrap a legacy `outputs: Array<Content>` payload into the modern
- * `steps: [{type: 'model_output', content: outputs}]` shape. Returns the input
- * unchanged when `steps` already wins or `outputs` is absent.
- */
-function wrapOutputsAsSteps(data) {
-    if (!('outputs' in data) || 'steps' in data) {
-        return data;
-    }
-    const { outputs } = data, rest = __rest(data, ["outputs"]);
-    return Object.assign(Object.assign({}, rest), { steps: [{ type: 'model_output', content: outputs }] });
-}
-/**
- * Non-streaming: rewrite a legacy interaction response so consumers see the
- * modern `steps` shape.
- */
-function coerceLegacyInteractionResponse(data) {
-    if (!isPlainObject(data))
-        return data;
-    return wrapOutputsAsSteps(data);
-}
-/**
- * Streaming: translate one legacy SSE event to its modern equivalent.
- *
- * Returns the input unchanged when the `event_type` is not one of the legacy
- * ones we know how to map. Two non-trivial cases:
- *   1. `content.start` carries `content: <Content>` — the modern `step.start`
- *      expects `step: {type: 'model_output', content: [<Content>]}`.
- *   2. `interaction.start` / `interaction.complete` wrap an `interaction`
- *      object that may itself carry the legacy `outputs` field; recurse.
- */
-function maybeRemapLegacyStreamEvent(data) {
-    if (!isPlainObject(data))
-        return data;
-    const eventType = data['event_type'];
-    if (typeof eventType !== 'string' || !(eventType in LEGACY_EVENT_TYPE_RENAMES)) {
-        return data;
-    }
-    const renamed = Object.assign(Object.assign({}, data), { event_type: LEGACY_EVENT_TYPE_RENAMES[eventType] });
-    if (eventType === 'content.start') {
-        const { content } = renamed, rest = __rest(renamed, ["content"]);
-        let stepContent;
-        if (content == null) {
-            stepContent = [];
-        }
-        else if (Array.isArray(content)) {
-            stepContent = content;
-        }
-        else {
-            stepContent = [content];
-        }
-        return Object.assign(Object.assign({}, rest), { step: { type: 'model_output', content: stepContent } });
-    }
-    if (eventType === 'interaction.start' || eventType === 'interaction.complete') {
-        const inner = renamed['interaction'];
-        if (isPlainObject(inner)) {
-            renamed['interaction'] = wrapOutputsAsSteps(inner);
-        }
-    }
-    return renamed;
-}
-/**
- * Stream subclass that runs each yielded SSE event through
- * `maybeRemapLegacyStreamEvent` so consumers always see modern event shapes.
- *
- * Wired in via the `__streamClass` request option from `resources/interactions.ts`
- * (read by `src/internal/parse.ts:defaultParseResponse`).
- */
-class LegacyLyriaStream extends Stream {
-    static fromSSEResponse(response, controller, client) {
-        const base = Stream.fromSSEResponse(response, controller, client);
-        function wrappedIterator() {
-            return __asyncGenerator(this, arguments, function* wrappedIterator_1() {
-                var _a, e_1, _b, _c;
-                try {
-                    for (var _d = true, base_1 = __asyncValues(base), base_1_1; base_1_1 = yield __await(base_1.next()), _a = base_1_1.done, !_a; _d = true) {
-                        _c = base_1_1.value;
-                        _d = false;
-                        const item = _c;
-                        yield yield __await(maybeRemapLegacyStreamEvent(item));
-                    }
-                }
-                catch (e_1_1) { e_1 = { error: e_1_1 }; }
-                finally {
-                    try {
-                        if (!_d && !_a && (_b = base_1.return)) yield __await(_b.call(base_1));
-                    }
-                    finally { if (e_1) throw e_1.error; }
-                }
-            });
-        }
-        return new LegacyLyriaStream(wrappedIterator, controller, client);
-    }
-}
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-class BaseInteractions extends APIResource {
-    create(params, options) {
-        var _a;
-        const { api_version = this._client.apiVersion } = params, body = __rest(params, ["api_version"]);
-        if ('model' in body && 'agent_config' in body) {
-            throw new GeminiNextGenAPIClientError(`Invalid request: specified \`model\` and \`agent_config\`. If specifying \`model\`, use \`generation_config\`.`);
-        }
-        if ('agent' in body && 'generation_config' in body) {
-            throw new GeminiNextGenAPIClientError(`Invalid request: specified \`agent\` and \`generation_config\`. If specifying \`agent\`, use \`agent_config\`.`);
-        }
-        const needsLegacyLyriaShim = isLegacyLyriaRequest({
-            isVertex: isVertexClient(this._client),
-            model: 'model' in body ? body.model : undefined,
-        });
-        const isStreaming = (_a = params.stream) !== null && _a !== void 0 ? _a : false;
-        const promise = this._client.post(path `/${api_version}/interactions`, Object.assign(Object.assign(Object.assign({ body }, options), { stream: isStreaming }), (needsLegacyLyriaShim && isStreaming ? { __streamClass: LegacyLyriaStream } : {})));
-        if (isStreaming) {
-            return promise;
-        }
-        let nonStreaming = promise;
-        if (needsLegacyLyriaShim) {
-            nonStreaming = nonStreaming._thenUnwrap((data) => coerceLegacyInteractionResponse(data));
-        }
-        return nonStreaming._thenUnwrap(addOutputProperties);
-    }
-    /**
-     * Deletes the interaction by id.
-     *
-     * @example
-     * ```ts
-     * const interaction = await client.interactions.delete('id', {
-     *   api_version: 'api_version',
-     * });
-     * ```
-     */
-    delete(id, params = {}, options) {
-        const { api_version = this._client.apiVersion } = params !== null && params !== void 0 ? params : {};
-        return this._client.delete(path `/${api_version}/interactions/${id}`, options);
-    }
-    /**
-     * Cancels an interaction by id. This only applies to background interactions that
-     * are still running.
-     *
-     * @example
-     * ```ts
-     * const interaction = await client.interactions.cancel('id', {
-     *   api_version: 'api_version',
-     * });
-     * ```
-     */
-    cancel(id, params = {}, options) {
-        const { api_version = this._client.apiVersion } = params !== null && params !== void 0 ? params : {};
-        return this._client.post(path `/${api_version}/interactions/${id}/cancel`, options)._thenUnwrap(addOutputProperties);
-    }
-    get(id, params = {}, options) {
-        var _a;
-        const _b = params !== null && params !== void 0 ? params : {}, { api_version = this._client.apiVersion } = _b, query = __rest(_b, ["api_version"]);
-        const response = this._client.get(path `/${api_version}/interactions/${id}`, Object.assign(Object.assign({ query }, options), { stream: (_a = params === null || params === void 0 ? void 0 : params.stream) !== null && _a !== void 0 ? _a : false }));
-        if (params === null || params === void 0 ? void 0 : params.stream) {
-            return response;
-        }
-        return response._thenUnwrap(addOutputProperties);
-    }
-}
-BaseInteractions._key = Object.freeze(['interactions']);
-class Interactions extends BaseInteractions {
-}
-function addOutputProperties(interaction) {
-    var _a, _b;
-    const steps = (_a = interaction.steps) !== null && _a !== void 0 ? _a : [];
-    // output_text: scan backwards across all steps (stopping at user_input),
-    // skip non-text content until the first text item is found, then collect
-    // text until a non-text barrier is hit.
-    const textParts = [];
-    let collecting = false;
-    outer: for (let i = steps.length - 1; i >= 0; i--) {
-        const step = steps[i];
-        if (step.type === 'user_input')
-            break;
-        if (step.type !== 'model_output' || !step.content) {
-            if (collecting)
-                break outer;
-            continue;
-        }
-        const content = step.content;
-        for (let j = content.length - 1; j >= 0; j--) {
-            const item = content[j];
-            if (item.type === 'text') {
-                collecting = true;
-                textParts.push((_b = item.text) !== null && _b !== void 0 ? _b : '');
-            }
-            else if (collecting) {
-                // Hit a non-text barrier after we started collecting.
-                break outer;
-            }
-        }
-    }
-    const output_text = textParts.reverse().join('');
-    let output_image;
-    let output_audio;
-    let output_video;
-    for (let i = steps.length - 1; i >= 0; i--) {
-        const step = steps[i];
-        const anyStep = step;
-        if (anyStep.type === 'user_input') {
-            break;
-        }
-        if (anyStep.type === 'model_output' && anyStep.content) {
-            for (let j = anyStep.content.length - 1; j >= 0; j--) {
-                const content = anyStep.content[j];
-                if (content.type === 'image' && !output_image) {
-                    output_image = content;
-                }
-                if (content.type === 'audio' && !output_audio) {
-                    output_audio = content;
-                }
-                if (content.type === 'video' && !output_video) {
-                    output_video = content;
-                }
-            }
-        }
-    }
-    return Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({}, interaction), (output_text && { output_text })), (output_image && { output_image })), (output_audio && { output_audio })), (output_video && { output_video }));
-}
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-class BaseWebhooks extends APIResource {
-    /**
-     * Creates a new Webhook.
-     */
-    create(params, options) {
-        const { api_version = this._client.apiVersion } = params, body = __rest(params, ["api_version"]);
-        return this._client.post(path `/${api_version}/webhooks`, Object.assign({ body }, options));
-    }
-    /**
-     * Updates an existing Webhook.
-     */
-    update(id, params = {}, options) {
-        const _a = params !== null && params !== void 0 ? params : {}, { api_version = this._client.apiVersion, update_mask } = _a, body = __rest(_a, ["api_version", "update_mask"]);
-        return this._client.patch(path `/${api_version}/webhooks/${id}`, Object.assign({ query: { update_mask }, body }, options));
-    }
-    /**
-     * Lists all Webhooks.
-     */
-    list(params = {}, options) {
-        const _a = params !== null && params !== void 0 ? params : {}, { api_version = this._client.apiVersion } = _a, query = __rest(_a, ["api_version"]);
-        return this._client.get(path `/${api_version}/webhooks`, Object.assign({ query }, options));
-    }
-    /**
-     * Deletes a Webhook.
-     */
-    delete(id, params = {}, options) {
-        const { api_version = this._client.apiVersion } = params !== null && params !== void 0 ? params : {};
-        return this._client.delete(path `/${api_version}/webhooks/${id}`, options);
-    }
-    /**
-     * Gets a specific Webhook.
-     */
-    get(id, params = {}, options) {
-        const { api_version = this._client.apiVersion } = params !== null && params !== void 0 ? params : {};
-        return this._client.get(path `/${api_version}/webhooks/${id}`, options);
-    }
-    /**
-     * Sends a ping event to a Webhook.
-     */
-    ping(id, params = undefined, options) {
-        const { api_version = this._client.apiVersion, body } = params !== null && params !== void 0 ? params : {};
-        return this._client.post(path `/${api_version}/webhooks/${id}:ping`, Object.assign({ body: body }, options));
-    }
-    /**
-     * Generates a new signing secret for a Webhook.
-     */
-    rotateSigningSecret(id, params = {}, options) {
-        const _a = params !== null && params !== void 0 ? params : {}, { api_version = this._client.apiVersion } = _a, body = __rest(_a, ["api_version"]);
-        return this._client.post(path `/${api_version}/webhooks/${id}:rotateSigningSecret`, Object.assign({ body }, options));
-    }
-}
-BaseWebhooks._key = Object.freeze(['webhooks']);
-class Webhooks extends BaseWebhooks {
-}
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-async function defaultParseResponse(client, props) {
-    const { response, requestLogID, retryOfRequestLogID, startTime } = props;
-    const body = await (async () => {
-        var _a;
-        if (props.options.stream) {
-            loggerFor(client).debug('response', response.status, response.url, response.headers, response.body);
-            // Note: there is an invariant here that isn't represented in the type system
-            // that if you set `stream: true` the response type must also be `Stream<T>`
-            if (props.options.__streamClass) {
-                return props.options.__streamClass.fromSSEResponse(response, props.controller, client);
-            }
-            return Stream.fromSSEResponse(response, props.controller, client);
-        }
-        // fetch refuses to read the body when the status code is 204.
-        if (response.status === 204) {
-            return null;
-        }
-        if (props.options.__binaryResponse) {
-            return response;
-        }
-        const contentType = response.headers.get('content-type');
-        const mediaType = (_a = contentType === null || contentType === void 0 ? void 0 : contentType.split(';')[0]) === null || _a === void 0 ? void 0 : _a.trim();
-        const isJSON = (mediaType === null || mediaType === void 0 ? void 0 : mediaType.includes('application/json')) || (mediaType === null || mediaType === void 0 ? void 0 : mediaType.endsWith('+json'));
-        if (isJSON) {
-            const contentLength = response.headers.get('content-length');
-            if (contentLength === '0') {
-                // if there is no content we can't do anything
-                return undefined;
-            }
-            const json = await response.json();
-            return json;
-        }
-        const text = await response.text();
-        return text;
-    })();
-    loggerFor(client).debug(`[${requestLogID}] response parsed`, formatRequestDetails({
-        retryOfRequestLogID,
-        url: response.url,
-        status: response.status,
-        body,
-        durationMs: Date.now() - startTime,
-    }));
-    return body;
-}
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-/**
- * A subclass of `Promise` providing additional helper methods
- * for interacting with the SDK.
- */
-class APIPromise extends Promise {
-    constructor(client, responsePromise, parseResponse = defaultParseResponse) {
-        super((resolve) => {
-            // this is maybe a bit weird but this has to be a no-op to not implicitly
-            // parse the response body; instead .then, .catch, .finally are overridden
-            // to parse the response
-            resolve(null);
-        });
-        this.responsePromise = responsePromise;
-        this.parseResponse = parseResponse;
-        this.client = client;
-    }
-    _thenUnwrap(transform) {
-        return new APIPromise(this.client, this.responsePromise, async (client, props) => transform(await this.parseResponse(client, props), props));
-    }
-    /**
-     * Gets the raw `Response` instance instead of parsing the response
-     * data.
-     *
-     * If you want to parse the response body but still get the `Response`
-     * instance, you can use {@link withResponse()}.
-     *
-     * 👋 Getting the wrong TypeScript type for `Response`?
-     * Try setting `"moduleResolution": "NodeNext"` or add `"lib": ["DOM"]`
-     * to your `tsconfig.json`.
-     */
-    asResponse() {
-        return this.responsePromise.then((p) => p.response);
-    }
-    /**
-     * Gets the parsed response data and the raw `Response` instance.
-     *
-     * If you just want to get the raw `Response` instance without parsing it,
-     * you can use {@link asResponse()}.
-     *
-     * 👋 Getting the wrong TypeScript type for `Response`?
-     * Try setting `"moduleResolution": "NodeNext"` or add `"lib": ["DOM"]`
-     * to your `tsconfig.json`.
-     */
-    async withResponse() {
-        const [data, response] = await Promise.all([this.parse(), this.asResponse()]);
-        return { data, response };
-    }
-    parse() {
-        if (!this.parsedPromise) {
-            this.parsedPromise = this.responsePromise.then((data) => this.parseResponse(this.client, data));
-        }
-        return this.parsedPromise;
-    }
-    then(onfulfilled, onrejected) {
-        return this.parse().then(onfulfilled, onrejected);
-    }
-    catch(onrejected) {
-        return this.parse().catch(onrejected);
-    }
-    finally(onfinally) {
-        return this.parse().finally(onfinally);
-    }
-}
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-const brand_privateNullableHeaders = /* @__PURE__ */ Symbol('brand.privateNullableHeaders');
-function* iterateHeaders(headers) {
-    if (!headers)
-        return;
-    if (brand_privateNullableHeaders in headers) {
-        const { values, nulls } = headers;
-        yield* values.entries();
-        for (const name of nulls) {
-            yield [name, null];
-        }
-        return;
-    }
-    let shouldClear = false;
-    let iter;
-    if (headers instanceof Headers) {
-        iter = headers.entries();
-    }
-    else if (isReadonlyArray(headers)) {
-        iter = headers;
-    }
-    else {
-        shouldClear = true;
-        iter = Object.entries(headers !== null && headers !== void 0 ? headers : {});
-    }
-    for (let row of iter) {
-        const name = row[0];
-        if (typeof name !== 'string')
-            throw new TypeError('expected header name to be a string');
-        const values = isReadonlyArray(row[1]) ? row[1] : [row[1]];
-        let didClear = false;
-        for (const value of values) {
-            if (value === undefined)
-                continue;
-            // Objects keys always overwrite older headers, they never append.
-            // Yield a null to clear the header before adding the new values.
-            if (shouldClear && !didClear) {
-                didClear = true;
-                yield [name, null];
-            }
-            yield [name, value];
-        }
-    }
-}
-const buildHeaders = (newHeaders) => {
-    const targetHeaders = new Headers();
-    const nullHeaders = new Set();
-    for (const headers of newHeaders) {
-        const seenHeaders = new Set();
-        for (const [name, value] of iterateHeaders(headers)) {
-            const lowerName = name.toLowerCase();
-            if (!seenHeaders.has(lowerName)) {
-                targetHeaders.delete(name);
-                seenHeaders.add(lowerName);
-            }
-            if (value === null) {
-                targetHeaders.delete(name);
-                nullHeaders.add(lowerName);
-            }
-            else {
-                targetHeaders.append(name, value);
-                nullHeaders.delete(lowerName);
-            }
-        }
-    }
-    return { [brand_privateNullableHeaders]: true, values: targetHeaders, nulls: nullHeaders };
-};
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-// File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
-/**
- * Read an environment variable.
- *
- * Trims beginning and trailing whitespace.
- *
- * Will return undefined if the environment variable doesn't exist or cannot be accessed.
- */
-const readEnv = (env) => {
-    var _a, _b, _c, _d, _e;
-    if (typeof globalThis.process !== 'undefined') {
-        return ((_b = (_a = globalThis.process.env) === null || _a === void 0 ? void 0 : _a[env]) === null || _b === void 0 ? void 0 : _b.trim()) || undefined;
-    }
-    if (typeof globalThis.Deno !== 'undefined') {
-        return ((_e = (_d = (_c = globalThis.Deno.env) === null || _c === void 0 ? void 0 : _c.get) === null || _d === void 0 ? void 0 : _d.call(_c, env)) === null || _e === void 0 ? void 0 : _e.trim()) || undefined;
-    }
-    return undefined;
-};
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-var _a;
-/**
- * Base class for Gemini Next Gen API API clients.
- */
-class BaseGeminiNextGenAPIClient {
-    /**
-     * API Client for interfacing with the Gemini Next Gen API API.
-     *
-     * @param {string | null | undefined} [opts.apiKey=process.env['GEMINI_API_KEY'] ?? null]
-     * @param {string | undefined} [opts.apiVersion=v1beta]
-     * @param {string} [opts.baseURL=process.env['GEMINI_NEXT_GEN_API_BASE_URL'] ?? https://generativelanguage.googleapis.com] - Override the default base URL for the API.
-     * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
-     * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
-     * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
-     * @param {number} [opts.maxRetries=2] - The maximum number of times the client will retry a request.
-     * @param {HeadersLike} opts.defaultHeaders - Default headers to include with every request to the API.
-     * @param {Record<string, string | undefined>} opts.defaultQuery - Default query parameters to include with every request to the API.
-     */
-    constructor(_b) {
-        var _c, _d, _e, _f, _g, _h, _j;
-        var { baseURL = readEnv('GEMINI_NEXT_GEN_API_BASE_URL'), apiKey = (_c = readEnv('GEMINI_API_KEY')) !== null && _c !== void 0 ? _c : null, apiVersion = 'v1beta' } = _b, opts = __rest(_b, ["baseURL", "apiKey", "apiVersion"]);
-        const options = Object.assign(Object.assign({ apiKey,
-            apiVersion }, opts), { baseURL: baseURL || `https://generativelanguage.googleapis.com` });
-        this.baseURL = options.baseURL;
-        this.timeout = (_d = options.timeout) !== null && _d !== void 0 ? _d : BaseGeminiNextGenAPIClient.DEFAULT_TIMEOUT /* 1 minute */;
-        this.logger = (_e = options.logger) !== null && _e !== void 0 ? _e : console;
-        const defaultLogLevel = 'warn';
-        // Set default logLevel early so that we can log a warning in parseLogLevel.
-        this.logLevel = defaultLogLevel;
-        this.logLevel =
-            (_g = (_f = parseLogLevel(options.logLevel, 'ClientOptions.logLevel', this)) !== null && _f !== void 0 ? _f : parseLogLevel(readEnv('GEMINI_NEXT_GEN_API_LOG'), "process.env['GEMINI_NEXT_GEN_API_LOG']", this)) !== null && _g !== void 0 ? _g : defaultLogLevel;
-        this.fetchOptions = options.fetchOptions;
-        this.maxRetries = (_h = options.maxRetries) !== null && _h !== void 0 ? _h : 2;
-        this.fetch = (_j = options.fetch) !== null && _j !== void 0 ? _j : getDefaultFetch();
-        this.encoder = FallbackEncoder;
-        this._options = options;
-        this.apiKey = apiKey;
-        this.apiVersion = apiVersion;
-        this.clientAdapter = options.clientAdapter;
-    }
-    /**
-     * Create a new client instance re-using the same options given to the current client with optional overriding.
-     */
-    withOptions(options) {
-        const client = new this.constructor(Object.assign(Object.assign(Object.assign({}, this._options), { baseURL: this.baseURL, maxRetries: this.maxRetries, timeout: this.timeout, logger: this.logger, logLevel: this.logLevel, fetch: this.fetch, fetchOptions: this.fetchOptions, apiKey: this.apiKey, apiVersion: this.apiVersion }), options));
-        return client;
-    }
-    /**
-     * Check whether the base URL is set to its default.
-     */
-    baseURLOverridden() {
-        return this.baseURL !== 'https://generativelanguage.googleapis.com';
-    }
-    defaultQuery() {
-        return this._options.defaultQuery;
-    }
-    validateHeaders({ values, nulls }) {
-        // The headers object handles case insensitivity.
-        if (values.has('authorization') || values.has('x-goog-api-key')) {
-            return;
-        }
-        if (this.apiKey && values.get('x-goog-api-key')) {
-            return;
-        }
-        if (nulls.has('x-goog-api-key')) {
-            return;
-        }
-        throw new Error('Could not resolve authentication method. Expected the apiKey to be set. Or for the "x-goog-api-key" headers to be explicitly omitted');
-    }
-    async authHeaders(opts) {
-        const existingHeaders = buildHeaders([opts.headers]);
-        if (existingHeaders.values.has('authorization') || existingHeaders.values.has('x-goog-api-key')) {
-            return undefined;
-        }
-        if (this.apiKey) {
-            return buildHeaders([{ 'x-goog-api-key': this.apiKey }]);
-        }
-        if (this.clientAdapter && this.clientAdapter.isVertexAI()) {
-            return buildHeaders([await this.clientAdapter.getAuthHeaders()]);
-        }
-        return undefined;
-    }
-    /**
-     * Basic re-implementation of `qs.stringify` for primitive types.
-     */
-    stringifyQuery(query) {
-        return stringifyQuery(query);
-    }
-    getUserAgent() {
-        return `${this.constructor.name}/JS ${VERSION}`;
-    }
-    defaultIdempotencyKey() {
-        return `stainless-node-retry-${uuid4()}`;
-    }
-    makeStatusError(status, error, message, headers) {
-        return APIError.generate(status, error, message, headers);
-    }
-    buildURL(path, query, defaultBaseURL) {
-        const baseURL = (!this.baseURLOverridden() && defaultBaseURL) || this.baseURL;
-        const url = isAbsoluteURL(path) ?
-            new URL(path)
-            : new URL(baseURL + (baseURL.endsWith('/') && path.startsWith('/') ? path.slice(1) : path));
-        const defaultQuery = this.defaultQuery();
-        const pathQuery = Object.fromEntries(url.searchParams);
-        if (!isEmptyObj(defaultQuery) || !isEmptyObj(pathQuery)) {
-            query = Object.assign(Object.assign(Object.assign({}, pathQuery), defaultQuery), query);
-        }
-        if (typeof query === 'object' && query && !Array.isArray(query)) {
-            url.search = this.stringifyQuery(query);
-        }
-        return url.toString();
-    }
-    /**
-     * Used as a callback for mutating the given `FinalRequestOptions` object.
-  
-     */
-    async prepareOptions(options) {
-        if (this.clientAdapter &&
-            this.clientAdapter.isVertexAI() &&
-            !options.path.startsWith(`/${this.apiVersion}/projects/`)) {
-            const oldPath = options.path.slice(this.apiVersion.length + 1);
-            options.path = `/${this.apiVersion}/projects/${this.clientAdapter.getProject()}/locations/${this.clientAdapter.getLocation()}${oldPath}`;
-        }
-    }
-    /**
-     * Used as a callback for mutating the given `RequestInit` object.
-     *
-     * This is useful for cases where you want to add certain headers based off of
-     * the request properties, e.g. `method` or `url`.
-     */
-    async prepareRequest(request, { url, options }) { }
-    get(path, opts) {
-        return this.methodRequest('get', path, opts);
-    }
-    post(path, opts) {
-        return this.methodRequest('post', path, opts);
-    }
-    patch(path, opts) {
-        return this.methodRequest('patch', path, opts);
-    }
-    put(path, opts) {
-        return this.methodRequest('put', path, opts);
-    }
-    delete(path, opts) {
-        return this.methodRequest('delete', path, opts);
-    }
-    methodRequest(method, path, opts) {
-        return this.request(Promise.resolve(opts).then((opts) => {
-            return Object.assign({ method, path }, opts);
-        }));
-    }
-    request(options, remainingRetries = null) {
-        return new APIPromise(this, this.makeRequest(options, remainingRetries, undefined));
-    }
-    async makeRequest(optionsInput, retriesRemaining, retryOfRequestLogID) {
-        var _b, _c, _d;
-        const options = await optionsInput;
-        const maxRetries = (_b = options.maxRetries) !== null && _b !== void 0 ? _b : this.maxRetries;
-        if (retriesRemaining == null) {
-            retriesRemaining = maxRetries;
-        }
-        await this.prepareOptions(options);
-        const { req, url, timeout } = await this.buildRequest(options, {
-            retryCount: maxRetries - retriesRemaining,
-        });
-        await this.prepareRequest(req, { url, options });
-        /** Not an API request ID, just for correlating local log entries. */
-        const requestLogID = 'log_' + ((Math.random() * (1 << 24)) | 0).toString(16).padStart(6, '0');
-        const retryLogStr = retryOfRequestLogID === undefined ? '' : `, retryOf: ${retryOfRequestLogID}`;
-        const startTime = Date.now();
-        loggerFor(this).debug(`[${requestLogID}] sending request`, formatRequestDetails({
-            retryOfRequestLogID,
-            method: options.method,
-            url,
-            options,
-            headers: req.headers,
-        }));
-        if ((_c = options.signal) === null || _c === void 0 ? void 0 : _c.aborted) {
-            throw new APIUserAbortError();
-        }
-        const controller = new AbortController();
-        const response = await this.fetchWithTimeout(url, req, timeout, controller).catch(castToError);
-        const headersTime = Date.now();
-        if (response instanceof globalThis.Error) {
-            const retryMessage = `retrying, ${retriesRemaining} attempts remaining`;
-            if ((_d = options.signal) === null || _d === void 0 ? void 0 : _d.aborted) {
-                throw new APIUserAbortError();
-            }
-            // detect native connection timeout errors
-            // deno throws "TypeError: error sending request for url (https://example/): client error (Connect): tcp connect error: Operation timed out (os error 60): Operation timed out (os error 60)"
-            // undici throws "TypeError: fetch failed" with cause "ConnectTimeoutError: Connect Timeout Error (attempted address: example:443, timeout: 1ms)"
-            // others do not provide enough information to distinguish timeouts from other connection errors
-            const isTimeout = isAbortError(response) ||
-                /timed? ?out/i.test(String(response) + ('cause' in response ? String(response.cause) : ''));
-            if (retriesRemaining) {
-                loggerFor(this).info(`[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} - ${retryMessage}`);
-                loggerFor(this).debug(`[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} (${retryMessage})`, formatRequestDetails({
-                    retryOfRequestLogID,
-                    url,
-                    durationMs: headersTime - startTime,
-                    message: response.message,
-                }));
-                return this.retryRequest(options, retriesRemaining, retryOfRequestLogID !== null && retryOfRequestLogID !== void 0 ? retryOfRequestLogID : requestLogID);
-            }
-            loggerFor(this).info(`[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} - error; no more retries left`);
-            loggerFor(this).debug(`[${requestLogID}] connection ${isTimeout ? 'timed out' : 'failed'} (error; no more retries left)`, formatRequestDetails({
-                retryOfRequestLogID,
-                url,
-                durationMs: headersTime - startTime,
-                message: response.message,
-            }));
-            if (isTimeout) {
-                throw new APIConnectionTimeoutError();
-            }
-            throw new APIConnectionError({ cause: response });
-        }
-        const responseInfo = `[${requestLogID}${retryLogStr}] ${req.method} ${url} ${response.ok ? 'succeeded' : 'failed'} with status ${response.status} in ${headersTime - startTime}ms`;
-        if (!response.ok) {
-            const shouldRetry = await this.shouldRetry(response);
-            if (retriesRemaining && shouldRetry) {
-                const retryMessage = `retrying, ${retriesRemaining} attempts remaining`;
-                // We don't need the body of this response.
-                await CancelReadableStream(response.body);
-                loggerFor(this).info(`${responseInfo} - ${retryMessage}`);
-                loggerFor(this).debug(`[${requestLogID}] response error (${retryMessage})`, formatRequestDetails({
-                    retryOfRequestLogID,
-                    url: response.url,
-                    status: response.status,
-                    headers: response.headers,
-                    durationMs: headersTime - startTime,
-                }));
-                return this.retryRequest(options, retriesRemaining, retryOfRequestLogID !== null && retryOfRequestLogID !== void 0 ? retryOfRequestLogID : requestLogID, response.headers);
-            }
-            const retryMessage = shouldRetry ? `error; no more retries left` : `error; not retryable`;
-            loggerFor(this).info(`${responseInfo} - ${retryMessage}`);
-            const errText = await response.text().catch((err) => castToError(err).message);
-            const errJSON = safeJSON(errText);
-            const errMessage = errJSON ? undefined : errText;
-            loggerFor(this).debug(`[${requestLogID}] response error (${retryMessage})`, formatRequestDetails({
-                retryOfRequestLogID,
-                url: response.url,
-                status: response.status,
-                headers: response.headers,
-                message: errMessage,
-                durationMs: Date.now() - startTime,
-            }));
-            // @ts-ignore
-            const err = this.makeStatusError(response.status, errJSON, errMessage, response.headers);
-            throw err;
-        }
-        loggerFor(this).info(responseInfo);
-        loggerFor(this).debug(`[${requestLogID}] response start`, formatRequestDetails({
-            retryOfRequestLogID,
-            url: response.url,
-            status: response.status,
-            headers: response.headers,
-            durationMs: headersTime - startTime,
-        }));
-        return { response, options, controller, requestLogID, retryOfRequestLogID, startTime };
-    }
-    async fetchWithTimeout(url, init, ms, controller) {
-        const _b = init || {}, { signal, method } = _b, options = __rest(_b, ["signal", "method"]);
-        const abort = this._makeAbort(controller);
-        if (signal)
-            signal.addEventListener('abort', abort, { once: true });
-        const timeout = setTimeout(abort, ms);
-        const isReadableBody = (globalThis.ReadableStream && options.body instanceof globalThis.ReadableStream) ||
-            (typeof options.body === 'object' && options.body !== null && Symbol.asyncIterator in options.body);
-        const fetchOptions = Object.assign(Object.assign(Object.assign({ signal: controller.signal }, (isReadableBody ? { duplex: 'half' } : {})), { method: 'GET' }), options);
-        if (method) {
-            // Custom methods like 'patch' need to be uppercased
-            // See https://github.com/nodejs/undici/issues/2294
-            fetchOptions.method = method.toUpperCase();
-        }
-        try {
-            // use undefined this binding; fetch errors if bound to something else in browser/cloudflare
-            return await this.fetch.call(undefined, url, fetchOptions);
-        }
-        finally {
-            clearTimeout(timeout);
-        }
-    }
-    async shouldRetry(response) {
-        // Note this is not a standard header.
-        const shouldRetryHeader = response.headers.get('x-should-retry');
-        // If the server explicitly says whether or not to retry, obey.
-        if (shouldRetryHeader === 'true')
-            return true;
-        if (shouldRetryHeader === 'false')
-            return false;
-        // Retry on request timeouts.
-        if (response.status === 408)
-            return true;
-        // Retry on lock timeouts.
-        if (response.status === 409)
-            return true;
-        // Retry on rate limits.
-        if (response.status === 429)
-            return true;
-        // Retry internal errors.
-        if (response.status >= 500)
-            return true;
-        return false;
-    }
-    async retryRequest(options, retriesRemaining, requestLogID, responseHeaders) {
-        var _b;
-        let timeoutMillis;
-        // Note the `retry-after-ms` header may not be standard, but is a good idea and we'd like proactive support for it.
-        const retryAfterMillisHeader = responseHeaders === null || responseHeaders === void 0 ? void 0 : responseHeaders.get('retry-after-ms');
-        if (retryAfterMillisHeader) {
-            const timeoutMs = parseFloat(retryAfterMillisHeader);
-            if (!Number.isNaN(timeoutMs)) {
-                timeoutMillis = timeoutMs;
-            }
-        }
-        // About the Retry-After header: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Retry-After
-        const retryAfterHeader = responseHeaders === null || responseHeaders === void 0 ? void 0 : responseHeaders.get('retry-after');
-        if (retryAfterHeader && !timeoutMillis) {
-            const timeoutSeconds = parseFloat(retryAfterHeader);
-            if (!Number.isNaN(timeoutSeconds)) {
-                timeoutMillis = timeoutSeconds * 1000;
-            }
-            else {
-                timeoutMillis = Date.parse(retryAfterHeader) - Date.now();
-            }
-        }
-        // If the API asks us to wait a certain amount of time, just do what it
-        // says, but otherwise calculate a default
-        if (timeoutMillis === undefined) {
-            const maxRetries = (_b = options.maxRetries) !== null && _b !== void 0 ? _b : this.maxRetries;
-            timeoutMillis = this.calculateDefaultRetryTimeoutMillis(retriesRemaining, maxRetries);
-        }
-        await sleep$1(timeoutMillis);
-        return this.makeRequest(options, retriesRemaining - 1, requestLogID);
-    }
-    calculateDefaultRetryTimeoutMillis(retriesRemaining, maxRetries) {
-        const initialRetryDelay = 0.5;
-        const maxRetryDelay = 8.0;
-        const numRetries = maxRetries - retriesRemaining;
-        // Apply exponential backoff, but not more than the max.
-        const sleepSeconds = Math.min(initialRetryDelay * Math.pow(2, numRetries), maxRetryDelay);
-        // Apply some jitter, take up to at most 25 percent of the retry time.
-        const jitter = 1 - Math.random() * 0.25;
-        return sleepSeconds * jitter * 1000;
-    }
-    async buildRequest(inputOptions, { retryCount = 0 } = {}) {
-        var _b, _c, _d;
-        const options = Object.assign({}, inputOptions);
-        const { method, path, query, defaultBaseURL } = options;
-        const url = this.buildURL(path, query, defaultBaseURL);
-        if ('timeout' in options)
-            validatePositiveInteger('timeout', options.timeout);
-        options.timeout = (_b = options.timeout) !== null && _b !== void 0 ? _b : this.timeout;
-        const { bodyHeaders, body } = this.buildBody({ options });
-        const reqHeaders = await this.buildHeaders({ options: inputOptions, method, bodyHeaders, retryCount });
-        const req = Object.assign(Object.assign(Object.assign(Object.assign(Object.assign({ method, headers: reqHeaders }, (options.signal && { signal: options.signal })), (globalThis.ReadableStream &&
-            body instanceof globalThis.ReadableStream && { duplex: 'half' })), (body && { body })), ((_c = this.fetchOptions) !== null && _c !== void 0 ? _c : {})), ((_d = options.fetchOptions) !== null && _d !== void 0 ? _d : {}));
-        return { req, url, timeout: options.timeout };
-    }
-    async buildHeaders({ options, method, bodyHeaders, retryCount, }) {
-        let idempotencyHeaders = {};
-        if (this.idempotencyHeader && method !== 'get') {
-            if (!options.idempotencyKey)
-                options.idempotencyKey = this.defaultIdempotencyKey();
-            idempotencyHeaders[this.idempotencyHeader] = options.idempotencyKey;
-        }
-        const authHeaders = await this.authHeaders(options);
-        let headers = buildHeaders([
-            idempotencyHeaders,
-            { Accept: 'application/json', 'User-Agent': this.getUserAgent(), 'Api-Revision': '2026-05-20' },
-            this._options.defaultHeaders,
-            bodyHeaders,
-            options.headers,
-            authHeaders,
-        ]);
-        this.validateHeaders(headers);
-        return headers.values;
-    }
-    _makeAbort(controller) {
-        // note: we can't just inline this method inside `fetchWithTimeout()` because then the closure
-        //       would capture all request options, and cause a memory leak.
-        return () => controller.abort();
-    }
-    buildBody({ options: { body, headers: rawHeaders } }) {
-        if (!body) {
-            return { bodyHeaders: undefined, body: undefined };
-        }
-        const headers = buildHeaders([rawHeaders]);
-        if (
-        // Pass raw type verbatim
-        ArrayBuffer.isView(body) ||
-            body instanceof ArrayBuffer ||
-            body instanceof DataView ||
-            (typeof body === 'string' &&
-                // Preserve legacy string encoding behavior for now
-                headers.values.has('content-type')) ||
-            // `Blob` is superset of `File`
-            (globalThis.Blob && body instanceof globalThis.Blob) ||
-            // `FormData` -> `multipart/form-data`
-            body instanceof FormData ||
-            // `URLSearchParams` -> `application/x-www-form-urlencoded`
-            body instanceof URLSearchParams ||
-            // Send chunked stream (each chunk has own `length`)
-            (globalThis.ReadableStream && body instanceof globalThis.ReadableStream)) {
-            return { bodyHeaders: undefined, body: body };
-        }
-        else if (typeof body === 'object' &&
-            (Symbol.asyncIterator in body ||
-                (Symbol.iterator in body && 'next' in body && typeof body.next === 'function'))) {
-            return { bodyHeaders: undefined, body: ReadableStreamFrom(body) };
-        }
-        else if (typeof body === 'object' &&
-            headers.values.get('content-type') === 'application/x-www-form-urlencoded') {
-            return {
-                bodyHeaders: { 'content-type': 'application/x-www-form-urlencoded' },
-                body: this.stringifyQuery(body),
-            };
-        }
-        else {
-            return this.encoder({ body, headers });
-        }
-    }
-}
-BaseGeminiNextGenAPIClient.DEFAULT_TIMEOUT = 60000; // 1 minute
-/**
- * API Client for interfacing with the Gemini Next Gen API API.
- */
-class GeminiNextGenAPIClient extends BaseGeminiNextGenAPIClient {
-    constructor() {
-        super(...arguments);
-        this.interactions = new Interactions(this);
-        this.webhooks = new Webhooks(this);
-        this.agents = new Agents(this);
-    }
-}
-_a = GeminiNextGenAPIClient;
-GeminiNextGenAPIClient.GeminiNextGenAPIClient = _a;
-GeminiNextGenAPIClient.GeminiNextGenAPIClientError = GeminiNextGenAPIClientError;
-GeminiNextGenAPIClient.APIError = APIError;
-GeminiNextGenAPIClient.APIConnectionError = APIConnectionError;
-GeminiNextGenAPIClient.APIConnectionTimeoutError = APIConnectionTimeoutError;
-GeminiNextGenAPIClient.APIUserAbortError = APIUserAbortError;
-GeminiNextGenAPIClient.NotFoundError = NotFoundError;
-GeminiNextGenAPIClient.ConflictError = ConflictError;
-GeminiNextGenAPIClient.RateLimitError = RateLimitError;
-GeminiNextGenAPIClient.BadRequestError = BadRequestError;
-GeminiNextGenAPIClient.AuthenticationError = AuthenticationError;
-GeminiNextGenAPIClient.InternalServerError = InternalServerError;
-GeminiNextGenAPIClient.PermissionDeniedError = PermissionDeniedError;
-GeminiNextGenAPIClient.UnprocessableEntityError = UnprocessableEntityError;
-GeminiNextGenAPIClient.toFile = toFile;
-GeminiNextGenAPIClient.Interactions = Interactions;
-GeminiNextGenAPIClient.Webhooks = Webhooks;
-GeminiNextGenAPIClient.Agents = Agents;
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-// Code generated by the Google Gen AI SDK generator DO NOT EDIT.
 function cancelTuningJobParametersToMldev(fromObject, _rootObject) {
     const toObject = {};
     const fromName = getValueByPath(fromObject, ['name']);
@@ -21646,165 +21767,6 @@ class Tunings extends BaseModule {
  * Copyright 2025 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
-class BrowserDownloader {
-    async download(_params, _apiClient) {
-        throw new Error('Download to file is not supported in the browser, please use a browser compliant download like an <a> tag.');
-    }
-}
-
-const MAX_CHUNK_SIZE = 1024 * 1024 * 8; // bytes
-const MAX_RETRY_COUNT = 3;
-const INITIAL_RETRY_DELAY_MS = 1000;
-const DELAY_MULTIPLIER = 2;
-const X_GOOG_UPLOAD_STATUS_HEADER_FIELD = 'x-goog-upload-status';
-async function uploadBlob(file, uploadUrl, apiClient, httpOptions) {
-    var _a;
-    const response = await uploadBlobInternal(file, uploadUrl, apiClient, httpOptions);
-    const responseJson = (await (response === null || response === void 0 ? void 0 : response.json()));
-    if (((_a = response === null || response === void 0 ? void 0 : response.headers) === null || _a === void 0 ? void 0 : _a[X_GOOG_UPLOAD_STATUS_HEADER_FIELD]) !== 'final') {
-        throw new Error('Failed to upload file: Upload status is not finalized.');
-    }
-    return responseJson['file'];
-}
-async function uploadBlobToFileSearchStore(file, uploadUrl, apiClient, httpOptions) {
-    var _a;
-    const response = await uploadBlobInternal(file, uploadUrl, apiClient, httpOptions);
-    const responseJson = (await (response === null || response === void 0 ? void 0 : response.json()));
-    if (((_a = response === null || response === void 0 ? void 0 : response.headers) === null || _a === void 0 ? void 0 : _a[X_GOOG_UPLOAD_STATUS_HEADER_FIELD]) !== 'final') {
-        throw new Error('Failed to upload file: Upload status is not finalized.');
-    }
-    const resp = uploadToFileSearchStoreOperationFromMldev(responseJson);
-    const typedResp = new UploadToFileSearchStoreOperation();
-    Object.assign(typedResp, resp);
-    return typedResp;
-}
-async function uploadBlobInternal(file, uploadUrl, apiClient, httpOptions) {
-    var _a, _b, _c;
-    let finalUrl = uploadUrl;
-    const effectiveBaseUrl = (httpOptions === null || httpOptions === void 0 ? void 0 : httpOptions.baseUrl) || ((_a = apiClient.clientOptions.httpOptions) === null || _a === void 0 ? void 0 : _a.baseUrl);
-    if (effectiveBaseUrl) {
-        const baseUri = new URL(effectiveBaseUrl);
-        const uploadUri = new URL(uploadUrl);
-        uploadUri.protocol = baseUri.protocol;
-        uploadUri.host = baseUri.host;
-        uploadUri.port = baseUri.port;
-        finalUrl = uploadUri.toString();
-    }
-    let fileSize = 0;
-    let offset = 0;
-    let response = new HttpResponse(new Response());
-    let uploadCommand = 'upload';
-    fileSize = file.size;
-    while (offset < fileSize) {
-        const chunkSize = Math.min(MAX_CHUNK_SIZE, fileSize - offset);
-        const chunk = file.slice(offset, offset + chunkSize);
-        if (offset + chunkSize >= fileSize) {
-            uploadCommand += ', finalize';
-        }
-        let retryCount = 0;
-        let currentDelayMs = INITIAL_RETRY_DELAY_MS;
-        while (retryCount < MAX_RETRY_COUNT) {
-            const mergedHeaders = Object.assign(Object.assign({}, ((httpOptions === null || httpOptions === void 0 ? void 0 : httpOptions.headers) || {})), { 'X-Goog-Upload-Command': uploadCommand, 'X-Goog-Upload-Offset': String(offset), 'Content-Length': String(chunkSize) });
-            response = await apiClient.request({
-                path: '',
-                body: chunk,
-                httpMethod: 'POST',
-                httpOptions: Object.assign(Object.assign({}, httpOptions), { apiVersion: '', baseUrl: finalUrl, headers: mergedHeaders }),
-            });
-            if ((_b = response === null || response === void 0 ? void 0 : response.headers) === null || _b === void 0 ? void 0 : _b[X_GOOG_UPLOAD_STATUS_HEADER_FIELD]) {
-                break;
-            }
-            retryCount++;
-            await sleep(currentDelayMs);
-            currentDelayMs = currentDelayMs * DELAY_MULTIPLIER;
-        }
-        offset += chunkSize;
-        // The `x-goog-upload-status` header field can be `active`, `final` and
-        //`cancelled` in resposne.
-        if (((_c = response === null || response === void 0 ? void 0 : response.headers) === null || _c === void 0 ? void 0 : _c[X_GOOG_UPLOAD_STATUS_HEADER_FIELD]) !== 'active') {
-            break;
-        }
-        // TODO(b/401391430) Investigate why the upload status is not finalized
-        // even though all content has been uploaded.
-        if (fileSize <= offset) {
-            throw new Error('All content has been uploaded, but the upload status is not finalized.');
-        }
-    }
-    return response;
-}
-async function getBlobStat(file) {
-    const fileStat = { size: file.size, type: file.type };
-    return fileStat;
-}
-function sleep(ms) {
-    return new Promise((resolvePromise) => setTimeout(resolvePromise, ms));
-}
-
-class BrowserUploader {
-    async upload(file, uploadUrl, apiClient, httpOptions) {
-        if (typeof file === 'string') {
-            throw new Error('File path is not supported in browser uploader.');
-        }
-        return await uploadBlob(file, uploadUrl, apiClient, httpOptions);
-    }
-    async uploadToFileSearchStore(file, uploadUrl, apiClient, httpOptions) {
-        if (typeof file === 'string') {
-            throw new Error('File path is not supported in browser uploader.');
-        }
-        return await uploadBlobToFileSearchStore(file, uploadUrl, apiClient, httpOptions);
-    }
-    async stat(file) {
-        if (typeof file === 'string') {
-            throw new Error('File path is not supported in browser uploader.');
-        }
-        else {
-            return await getBlobStat(file);
-        }
-    }
-}
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
-class BrowserWebSocketFactory {
-    create(url, headers, callbacks) {
-        return new BrowserWebSocket(url, headers, callbacks);
-    }
-}
-class BrowserWebSocket {
-    constructor(url, headers, callbacks) {
-        this.url = url;
-        this.headers = headers;
-        this.callbacks = callbacks;
-    }
-    connect() {
-        this.ws = new WebSocket(this.url);
-        this.ws.onopen = this.callbacks.onopen;
-        this.ws.onerror = this.callbacks.onerror;
-        this.ws.onclose = this.callbacks.onclose;
-        this.ws.onmessage = this.callbacks.onmessage;
-    }
-    send(message) {
-        if (this.ws === undefined) {
-            throw new Error('WebSocket is not connected');
-        }
-        this.ws.send(message);
-    }
-    close() {
-        if (this.ws === undefined) {
-            throw new Error('WebSocket is not connected');
-        }
-        this.ws.close();
-    }
-}
-
-/**
- * @license
- * Copyright 2025 Google LLC
- * SPDX-License-Identifier: Apache-2.0
- */
 const GOOGLE_API_KEY_HEADER = 'x-goog-api-key';
 // TODO(b/395122533): We need a secure client side authentication mechanism.
 class WebAuth {
@@ -21837,18 +21799,13 @@ const LANGUAGE_LABEL_PREFIX = 'gl-node/';
  * The Google GenAI SDK.
  *
  * @remarks
- * Provides access to the GenAI features through either the {@link
- * https://cloud.google.com/vertex-ai/docs/reference/rest | Gemini API} or
- * the {@link https://cloud.google.com/vertex-ai/docs/reference/rest | Vertex AI
- * API}.
+ * Provides access to the GenAI features through either the {@link https://cloud.google.com/vertex-ai/docs/reference/rest | Gemini API}
+ * or the {@link https://cloud.google.com/vertex-ai/docs/reference/rest | Vertex AI API}.
  *
- * The {@link GoogleGenAIOptions.vertexai} value determines which of the API
- * services to use.
+ * The {@link GoogleGenAIOptions.vertexai} value determines which of the API services to use.
  *
- * When using the Gemini API, a {@link GoogleGenAIOptions.apiKey} must also be
- * set. When using Vertex AI, currently only {@link GoogleGenAIOptions.apiKey}
- * is supported via Express mode. {@link GoogleGenAIOptions.project} and {@link
- * GoogleGenAIOptions.location} should not be set.
+ * When using the Gemini API, a {@link GoogleGenAIOptions.apiKey} must also be set,
+ * when using Vertex AI {@link GoogleGenAIOptions.project} and {@link GoogleGenAIOptions.location} must also be set.
  *
  * @example
  * Initializing the SDK for using the Gemini API:
@@ -21874,7 +21831,6 @@ class GoogleGenAI {
         var _a;
         const httpOpts = this.httpOptions;
         if (this._nextGenClient === undefined) {
-            const httpOpts = this.httpOptions;
             this._nextGenClient = new GeminiNextGenAPIClient({
                 baseURL: this.apiClient.getBaseUrl(),
                 apiKey: this.apiKey,
@@ -21915,27 +21871,17 @@ class GoogleGenAI {
         return this._agents;
     }
     constructor(options) {
-        var _a;
+        var _a, _b;
         if (options.apiKey == null) {
-            throw new Error('An API Key must be set when running in a browser');
+            throw new Error(`An API Key must be set when running in an unspecified environment.\n + ${crossError().message}`);
         }
-        // Web client only supports API key mode for Vertex AI.
-        if (options.project || options.location) {
-            throw new Error('Vertex AI project based authentication is not supported on browser runtimes. Please do not provide a project or location.');
+        if (options.enterprise !== undefined &&
+            options.vertexai !== undefined &&
+            options.enterprise !== options.vertexai) {
+            throw new Error('enterprise and vertexAI flags have conflicting values, please set enterprise value only.');
         }
-        this.vertexai = (_a = options.vertexai) !== null && _a !== void 0 ? _a : false;
+        this.vertexai = (_b = (_a = options.enterprise) !== null && _a !== void 0 ? _a : options.vertexai) !== null && _b !== void 0 ? _b : false;
         this.apiKey = options.apiKey;
-        const baseUrl = getBaseUrl(options.httpOptions, options.vertexai, 
-        /*vertexBaseUrlFromEnv*/ undefined, 
-        /*geminiBaseUrlFromEnv*/ undefined);
-        if (baseUrl) {
-            if (options.httpOptions) {
-                options.httpOptions.baseUrl = baseUrl;
-            }
-            else {
-                options.httpOptions = { baseUrl: baseUrl };
-            }
-        }
         this.apiVersion = options.apiVersion;
         this.httpOptions = options.httpOptions;
         const auth = new WebAuth(this.apiKey);
@@ -21945,14 +21891,14 @@ class GoogleGenAI {
             apiKey: this.apiKey,
             vertexai: this.vertexai,
             httpOptions: this.httpOptions,
-            userAgentExtra: LANGUAGE_LABEL_PREFIX + 'web',
-            uploader: new BrowserUploader(),
-            downloader: new BrowserDownloader(),
+            userAgentExtra: LANGUAGE_LABEL_PREFIX + 'cross',
+            uploader: new CrossUploader(),
+            downloader: new CrossDownloader(),
         });
         this.models = new Models(this.apiClient);
-        this.live = new Live(this.apiClient, auth, new BrowserWebSocketFactory());
-        this.batches = new Batches(this.apiClient);
+        this.live = new Live(this.apiClient, auth, new CrossWebSocketFactory());
         this.chats = new Chats(this.models, this.apiClient);
+        this.batches = new Batches(this.apiClient);
         this.caches = new Caches(this.apiClient);
         this.files = new Files(this.apiClient);
         this.operations = new Operations(this.apiClient);
