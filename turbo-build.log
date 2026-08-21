@@ -1,5 +1,5 @@
 
 
-> @jimp/plugin-mask@1.6.0 build /Users/andrew/Documents/jimp/plugins/plugin-mask
-> tshy
+> @jimp/plugin-print@1.6.0 build /Users/andrew/Documents/jimp/plugins/plugin-print
+> tshy && cp -r fonts dist
 
