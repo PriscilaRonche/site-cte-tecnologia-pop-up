@@ -1,67 +1,63 @@
 import { expect, test, describe } from "vitest";
 
-import { makeTestImage } from "@jimp/test-utils";
+import { makeDonutTestImage } from "@jimp/test-utils";
 import { createJimp } from "@jimp/core";
 
-import { methods } from "./index.js";
+import { methods as color } from "./index.js";
 
-const Jimp = createJimp({ plugins: [methods] });
+const jimp = createJimp({ plugins: [color] });
 
-describe("Circle", () => {
-  test("makes a circle based on image height and width", () => {
-    const imgSrc = Jimp.fromBitmap(
-      makeTestImage(
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-      ),
-    );
+describe("canvas color transformation", () => {
+  const redDonutJGD = makeDonutTestImage(0x00000000, 0xff000088, 0xff0000ff);
 
-    expect(imgSrc.circle()).toMatchSnapshot();
+  test("can apply more than one color transformation", () => {
+    const image = jimp.fromBitmap(redDonutJGD);
+    const newJGD = image.color([
+      { apply: "hue", params: [-180] },
+      { apply: "lighten", params: [25] },
+    ]);
+
+    expect(newJGD.bitmap).toMatchSnapshot();
   });
 
-  test("makes a circle using provided radius", () => {
-    const imgSrc = Jimp.fromBitmap(
-      makeTestImage(
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-      ),
-    );
-
-    expect(imgSrc.circle({ radius: 3 })).toMatchSnapshot();
+  test("lighten", () => {
+    const image = jimp.fromBitmap(redDonutJGD);
+    expect(image.color([{ apply: "lighten", params: [25] }])).toMatchSnapshot();
   });
 
-  test("should ", () => {
-    const imgSrc = Jimp.fromBitmap(
-      makeTestImage(
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
-      ),
-    );
+  test("brighten", () => {
+    const image = jimp.fromBitmap(redDonutJGD);
+    expect(
+      image.color([{ apply: "brighten", params: [25] }]),
+    ).toMatchSnapshot();
+  });
 
-    expect(imgSrc.circle({ radius: 5, x: 5, y: 5 })).toMatchSnapshot();
+  test("spin hue", () => {
+    const image = jimp.fromBitmap(redDonutJGD);
+    expect(image.color([{ apply: "hue", params: [150] }])).toMatchSnapshot();
+  });
+});
+
+describe("brightness", () => {
+  test("brightness of 1 should be the same as no change", () => {
+    const jgd = makeDonutTestImage(0xff000088, 0xff000088, 0xff000088);
+    const image = jimp.fromBitmap(jgd);
+    const image2 = jimp.fromBitmap(jgd);
+
+    expect(image.brightness(1).bitmap).toStrictEqual(image2.bitmap);
+  });
+
+  test("should be able to brighten", () => {
+    const jgd = makeDonutTestImage(0xaa000088, 0xaa000088, 0xaa000088);
+    const image = jimp.fromBitmap(jgd);
+
+    expect(image.brightness(2).bitmap).toMatchSnapshot();
+  });
+
+  test("should be able to darken", () => {
+    const jgd = makeDonutTestImage(0xaa000088, 0xaa000088, 0xaa000088);
+    const image = jimp.fromBitmap(jgd);
+
+    expect(image.brightness(0.2).bitmap).toMatchSnapshot();
   });
 });
