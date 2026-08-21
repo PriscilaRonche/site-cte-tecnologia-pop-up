@@ -1,29 +1,27 @@
 /**
- * Filter method is a single-byte integer that indicates the preprocessing method applied to the image data before compression.
+ * What resizing algorithm to use.
  */
-export declare enum PNGFilterType {
-    AUTO = -1,
-    /** scanline is transmitted unmodified */
-    NONE = 0,
-    /** filter transmits the difference between each byte and the value of the corresponding byte of the prior pixel */
-    SUB = 1,
-    /** The Up() filter is just like the Sub() filter except that the pixel immediately above the current pixel, rather than just to its left, is used as the predictor. */
-    UP = 2,
-    /** uses the average of the two neighboring pixels (left and above) to predict the value of a pixel */
-    AVERAGE = 3,
-    /** computes a simple linear function of the three neighboring pixels (left, above, upper left), then chooses as predictor the neighboring pixel closest to the computed value. */
-    PATH = 4
-}
-/**
- * Color type is a single-byte integer that describes the interpretation of the image data.
- * Color type codes represent sums of the following values:
- *
- * 1 (palette used), 2 (color used), and 4 (alpha channel used).
- */
-export declare enum PNGColorType {
-    GRAYSCALE = 0,
-    COLOR = 2,
-    GRAYSCALE_ALPHA = 4,
-    COLOR_ALPHA = 6
+export declare enum ResizeStrategy {
+    /**
+     * Nearest Neighbor resizing is a method used in image processing that assigns the value of the nearest pixel to the output pixel when resizing an image.
+     * While fast, it can lead to lower quality outputs with noticeable pixelation, especially at larger scaling factors.
+     */
+    NEAREST_NEIGHBOR = "nearestNeighbor",
+    /**
+     * Bilinear resizing is an image scaling method that uses the weighted average of the four nearest pixel values, providing smoother gradients than nearest neighbor resizing.
+     * It's computationally more intense than nearest neighbor but results in images of higher quality and fewer artifacts.
+     */
+    BILINEAR = "bilinearInterpolation",
+    /**
+     * Bicubic resizing is an image interpolation method that uses the values of the nearest 16 pixels in the input image to calculate the output pixel value, providing even more smoothness and sharpness than bilinear resizing.
+     * Although it's computationally more expensive than bilinear and nearest neighbor, it produces higher quality images, making it ideal for photographic image scaling.
+     */
+    BICUBIC = "bicubicInterpolation",
+    /**
+     * Hermite resizing is an image resizing method that uses Hermite interpolation, a mathematical formula, to determine the values of output pixels based on a weighted average of the surrounding pixels.
+     * Although slower than some simpler techniques like bilinear or nearest neighbor, Hermite resizing can produce higher quality visuals and detailed renderings with less blurring.
+     */
+    HERMITE = "hermiteInterpolation",
+    BEZIER = "bezierInterpolation"
 }
 //# sourceMappingURL=constants.d.ts.map
