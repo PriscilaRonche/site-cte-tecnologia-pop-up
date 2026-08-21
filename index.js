@@ -1,36 +1,31 @@
-import { HorizontalAlign, VerticalAlign } from "@jimp/core";
-import { clone } from "@jimp/utils";
+import { VerticalAlign, HorizontalAlign } from "@jimp/core";
 import { ResizeStrategy, methods as resizeMethods } from "@jimp/plugin-resize";
-import { methods as blitMethods } from "@jimp/plugin-blit";
+import { methods as cropMethods } from "@jimp/plugin-crop";
 import { z } from "zod";
-const ContainOptionsSchema = z.object({
+const CoverOptionsSchema = z.object({
     /** the width to resize the image to */
     w: z.number(),
     /** the height to resize the image to */
     h: z.number(),
     /** A bitmask for horizontal and vertical alignment */
     align: z.number().optional(),
-    /** a scaling method (e.g. Jimp.RESIZE_BEZIER) */
+    /** a scaling method (e.g. ResizeStrategy.BEZIER) */
     mode: z.nativeEnum(ResizeStrategy).optional(),
 });
 export const methods = {
     /**
-     * Scale the image to the given width and height keeping the aspect ratio. Some parts of the image may be letter boxed.
-     * @param w the width to resize the image to
-     * @param h the height to resize the image to
-     * @param align A bitmask for horizontal and vertical alignment
-     * @param mode a scaling method (e.g. Jimp.RESIZE_BEZIER)
+     * Scale the image so the given width and height keeping the aspect ratio. Some parts of the image may be clipped.
      * @example
      * ```ts
      * import { Jimp } from "jimp";
      *
      * const image = await Jimp.read("test/image.png");
      *
-     * image.contain({ w: 150, h: 100 });
+     * image.cover(150, 100);
      * ```
      */
-    contain(image, options) {
-        const { w, h, align = HorizontalAlign.CENTER | VerticalAlign.MIDDLE, mode, } = ContainOptionsSchema.parse(options);
+    cover(image, options) {
+        const { w, h, align = HorizontalAlign.CENTER | VerticalAlign.MIDDLE, mode, } = CoverOptionsSchema.parse(options);
         const hbits = align & ((1 << 3) - 1);
         const vbits = align >> 3;
         // check if more flags than one is in the bit sets
@@ -41,17 +36,17 @@ export const methods = {
         const alignH = hbits >> 1; // 0, 1, 2
         const alignV = vbits >> 1; // 0, 1, 2
         const f = w / h > image.bitmap.width / image.bitmap.height
-            ? h / image.bitmap.height
-            : w / image.bitmap.width;
-        const c = resizeMethods.scale(clone(image), { f, mode });
-        image = resizeMethods.resize(image, { w, h, mode });
-        image.scan((_, __, idx) => {
-            image.bitmap.data.writeUInt32BE(image.background, idx);
+            ? w / image.bitmap.width
+            : h / image.bitmap.height;
+        image = resizeMethods.scale(image, {
+            f,
+            mode,
         });
-        image = blitMethods.blit(image, {
-            src: c,
-            x: ((image.bitmap.width - c.bitmap.width) / 2) * alignH,
-            y: ((image.bitmap.height - c.bitmap.height) / 2) * alignV,
+        image = cropMethods.crop(image, {
+            x: ((image.bitmap.width - w) / 2) * alignH,
+            y: ((image.bitmap.height - h) / 2) * alignV,
+            w,
+            h,
         });
         return image;
     },
