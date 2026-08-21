@@ -1,43 +1,72 @@
 import { expect, test, describe } from "vitest";
 import { createJimp } from "@jimp/core";
-import { getTestImagePath } from "@jimp/test-utils";
+import jpeg from "@jimp/js-jpeg";
+import png from "@jimp/js-png";
+import { makeTestImage } from "@jimp/test-utils";
 
-import jpeg from "./index.js";
+import * as blit from "./index.js";
 
-const jimp = createJimp({ formats: [jpeg] });
+const Jimp = createJimp({ formats: [jpeg, png], plugins: [blit.methods] });
 
-describe("JPEG", () => {
-  test("load JPG", async () => {
-    const image = await jimp.read(getTestImagePath("cops.jpg"));
+describe("Blit over image", function () {
+  const targetImg = Jimp.fromBitmap(
+    makeTestImage(
+      "▴▴▴▴▸▸▸▸",
+      "▴▴▴▴▸▸▸▸",
+      "▴▴▴▴▸▸▸▸",
+      "▴▴▴▴▸▸▸▸",
+      "▾▾▾▾◆◆◆◆",
+      "▾▾▾▾◆◆◆◆",
+      "▾▾▾▾◆◆◆◆",
+      "▾▾▾▾◆◆◆◆",
+    ),
+  );
+  // stores the Jimp instances of the JGD images above.
+  // prettier-ignore
+  const srcImg = Jimp.fromBitmap(makeTestImage(
+    "□□□□□□",
+    "□▥▥▥▥□",
+    "□▥■■▥□",
+    "□▥■■▥□",
+    "□▥▥▥▥□",
+    "□□□□□□"
+  ));
 
-    expect(image.getPixelColor(10, 10)).toBe(0x3f4a02ff);
-    expect(image.getPixelColor(220, 190)).toBe(0x5d94b6ff);
-    expect(image.getPixelColor(350, 130)).toBe(0xdf7944ff);
+  test("blit on top, with no crop", () => {
+    expect(targetImg.clone().blit(srcImg)).toMatchSnapshot();
   });
 
-  test("load JPG with fill bytes", async () => {
-    const image = await jimp.read(getTestImagePath("fillbytes.jpg"));
-
-    expect(image.getPixelColor(10, 10)).toBe(0xaeb8c3ff);
-    expect(image.getPixelColor(220, 190)).toBe(0x262b21ff);
-    expect(image.getPixelColor(350, 130)).toBe(0x4e5d30ff);
+  test("blit on middle, with no crop", () => {
+    expect(
+      targetImg.clone().blit({ src: srcImg, x: 1, y: 1 }),
+    ).toMatchSnapshot();
   });
 
-  test("export JPG", async () => {
-    const image = jimp.fromBitmap({
-      width: 3,
-      height: 3,
-      data: [
-        0xff0000ff, 0xff0080ff, 0xff00ffff, 0xff0080ff, 0xff00ffff, 0x8000ffff,
-        0xff00ffff, 0x8000ffff, 0x0000ffff,
-      ],
-    });
+  test("blit on middle, with x,y crop", () => {
+    expect(
+      targetImg
+        .clone()
+        .blit({ src: srcImg, x: 2, y: 2, srcX: 1, srcY: 1, srcW: 5, srcH: 5 }),
+    ).toMatchSnapshot();
+  });
 
-    const buffer = await image.getBuffer("image/jpeg", {
-      quality: 50,
-    });
+  test("blit on middle, with x,y,w,h crop", () => {
+    expect(
+      targetImg
+        .clone()
+        .blit({ src: srcImg, x: 2, y: 2, srcX: 1, srcY: 1, srcW: 4, srcH: 4 }),
+    ).toMatchSnapshot();
+  });
 
-    // eslint-disable-next-line no-control-regex
-    expect(buffer.toString()).toMatch(/^.{3,9}JFIF\u0000/);
+  test("blit partially out, on top-left", () => {
+    expect(
+      targetImg.clone().blit({ src: srcImg, x: -1, y: -1 }),
+    ).toMatchSnapshot();
+  });
+
+  test("blit partially out, on bottom-right", () => {
+    expect(
+      targetImg.clone().blit({ src: srcImg, x: 3, y: 3 }),
+    ).toMatchSnapshot();
   });
 });
