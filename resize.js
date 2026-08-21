@@ -1,7 +1,5 @@
-"use strict";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-Object.defineProperty(exports, "__esModule", { value: true });
 // JavaScript Image Resizer (c) 2012 - Grant Galitz
 // Released to public domain 29 July 2013: https://github.com/grantgalitz/JS-Image-Resizer/issues/4
 function Resize(widthOriginal, heightOriginal, targetWidth, targetHeight, blendAlpha, interpolationPass, resizeCallback) {
@@ -408,5 +406,5 @@ Resize.prototype.generateUint8Buffer = function (bufferLength) {
         return [];
     }
 };
-exports.default = Resize;
+export default Resize;
 //# sourceMappingURL=resize.js.map

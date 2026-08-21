@@ -1,4 +1,3 @@
-"use strict";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Copyright (c) 2015 Guyon Roche
@@ -21,9 +20,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.operations = void 0;
-exports.operations = {
+export const operations = {
     nearestNeighbor(src, dst) {
         const wSrc = src.width;
         const hSrc = src.height;
