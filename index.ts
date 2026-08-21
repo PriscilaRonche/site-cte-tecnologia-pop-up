@@ -1,99 +1,33 @@
-import * as BMP from "bmp-ts";
+import GIF from "omggif";
+import { GifUtil, GifFrame, BitmapImage, GifCodec } from "gifwrap";
+import { Format } from "@jimp/types";
 
-import { scan } from "@jimp/utils";
-import { Bitmap, Format } from "@jimp/types";
-
-export type { BmpColor } from "bmp-ts";
-export { BmpCompression } from "bmp-ts";
-
-type Pretty<T> = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [K in keyof T]: T[K] extends (...args: any[]) => any
-    ? T[K]
-    : T[K] extends object
-      ? Pretty<T[K]>
-      : T[K];
-};
-
-export type EncodeOptions = Pretty<
-  Partial<
-    Pick<
-      BMP.BmpImage,
-      | "palette"
-      | "colors"
-      | "importantColors"
-      | "hr"
-      | "vr"
-      | "reserved1"
-      | "reserved2"
-    >
-  >
->;
-
-export interface DecodeBmpOptions {
-  toRGBA?: boolean;
+export interface JPEGOptions {
+  quality?: number;
 }
 
-function encode(image: Bitmap, options: EncodeOptions = {}) {
-  scan(
-    { bitmap: image },
-    0,
-    0,
-    image.width,
-    image.height,
-    function (_, __, index) {
-      const red = image.data[index + 0]!;
-      const green = image.data[index + 1]!;
-      const blue = image.data[index + 2]!;
-      const alpha = image.data[index + 3]!;
-
-      image.data[index + 0] = alpha;
-      image.data[index + 1] = blue;
-      image.data[index + 2] = green;
-      image.data[index + 3] = red;
-    }
-  );
-
-  return BMP.encode({ ...image, ...options }).data;
-}
-
-function decode(data: Buffer, options?: DecodeBmpOptions) {
-  const result = BMP.decode(data, options);
-
-  scan(
-    { bitmap: result },
-    0,
-    0,
-    result.width,
-    result.height,
-    function (_, __, index) {
-      // const alpha = result.data[index + 0]!;
-      const blue = result.data[index + 1]!;
-      const green = result.data[index + 2]!;
-      const red = result.data[index + 3]!;
-
-      result.data[index + 0] = red;
-      result.data[index + 1] = green;
-      result.data[index + 2] = blue;
-      result.data[index + 3] = 0xff;
-    }
-  );
-
-  return result as Bitmap;
-}
-
-export function msBmp() {
+export default function gif() {
   return {
-    mime: "image/x-ms-bmp",
-    encode,
-    decode,
-  } satisfies Format<"image/x-ms-bmp">;
-}
+    mime: "image/gif",
+    encode: async (bitmap) => {
+      const gif = new BitmapImage(bitmap);
+      GifUtil.quantizeDekker(gif, 256);
+      const newFrame = new GifFrame(bitmap);
+      const gifCodec = new GifCodec();
+      const newGif = await gifCodec.encodeGif([newFrame], {});
+      return newGif.buffer;
+    },
+    decode: (data) => {
+      const gifObj = new GIF.GifReader(data);
+      const gifData = Buffer.alloc(gifObj.width * gifObj.height * 4);
 
-export default function bmp() {
-  return {
-    mime: "image/bmp",
-    encode,
-    decode,
-  } satisfies Format<"image/bmp">;
+      gifObj.decodeAndBlitFrameRGBA(0, gifData);
+
+      return {
+        data: gifData,
+        width: gifObj.width,
+        height: gifObj.height,
+      };
+    },
+  } satisfies Format<"image/gif">;
 }
