@@ -1,37 +1,25 @@
-import { JimpClassSchema } from "@jimp/types";
-import { clone } from "@jimp/utils";
-import { z } from "zod";
-const DisplaceOptionsSchema = z.object({
-    /** the source Jimp instance */
-    map: JimpClassSchema,
-    /** the maximum displacement value */
-    offset: z.number(),
-});
 export const methods = {
     /**
-     * Displaces the image based on the provided displacement map
-     * @param map the source Jimp instance
-     * @param offset
+     * Apply a ordered dithering effect.
      * @example
      * ```ts
      * import { Jimp } from "jimp";
      *
      * const image = await Jimp.read("test/image.png");
-     * const map = await Jimp.read("test/map.png");
      *
-     * image.displace(map, 10);
+     * image.dither();
      * ```
      */
-    displace(image, options) {
-        const { map, offset } = DisplaceOptionsSchema.parse(options);
-        const source = clone(image);
+    dither(image) {
+        const rgb565Matrix = [
+            1, 9, 3, 11, 13, 5, 15, 7, 4, 12, 2, 10, 16, 8, 14, 6,
+        ];
         image.scan((x, y, idx) => {
-            let displacement = (map.bitmap.data[idx] / 256) * offset;
-            displacement = Math.round(displacement);
-            const ids = image.getPixelIndex(x + displacement, y);
-            image.bitmap.data[ids] = source.bitmap.data[idx];
-            image.bitmap.data[ids + 1] = source.bitmap.data[idx + 1];
-            image.bitmap.data[ids + 2] = source.bitmap.data[idx + 2];
+            const thresholdId = ((y & 3) << 2) + (x % 4);
+            const dither = rgb565Matrix[thresholdId];
+            image.bitmap.data[idx] = Math.min(image.bitmap.data[idx] + dither, 0xff);
+            image.bitmap.data[idx + 1] = Math.min(image.bitmap.data[idx + 1] + dither, 0xff);
+            image.bitmap.data[idx + 2] = Math.min(image.bitmap.data[idx + 2] + dither, 0xff);
         });
         return image;
     },
