@@ -1,48 +1,57 @@
-import { expect, test, describe } from "vitest";
-
-import { makeTestImage } from "@jimp/test-utils";
+import { describe, expect, test } from "vitest";
 import { createJimp } from "@jimp/core";
+import { makeTestImage } from "@jimp/test-utils";
 
 import { methods } from "./index.js";
 
-const Jimp = createJimp({ plugins: [methods] });
+const jimp = createJimp({ plugins: [methods] });
 
-describe("Fisheye", () => {
-  test("should create fisheye lens to image", () => {
-    const img = Jimp.fromBitmap(
+describe("Flipping plugin", () => {
+  test("can flip horizontally", () => {
+    const src = jimp.fromBitmap(
       makeTestImage(
-        "0000000000",
-        "0001221000",
-        "0022222200",
-        "0122112210",
-        "0221001220",
-        "0221001220",
-        "0122112210",
-        "0022222200",
-        "0001221000",
-        "0000000000",
+        "AAAABBBB",
+        "AAABAAAB",
+        "ABABABAB",
+        "CCCCCCCC",
+        "CCCCCCCC",
+        "CCCCCCCC",
+        "AACCCCAA",
       ),
     );
 
-    expect(img.fisheye()).toMatchSnapshot();
+    expect(src.flip({ horizontal: true })).toMatchSnapshot();
   });
 
-  test("should create fisheye lens to image with radius", async () => {
-    const imgNormal = Jimp.fromBitmap(
+  test("can flip vertically", () => {
+    const src = jimp.fromBitmap(
       makeTestImage(
-        "0000000000",
-        "0000000000",
-        "0000000000",
-        "0000000000",
-        "0001111000",
-        "0001111000",
-        "0000000000",
-        "0000000000",
-        "0000000000",
-        "0000000000",
+        "AAAABBBB",
+        "AAABAAAB",
+        "ABABABAB",
+        "CCCCCCCC",
+        "CCCCCCCC",
+        "CCCCCCCC",
+        "AACCCCAA",
       ),
     );
 
-    expect(imgNormal.fisheye({ radius: 1.8 })).toMatchSnapshot();
+    expect(src.flip({ vertical: true })).toMatchSnapshot();
+  });
+
+  test("can flip both horizontally and vertically at once", async () => {
+    const src = jimp.fromBitmap(
+      makeTestImage(
+        "AAAABBBB",
+        "AAABAAAB",
+        "ABABABAB",
+        "CCCCCCCC",
+        "CCCCCCCC",
+        "CCCCCCCC",
+        "AACCCCAA",
+      ),
+    );
+
+    expect(src.flip({ horizontal: true, vertical: true })).toMatchSnapshot();
   });
 });

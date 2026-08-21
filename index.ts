@@ -1,51 +1,43 @@
 import { JimpClass } from "@jimp/types";
-import { clone } from "@jimp/utils";
 import { z } from "zod";
 
-const FisheyeOptionsSchema = z.object({
-  /** the radius of the circle */
-  radius: z.number().min(0).optional(),
+const FlipOptionsSchema = z.object({
+  /** if true the image will be flipped horizontally */
+  horizontal: z.boolean().optional(),
+  /** if true the image will be flipped vertically */
+  vertical: z.boolean().optional(),
 });
 
-export type FisheyeOptions = z.infer<typeof FisheyeOptionsSchema>;
+export type FlipOptions = z.infer<typeof FlipOptionsSchema>;
 
 export const methods = {
   /**
-   * Adds a fisheye effect to the image.
+   * Flip the image.
+   * @param horizontal a Boolean, if true the image will be flipped horizontally
+   * @param vertical a Boolean, if true the image will be flipped vertically
    * @example
    * ```ts
    * import { Jimp } from "jimp";
    *
    * const image = await Jimp.read("test/image.png");
    *
-   * image.fisheye();
+   * image.flip(true, false);
    * ```
    */
-  fisheye<I extends JimpClass>(image: I, options: FisheyeOptions = {}) {
-    const { radius = 2.5 } = FisheyeOptionsSchema.parse(options);
-    const source = clone(image);
-    const { width, height } = source.bitmap;
+  flip<I extends JimpClass>(image: I, options: FlipOptions) {
+    const { horizontal, vertical } = FlipOptionsSchema.parse(options);
+    const bitmap = Buffer.alloc(image.bitmap.data.length);
 
-    source.scan((x, y) => {
-      const hx = x / width;
-      const hy = y / height;
-      const rActual = Math.sqrt(Math.pow(hx - 0.5, 2) + Math.pow(hy - 0.5, 2));
-      const rn = 2 * Math.pow(rActual, radius);
-      const cosA = (hx - 0.5) / rActual;
-      const sinA = (hy - 0.5) / rActual;
-      const newX = Math.round((rn * cosA + 0.5) * width);
-      const newY = Math.round((rn * sinA + 0.5) * height);
-      const color = source.getPixelColor(newX, newY);
+    image.scan((x, y, idx) => {
+      const _x = horizontal ? image.bitmap.width - 1 - x : x;
+      const _y = vertical ? image.bitmap.height - 1 - y : y;
+      const _idx = (image.bitmap.width * _y + _x) << 2;
+      const data = image.bitmap.data.readUInt32BE(idx);
 
-      image.setPixelColor(color, x, y);
+      bitmap.writeUInt32BE(data, _idx);
     });
 
-    /* Set center pixel color, otherwise it will be transparent */
-    image.setPixelColor(
-      source.getPixelColor(width / 2, height / 2),
-      width / 2,
-      height / 2,
-    );
+    image.bitmap.data = Buffer.from(bitmap);
 
     return image;
   },

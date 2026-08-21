@@ -1,57 +1,67 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Fisheye > should create fisheye lens to image 1`] = `
+exports[`Flipping plugin > can flip both horizontally and vertically at once 1`] = `
 Visualization:
 
-■■■1221■■■
-■22111222■
-■22■■■■121
-11■■■■■112
-21■■■■■■12
-21■■■■■■12
-12■■■■■■12
-■211■■■222
-■22111122■
-■■122222■■
+AACCCCAA
+CCCCCCCC
+CCCCCCCC
+CCCCCCCC
+BABABABA
+BAAABAAA
+BBBBAAAA
 
 Data:
 
-00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 11-11-11ᶠᶠ 22-22-22ᶠᶠ 22-22-22ᶠᶠ 11-11-11ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ
-00-00-00ᶠᶠ 22-22-22ᶠᶠ 22-22-22ᶠᶠ 11-11-11ᶠᶠ 11-11-11ᶠᶠ 11-11-11ᶠᶠ 22-22-22ᶠᶠ 22-22-22ᶠᶠ 22-22-22ᶠᶠ 00-00-00ᶠᶠ
-00-00-00ᶠᶠ 22-22-22ᶠᶠ 22-22-22ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 11-11-11ᶠᶠ 22-22-22ᶠᶠ 11-11-11ᶠᶠ
-11-11-11ᶠᶠ 11-11-11ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 11-11-11ᶠᶠ 11-11-11ᶠᶠ 22-22-22ᶠᶠ
-22-22-22ᶠᶠ 11-11-11ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 11-11-11ᶠᶠ 22-22-22ᶠᶠ
-22-22-22ᶠᶠ 11-11-11ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 11-11-11ᶠᶠ 22-22-22ᶠᶠ
-11-11-11ᶠᶠ 22-22-22ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 11-11-11ᶠᶠ 22-22-22ᶠᶠ
-00-00-00ᶠᶠ 22-22-22ᶠᶠ 11-11-11ᶠᶠ 11-11-11ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 22-22-22ᶠᶠ 22-22-22ᶠᶠ 22-22-22ᶠᶠ
-00-00-00ᶠᶠ 22-22-22ᶠᶠ 22-22-22ᶠᶠ 11-11-11ᶠᶠ 11-11-11ᶠᶠ 11-11-11ᶠᶠ 11-11-11ᶠᶠ 22-22-22ᶠᶠ 22-22-22ᶠᶠ 00-00-00ᶠᶠ
-00-00-00ᶠᶠ 00-00-00ᶠᶠ 11-11-11ᶠᶠ 22-22-22ᶠᶠ 22-22-22ᶠᶠ 22-22-22ᶠᶠ 22-22-22ᶠᶠ 22-22-22ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ
+AA-AA-AAᶠᶠ AA-AA-AAᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ AA-AA-AAᶠᶠ AA-AA-AAᶠᶠ
+CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ
+CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ
+CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ
+BB-BB-BBᶠᶠ AA-AA-AAᶠᶠ BB-BB-BBᶠᶠ AA-AA-AAᶠᶠ BB-BB-BBᶠᶠ AA-AA-AAᶠᶠ BB-BB-BBᶠᶠ AA-AA-AAᶠᶠ
+BB-BB-BBᶠᶠ AA-AA-AAᶠᶠ AA-AA-AAᶠᶠ AA-AA-AAᶠᶠ BB-BB-BBᶠᶠ AA-AA-AAᶠᶠ AA-AA-AAᶠᶠ AA-AA-AAᶠᶠ
+BB-BB-BBᶠᶠ BB-BB-BBᶠᶠ BB-BB-BBᶠᶠ BB-BB-BBᶠᶠ AA-AA-AAᶠᶠ AA-AA-AAᶠᶠ AA-AA-AAᶠᶠ AA-AA-AAᶠᶠ
 `;
 
-exports[`Fisheye > should create fisheye lens to image with radius 1`] = `
+exports[`Flipping plugin > can flip horizontally 1`] = `
 Visualization:
 
-■■■■■■■■■■
-■■■■■■■■■■
-■■■■■■■■■■
-■■■11111■■
-■■111111■■
-■■111111■■
-■■■■111■■■
-■■■■■■■■■■
-■■■■■■■■■■
-■■■■■■■■■■
+BBBBAAAA
+BAAABAAA
+BABABABA
+CCCCCCCC
+CCCCCCCC
+CCCCCCCC
+AACCCCAA
 
 Data:
 
-00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ
-00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ
-00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ
-00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 11-11-11ᶠᶠ 11-11-11ᶠᶠ 11-11-11ᶠᶠ 11-11-11ᶠᶠ 11-11-11ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ
-00-00-00ᶠᶠ 00-00-00ᶠᶠ 11-11-11ᶠᶠ 11-11-11ᶠᶠ 11-11-11ᶠᶠ 11-11-11ᶠᶠ 11-11-11ᶠᶠ 11-11-11ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ
-00-00-00ᶠᶠ 00-00-00ᶠᶠ 11-11-11ᶠᶠ 11-11-11ᶠᶠ 11-11-11ᶠᶠ 11-11-11ᶠᶠ 11-11-11ᶠᶠ 11-11-11ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ
-00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 11-11-11ᶠᶠ 11-11-11ᶠᶠ 11-11-11ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ
-00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ
-00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ
-00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ 00-00-00ᶠᶠ
+BB-BB-BBᶠᶠ BB-BB-BBᶠᶠ BB-BB-BBᶠᶠ BB-BB-BBᶠᶠ AA-AA-AAᶠᶠ AA-AA-AAᶠᶠ AA-AA-AAᶠᶠ AA-AA-AAᶠᶠ
+BB-BB-BBᶠᶠ AA-AA-AAᶠᶠ AA-AA-AAᶠᶠ AA-AA-AAᶠᶠ BB-BB-BBᶠᶠ AA-AA-AAᶠᶠ AA-AA-AAᶠᶠ AA-AA-AAᶠᶠ
+BB-BB-BBᶠᶠ AA-AA-AAᶠᶠ BB-BB-BBᶠᶠ AA-AA-AAᶠᶠ BB-BB-BBᶠᶠ AA-AA-AAᶠᶠ BB-BB-BBᶠᶠ AA-AA-AAᶠᶠ
+CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ
+CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ
+CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ
+AA-AA-AAᶠᶠ AA-AA-AAᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ AA-AA-AAᶠᶠ AA-AA-AAᶠᶠ
+`;
+
+exports[`Flipping plugin > can flip vertically 1`] = `
+Visualization:
+
+AACCCCAA
+CCCCCCCC
+CCCCCCCC
+CCCCCCCC
+ABABABAB
+AAABAAAB
+AAAABBBB
+
+Data:
+
+AA-AA-AAᶠᶠ AA-AA-AAᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ AA-AA-AAᶠᶠ AA-AA-AAᶠᶠ
+CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ
+CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ
+CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ CC-CC-CCᶠᶠ
+AA-AA-AAᶠᶠ BB-BB-BBᶠᶠ AA-AA-AAᶠᶠ BB-BB-BBᶠᶠ AA-AA-AAᶠᶠ BB-BB-BBᶠᶠ AA-AA-AAᶠᶠ BB-BB-BBᶠᶠ
+AA-AA-AAᶠᶠ AA-AA-AAᶠᶠ AA-AA-AAᶠᶠ BB-BB-BBᶠᶠ AA-AA-AAᶠᶠ AA-AA-AAᶠᶠ AA-AA-AAᶠᶠ BB-BB-BBᶠᶠ
+AA-AA-AAᶠᶠ AA-AA-AAᶠᶠ AA-AA-AAᶠᶠ AA-AA-AAᶠᶠ BB-BB-BBᶠᶠ BB-BB-BBᶠᶠ BB-BB-BBᶠᶠ BB-BB-BBᶠᶠ
 `;
