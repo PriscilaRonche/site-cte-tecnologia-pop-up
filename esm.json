@@ -8,8 +8,7 @@
   ],
   "exclude": [
     "../**/*.test.ts",
-    "../src/package.json",
-    "../src/index-browser.mts"
+    "../src/package.json"
   ],
   "compilerOptions": {
     "outDir": "../.tshy-build/esm"

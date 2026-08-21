@@ -1,5 +1,13 @@
-import { promises as fs } from "fs";
-export { existsSync } from "fs";
-export declare const readFile: typeof fs.readFile;
-export declare const writeFile: typeof fs.writeFile;
+export interface JPEGOptions {
+    quality?: number;
+}
+export default function gif(): {
+    mime: "image/gif";
+    encode: (bitmap: import("@jimp/types").Bitmap) => Promise<Buffer>;
+    decode: (data: Buffer) => {
+        data: Buffer;
+        width: number;
+        height: number;
+    };
+};
 //# sourceMappingURL=index.d.ts.map
