@@ -1,609 +1,178 @@
-# Google Gen AI SDK for TypeScript and JavaScript
+<!--
+  -- This file is auto-generated from src/README_js.md. Changes should be made there.
+  -->
+# Mime
 
-[![NPM Downloads](https://img.shields.io/npm/dw/%40google%2Fgenai)](https://www.npmjs.com/package/@google/genai)
-[![Node Current](https://img.shields.io/node/v/%40google%2Fgenai)](https://www.npmjs.com/package/@google/genai)
+A comprehensive, compact MIME type module.
 
-----------------------
-**Documentation:** https://googleapis.github.io/js-genai/
+[![Build Status](https://travis-ci.org/broofa/mime.svg?branch=master)](https://travis-ci.org/broofa/mime)
 
-----------------------
+## Install
 
-The Google Gen AI JavaScript SDK is designed for
-TypeScript and JavaScript developers to build applications powered by Gemini. The SDK
-supports both the [Gemini Developer API](https://ai.google.dev/gemini-api/docs)
-and [Gemini Enterprise Agent Platform](https://docs.cloud.google.com/gemini-enterprise-agent-platform).
-
-The Google Gen AI SDK is designed to work with Gemini 2.0+ features.
-
-> [!CAUTION]
-> **API Key Security:** Avoid exposing API keys in client-side code.
-> Use server-side implementations in production environments.
-
-## Code Generation
-
-Generative models are often unaware of recent API and SDK updates and may suggest outdated or legacy code.
-
-We recommend using our Code Generation instructions [`codegen_instructions.md`](https://raw.githubusercontent.com/googleapis/js-genai/refs/heads/main/codegen_instructions.md) when generating Google Gen AI SDK code to guide your model towards using the more recent SDK features. Copy and paste the instructions into your development environment to provide the model with the necessary context.
-
-## Prerequisites
-
-1. Node.js version 20 or later
-
-### The following are required for Gemini Enterprise Agent Platform users (excluding Vertex AI Studio)
-1.  [Select](https://console.cloud.google.com/project) or [create](https://cloud.google.com/resource-manager/docs/creating-managing-projects#creating_a_project) a Google Cloud project.
-1.  [Enable billing for your project](https://cloud.google.com/billing/docs/how-to/modify-project).
-1.  [Enable the Vertex AI API](https://console.cloud.google.com/flows/enableapi?apiid=aiplatform.googleapis.com).
-1.  [Configure authentication](https://cloud.google.com/docs/authentication) for your project.
-    *   [Install the gcloud CLI](https://cloud.google.com/sdk/docs/install).
-    *   [Initialize the gcloud CLI](https://cloud.google.com/sdk/docs/initializing).
-    *   Create local authentication credentials for your user account:
-
-    ```sh
-    gcloud auth application-default login
-    ```
-A list of accepted authentication options are listed in [GoogleAuthOptions](https://github.com/googleapis/google-auth-library-nodejs/blob/3ae120d0a45c95e36c59c9ac8286483938781f30/src/auth/googleauth.ts#L87) interface of google-auth-library-node.js GitHub repo.
-
-## Installation
-
-To install the SDK, run the following command:
-
-```shell
-npm install @google/genai
+### NPM
+```
+npm install mime
 ```
 
-## Quickstart
+### Browser
 
-The simplest way to get started is to use an API key from
-[Google AI Studio](https://aistudio.google.com/apikey):
-
-```typescript
-import {GoogleGenAI} from '@google/genai';
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-
-const ai = new GoogleGenAI({apiKey: GEMINI_API_KEY});
-
-async function main() {
-  const response = await ai.models.generateContent({
-    model: 'gemini-2.5-flash',
-    contents: 'Why is the sky blue?',
-  });
-  console.log(response.text);
-}
-
-main();
+It is recommended that you use a bundler such as
+[webpack](https://webpack.github.io/) or [browserify](http://browserify.org/) to
+package your code.  However, browser-ready versions are available via
+skypack.dev as follows:
+```
+// Full version
+<script type="module">
+import mime from "https://cdn.skypack.dev/mime";
+</script>
 ```
 
-## Initialization
-
-The Google Gen AI SDK provides support for both the
-[Google AI Studio](https://ai.google.dev/gemini-api/docs) and
-[Gemini Enterprise Agent Platform](https://cloud.google.com/vertex-ai/generative-ai/docs/learn/overview)
- implementations of the Gemini API.
-
-### Gemini Developer API
-
-For server-side applications, initialize using an API key, which can
-be acquired from [Google AI Studio](https://aistudio.google.com/apikey):
-
-```typescript
-import { GoogleGenAI } from '@google/genai';
-const ai = new GoogleGenAI({apiKey: 'GEMINI_API_KEY'});
+```
+// "lite" version
+<script type="module">
+import mime from "https://cdn.skypack.dev/mime/lite";
+</script>
 ```
 
-#### Browser
+## Quick Start
 
-> [!CAUTION]
-> **API Key Security:** Avoid exposing API keys in client-side code.
->   Use server-side implementations in production environments.
-
-In the browser the initialization code is identical:
-
-
-```typescript
-import { GoogleGenAI } from '@google/genai';
-const ai = new GoogleGenAI({apiKey: 'GEMINI_API_KEY'});
-```
-
-### Gemini Enterprise Agent Platform
-
-Sample code for Gemini Enterprise Agent Platform initialization:
-
-```typescript
-import { GoogleGenAI } from '@google/genai';
-
-const ai = new GoogleGenAI({
-    enterprise: true,
-    project: 'your_project',
-    location: 'your_location',
-});
-```
-
-### (Optional) (NodeJS only) Using environment variables:
-
-For NodeJS environments, you can create a client by configuring the necessary
-environment variables. Configuration setup instructions depends on whether
-you're using the Gemini Developer API or the Gemini Enterprise Agent Platform.
-
-**Gemini Developer API:** Set `GOOGLE_API_KEY` as shown below:
-
-```bash
-export GOOGLE_API_KEY='your-api-key'
-```
-
-**Gemini Enterprise Agent Platform:** Set `GOOGLE_GENAI_USE_ENTERPRISE`,
-`GOOGLE_CLOUD_PROJECT` and `GOOGLE_CLOUD_LOCATION`, as shown below:
-
-```bash
-export GOOGLE_GENAI_USE_ENTERPRISE=true
-export GOOGLE_CLOUD_PROJECT='your-project-id'
-export GOOGLE_CLOUD_LOCATION='us-central1'
-```
-
-```typescript
-import {GoogleGenAI} from '@google/genai';
-
-const ai = new GoogleGenAI();
-```
-
-## API Selection
-
-By default, the SDK uses the beta API endpoints provided by Google to support
-preview features in the APIs. The stable API endpoints can be selected by
-setting the API version to `v1`.
-
-To set the API version use `apiVersion`. For example, to set the API version to
-`v1` for Gemini Enterprise Agent Platform:
-
-```typescript
-const ai = new GoogleGenAI({
-    enterprise: true,
-    project: 'your_project',
-    location: 'your_location',
-    apiVersion: 'v1'
-});
-```
-
-To set the API version to `v1alpha` for the Gemini Developer API:
-
-```typescript
-const ai = new GoogleGenAI({
-    apiKey: 'GEMINI_API_KEY',
-    apiVersion: 'v1alpha'
-});
-```
-
-## GoogleGenAI overview
-
-All API features are accessed through an instance of the `GoogleGenAI` classes.
-The submodules bundle together related API methods:
-
-- [`ai.models`](https://googleapis.github.io/js-genai/release_docs/classes/models.Models.html):
-  Use `models` to query models (`generateContent`, `generateImages`, ...), or
-  examine their metadata.
-- [`ai.caches`](https://googleapis.github.io/js-genai/release_docs/classes/caches.Caches.html):
-  Create and manage `caches` to reduce costs when repeatedly using the same
-  large prompt prefix.
-- [`ai.chats`](https://googleapis.github.io/js-genai/release_docs/classes/chats.Chats.html):
-  Create local stateful `chat` objects to simplify multi turn interactions.
-- [`ai.files`](https://googleapis.github.io/js-genai/release_docs/classes/files.Files.html):
-  Upload `files` to the API and reference them in your prompts.
-  This reduces bandwidth if you use a file many times, and handles files too
-  large to fit inline with your prompt.
-- [`ai.live`](https://googleapis.github.io/js-genai/release_docs/classes/live.Live.html):
-  Start a `live` session for real time interaction, allows text + audio + video
-  input, and text or audio output.
-
-## Samples
-
-More samples can be found in the
-[github samples directory](https://github.com/googleapis/js-genai/tree/main/sdk-samples).
-
-### Streaming
-
-For quicker, more responsive API interactions use the `generateContentStream`
-method which yields chunks as they're generated:
-
-```typescript
-import {GoogleGenAI} from '@google/genai';
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-
-const ai = new GoogleGenAI({apiKey: GEMINI_API_KEY});
-
-async function main() {
-  const response = await ai.models.generateContentStream({
-    model: 'gemini-2.5-flash',
-    contents: 'Write a 100-word poem.',
-  });
-  for await (const chunk of response) {
-    console.log(chunk.text);
-  }
-}
-
-main();
-```
-
-### Function Calling
-
-To let Gemini to interact with external systems, you can provide
-`functionDeclaration` objects as `tools`. To use these tools it's a 4 step
-
-1. **Declare the function name, description, and parametersJsonSchema**
-2. **Call `generateContent` with function calling enabled**
-3. **Use the returned `FunctionCall` parameters to call your actual function**
-3. **Send the result back to the model (with history, easier in `ai.chat`)
-   as a `FunctionResponse`**
-
-```typescript
-import {GoogleGenAI, FunctionCallingConfigMode, FunctionDeclaration, Type} from '@google/genai';
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-
-async function main() {
-  const controlLightDeclaration: FunctionDeclaration = {
-    name: 'controlLight',
-    parametersJsonSchema: {
-      type: 'object',
-      properties:{
-        brightness: {
-          type:'number',
-        },
-        colorTemperature: {
-          type:'string',
-        },
-      },
-      required: ['brightness', 'colorTemperature'],
-    },
-  };
-
-  const ai = new GoogleGenAI({apiKey: GEMINI_API_KEY});
-  const response = await ai.models.generateContent({
-    model: 'gemini-2.5-flash',
-    contents: 'Dim the lights so the room feels cozy and warm.',
-    config: {
-      toolConfig: {
-        functionCallingConfig: {
-          // Force it to call any function
-          mode: FunctionCallingConfigMode.ANY,
-          allowedFunctionNames: ['controlLight'],
-        }
-      },
-      tools: [{functionDeclarations: [controlLightDeclaration]}]
-    }
-  });
-
-  console.log(response.functionCalls);
-}
-
-main();
-```
-
-#### Model Context Protocol (MCP) support (experimental)
-
-Built-in [MCP](https://modelcontextprotocol.io/introduction) support is an
-experimental feature. You can pass a local MCP server as a tool directly.
+For the full version (800+ MIME types, 1,000+ extensions):
 
 ```javascript
-import { GoogleGenAI, FunctionCallingConfigMode , mcpToTool} from '@google/genai';
-import { Client } from "@modelcontextprotocol/sdk/client/index.js";
-import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+const mime = require('mime');
 
-// Create server parameters for stdio connection
-const serverParams = new StdioClientTransport({
-  command: "npx", // Executable
-  args: ["-y", "@philschmid/weather-mcp"] // MCP Server
-});
-
-const client = new Client(
-  {
-    name: "example-client",
-    version: "1.0.0"
-  }
-);
-
-// Configure the client
-const ai = new GoogleGenAI({});
-
-// Initialize the connection between client and server
-await client.connect(serverParams);
-
-// Send request to the model with MCP tools
-const response = await ai.models.generateContent({
-  model: "gemini-2.5-flash",
-  contents: `What is the weather in London in ${new Date().toLocaleDateString()}?`,
-  config: {
-    tools: [mcpToTool(client)],  // uses the session, will automatically call the tool using automatic function calling
-  },
-});
-console.log(response.text);
-
-// Close the connection
-await client.close();
+mime.getType('txt');                    // ⇨ 'text/plain'
+mime.getExtension('text/plain');        // ⇨ 'txt'
 ```
 
-### Generate Content
+See [Mime API](#mime-api) below for API details.
 
-#### How to structure `contents` argument for `generateContent`
+## Lite Version
 
-The SDK allows you to specify the following types in the `contents` parameter:
+The "lite" version of this module omits vendor-specific (`*/vnd.*`) and
+experimental (`*/x-*`) types.  It weighs in at ~2.5KB, compared to 8KB for the
+full version.  To load the lite version:
 
-#### Content
-
-- `Content`: The SDK will wrap the singular `Content` instance in an array which
-contains only the given content instance
-- `Content[]`: No transformation happens
-
-#### Part
-
-Parts will be aggregated on a singular Content, with role 'user'.
-
-- `Part | string`: The SDK will wrap the `string` or `Part` in a `Content`
-instance with role 'user'.
-- `Part[] | string[]`: The SDK will wrap the full provided list into a single
-`Content` with role 'user'.
-
-**_NOTE:_** This doesn't apply to `FunctionCall` and `FunctionResponse` parts,
-if you are specifying those, you need to explicitly provide the full
-`Content[]` structure making it explicit which Parts are 'spoken' by the model,
-or the user. The SDK will throw an exception if you try this.
-
-## Error Handling
-
-To handle errors raised by the API, the SDK provides this [ApiError](https://github.com/googleapis/js-genai/blob/main/src/errors.ts) class.
-
-```typescript
-import {GoogleGenAI} from '@google/genai';
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-
-const ai = new GoogleGenAI({apiKey: GEMINI_API_KEY});
-
-async function main() {
-  await ai.models.generateContent({
-    model: 'non-existent-model',
-    contents: 'Write a 100-word poem.',
-  }).catch((e) => {
-    console.error('error name: ', e.name);
-    console.error('error message: ', e.message);
-    console.error('error status: ', e.status);
-  });
-}
-
-main();
+```javascript
+const mime = require('mime/lite');
 ```
 
-## Interactions (Experimental)
+## Mime .vs. mime-types .vs. mime-db modules
 
-> **Warning:** The Interactions API is in **Beta**. This is a preview of an
-experimental feature. Features and schemas are subject to **breaking changes**.
+For those of you wondering about the difference between these [popular] NPM modules,
+here's a brief rundown ...
 
-The Interactions API is a unified interface for interacting with Gemini models
-and agents. It simplifies state management, tool orchestration, and long-running
-tasks.
+[`mime-db`](https://github.com/jshttp/mime-db) is "the source of
+truth" for MIME type information.  It is not an API.  Rather, it is a canonical
+dataset of mime type definitions pulled from IANA, Apache, NGINX, and custom mappings
+submitted by the Node.js community.
 
-See the [documentation site](https://ai.google.dev/gemini-api/docs/interactions)
-for more details.
+[`mime-types`](https://github.com/jshttp/mime-types) is a thin
+wrapper around mime-db that provides an API drop-in compatible(ish) with `mime @ < v1.3.6` API.
 
-### Basic Interaction
+`mime` is, as of v2, a self-contained module bundled with a pre-optimized version
+of the `mime-db` dataset.  It provides a simplified API with the following characteristics:
 
-```typescript
-const interaction = await ai.interactions.create({
-    model: 'gemini-2.5-flash',
-    input: 'Hello, how are you?',
-});
-console.debug(interaction);
+* Intelligently resolved type conflicts (See [mime-score](https://github.com/broofa/mime-score) for details)
+* Method naming consistent with industry best-practices
+* Compact footprint.  E.g. The minified+compressed sizes of the various modules:
 
-```
+Module | Size
+--- | ---
+`mime-db`  | 18 KB
+`mime-types` | same as mime-db
+`mime` | 8 KB
+`mime/lite` | 2 KB
 
-### Stateful Conversation
+## Mime API
 
-The Interactions API supports server-side state management. You can continue a
-conversation by referencing the `previous_interaction_id`.
+Both `require('mime')` and `require('mime/lite')` return instances of the MIME
+class, documented below.
 
-```typescript
-// 1. First turn
-const interaction1 = await ai.interactions.create({
-    model: 'gemini-2.5-flash',
-    input: 'Hi, my name is Amir.',
-});
-console.debug(interaction1);
+Note: Inputs to this API are case-insensitive.  Outputs (returned values) will
+be lowercase.
 
-// 2. Second turn (passing previous_interaction_id)
-const interaction2 = await ai.interactions.create({
-  model: 'gemini-2.5-flash',
-  input: 'What is my name?',
-  previous_interaction_id: interaction1.id,
-});
-console.debug(interaction2);
+### new Mime(typeMap, ... more maps)
 
-```
+Most users of this module will not need to create Mime instances directly.
+However if you would like to create custom mappings, you may do so as follows
+...
 
-### Agents (Deep Research)
+```javascript
+// Require Mime class
+const Mime = require('mime/Mime');
 
-You can use specialized agents like `deep-research-pro-preview-12-2025` for
-complex tasks.
-
-```typescript
-function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-// 1. Start the Deep Research Agent
-const initialInteraction = await ai.interactions.create({
-  input:
-      'Research the history of the Google TPUs with a focus on 2025 and 2026.',
-  agent: 'deep-research-pro-preview-12-2025',
-  background: true,
-});
-
-console.log(`Research started. Interaction ID: ${initialInteraction.id}`);
-
-// 2. Poll for results
-while (true) {
-  const interaction = await ai.interactions.get(initialInteraction.id);
-  console.log(`Status: ${interaction.status}`);
-
-  if (interaction.status === 'completed') {
-    console.debug('\nFinal Report:\n', interaction.outputs);
-    break;
-  } else if (['failed', 'cancelled'].includes(interaction.status)) {
-    console.log(`Failed with status: ${interaction.status}`);
-    break;
-  }
-
-  await sleep(10000);  // Sleep for 10 seconds
-}
-
-```
-
-### Multimodal Input
-
-You can provide multimodal data (text, images, audio, etc.) in the input list.
-
-```typescript
-import base64
-
-// Assuming you have a base64 string
-// const base64Image = ...;
-
-const interaction = await ai.interactions.create({
-  model: 'gemini-2.5-flash',
-  input: [
-    { type: 'text', text: 'Describe the image.' },
-    { type: 'image', data: base64Image, mime_type: 'image/png' },
-  ],
-});
-
-console.debug(interaction);
-
-```
-
-### Function Calling
-
-You can define custom functions for the model to use. The Interactions API
-handles the tool selection, and you provide the execution result back to the
-model.
-
-```typescript
-// 1. Define the tool
-const getWeather = (location: string) => {
-  /* Gets the weather for a given location. */
-  return `The weather in ${location} is sunny.`;
+// Define mime type -> extensions map
+const typeMap = {
+  'text/abc': ['abc', 'alpha', 'bet'],
+  'text/def': ['leppard']
 };
 
-// 2. Send the request with tools
-let interaction = await ai.interactions.create({
-  model: 'gemini-2.5-flash',
-  input: 'What is the weather in Mountain View, CA?',
-  tools: [
-    {
-      type: 'function',
-      name: 'get_weather',
-      description: 'Gets the weather for a given location.',
-      parameters: {
-        type: 'object',
-        properties: {
-          location: {
-            type: 'string',
-            description: 'The city and state, e.g. San Francisco, CA',
-          },
-        },
-        required: ['location'],
-      },
-    },
-  ],
-});
-
-// 3. Handle the tool call
-for (const output of interaction.outputs!) {
-  if (output.type === 'function_call') {
-    console.log(
-        `Tool Call: ${output.name}(${JSON.stringify(output.arguments)})`);
-
-    // Execute your actual function here
-    // Note: ensure arguments match your function signature
-    const result = getWeather(JSON.stringify(output.arguments.location));
-
-    // Send result back to the model
-    interaction = await ai.interactions.create({
-      model: 'gemini-2.5-flash',
-      previous_interaction_id: interaction.id,
-      input: [
-        {
-          type: 'function_result',
-          name: output.name,
-          call_id: output.id,
-          result: result,
-        },
-      ],
-    });
-
-    console.debug(`Response: ${JSON.stringify(interaction)}`);
-  }
-}
-
+// Create and use Mime instance
+const myMime = new Mime(typeMap);
+myMime.getType('abc');            // ⇨ 'text/abc'
+myMime.getExtension('text/def');  // ⇨ 'leppard'
 ```
 
-### Built-in Tools
-You can also use Google's built-in tools, such as **Google Search** or **Code
-Execution**.
+If more than one map argument is provided, each map is `define()`ed (see below), in order.
 
-#### Grounding with Google Search
+### mime.getType(pathOrExtension)
 
-```typescript
-const interaction = await ai.interactions.create({
-  model: 'gemini-2.5-flash',
-  input: 'Who won the last Super Bowl',
-  tools: [{ type: 'google_search' }],
-});
+Get mime type for the given path or extension.  E.g.
 
-console.debug(interaction);
+```javascript
+mime.getType('js');             // ⇨ 'application/javascript'
+mime.getType('json');           // ⇨ 'application/json'
 
+mime.getType('txt');            // ⇨ 'text/plain'
+mime.getType('dir/text.txt');   // ⇨ 'text/plain'
+mime.getType('dir\\text.txt');  // ⇨ 'text/plain'
+mime.getType('.text.txt');      // ⇨ 'text/plain'
+mime.getType('.txt');           // ⇨ 'text/plain'
 ```
 
-#### Code Execution
+`null` is returned in cases where an extension is not detected or recognized
 
-```typescript
-const interaction = await ai.interactions.create({
-  model: 'gemini-2.5-flash',
-  input: 'Calculate the 50th Fibonacci number.',
-  tools: [{ type: 'code_execution' }],
-});
-
-console.debug(interaction);
-
+```javascript
+mime.getType('foo/txt');        // ⇨ null
+mime.getType('bogus_type');     // ⇨ null
 ```
 
-### Multimodal Output
+### mime.getExtension(type)
+Get extension for the given mime type.  Charset options (often included in
+Content-Type headers) are ignored.
 
-The Interactions API can generate multimodal outputs, such as images. You must
-specify the `response_modalities`.
-
-```typescript
-import * as fs from 'fs';
-
-const interaction = await ai.interactions.create({
-  model: 'gemini-3-pro-image-preview',
-  input: 'Generate an image of a futuristic city.',
-  response_modalities: ['image'],
-});
-
-for (const output of interaction.outputs!) {
-  if (output.type === 'image') {
-    console.log(`Generated image with mime_type: ${output.mime_type}`);
-    // Save the image
-    fs.writeFileSync(
-        'generated_city.png', Buffer.from(output.data!, 'base64'));
-  }
-}
-
+```javascript
+mime.getExtension('text/plain');               // ⇨ 'txt'
+mime.getExtension('application/json');         // ⇨ 'json'
+mime.getExtension('text/html; charset=utf8');  // ⇨ 'html'
 ```
 
-## How is this different from the other Google AI SDKs
-This SDK (`@google/genai`) is Google Deepmind’s "vanilla" SDK for its generative
-AI offerings, and is where Google Deepmind adds new AI features.
+### mime.define(typeMap[, force = false])
 
-Models hosted either on the [Gemini Enterprise Agent Platform](https://cloud.google.com/vertex-ai/generative-ai/docs/learn/overview) or the [Gemini Developer platform](https://ai.google.dev/gemini-api/docs) are accessible through this SDK.
+Define [more] type mappings.
 
-Other SDKs may be offering additional AI frameworks on top of this SDK, or may
-be targeting specific project environments (like Firebase).
+`typeMap` is a map of type -> extensions, as documented in `new Mime`, above.
 
-The `@google/generative_language` and `@google-cloud/vertexai` SDKs are previous
-iterations of this SDK and are no longer receiving new Gemini 2.0+ features.
+By default this method will throw an error if you try to map a type to an
+extension that is already assigned to another type.  Passing `true` for the
+`force` argument will suppress this behavior (overriding any previous mapping).
+
+```javascript
+mime.define({'text/x-abc': ['abc', 'abcd']});
+
+mime.getType('abcd');            // ⇨ 'text/x-abc'
+mime.getExtension('text/x-abc')  // ⇨ 'abc'
+```
+
+## Command Line
+
+    mime [path_or_extension]
+
+E.g.
+
+    > mime scripts/jquery.js
+    application/javascript
+
+----
+Markdown generated from [src/README_js.md](src/README_js.md) by [![RunMD Logo](http://i.imgur.com/h0FVyzU.png)](https://github.com/broofa/runmd)
