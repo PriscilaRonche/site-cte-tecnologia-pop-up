@@ -10,18 +10,6 @@
 
 ---
 
-# v1.1.2 (Mon Sep 02 2024)
-
-#### 🐛 Bug Fix
-
-- Rotate short circuit [#1317](https://github.com/jimp-dev/jimp/pull/1317) ([@hipstersmoothie](https://github.com/hipstersmoothie))
-
-#### Authors: 1
-
-- Andrew Lisowski ([@hipstersmoothie](https://github.com/hipstersmoothie))
-
----
-
 # v1.1.0 (Sun Sep 01 2024)
 
 #### ⚠️ Pushed to `main`

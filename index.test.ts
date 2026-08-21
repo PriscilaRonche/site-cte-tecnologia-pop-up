@@ -1,101 +1,84 @@
-import { expect, test, describe } from "vitest";
-
-import { makeTestImage } from "@jimp/test-utils";
+import { describe, expect, test } from "vitest";
 import { createJimp } from "@jimp/core";
+import { makeTestImage } from "@jimp/test-utils";
 
-import { methods, ResizeStrategy } from "./index.js";
+import { methods } from "./index.js";
 
-const jimp = createJimp({ plugins: [methods], formats: [] });
+const jimp = createJimp({ plugins: [methods] });
 
-describe("Resize images", () => {
-  const testImages = [
-    {
-      title: "max contrast 8x8",
-      src: jimp.fromBitmap(
-        makeTestImage(
-          "■■■■□□□□",
-          "■■■■□□□□",
-          "■■■■□□□□",
-          "■■■■□□□□",
-          "□□□□■■■■",
-          "□□□□■■■■",
-          "□□□□■■■■",
-          "□□□□■■■■"
-        )
-      ),
-      tests: [
-        { mode: "default", size: { height: 4, width: 4 } },
-        { mode: "NEAREST_NEIGHBOR", size: { height: 4, width: 4 } },
-        { mode: "BILINEAR", size: { height: 4, width: 4 } },
-        { mode: "BICUBIC", size: { height: 4, width: 4 } },
-        { mode: "HERMITE", size: { height: 4, width: 4 } },
-        { mode: "BEZIER", size: { height: 4, width: 4 } },
-        { mode: "default", size: { height: 5, width: 2 } },
-        { mode: "NEAREST_NEIGHBOR", size: { height: 5, width: 2 } },
-        { mode: "BILINEAR", size: { height: 5, width: 2 } },
-        { mode: "BICUBIC", size: { height: 5, width: 2 } },
-        { mode: "HERMITE", size: { height: 5, width: 2 } },
-        { mode: "BEZIER", size: { height: 5, width: 2 } },
-      ],
-    },
-    /**********************************************************************/
-    {
-      title: "max contrast 12x12 with dots",
-      src: jimp.fromBitmap(
-        makeTestImage(
-          "■■■■■■□□□□□□",
-          "■■■■■■□□□□□□",
-          "■■■□■■□□■□□□",
-          "■■■■■■□□□□□□",
-          "■■■■■■□□□□□□",
-          "■■■■■■□□□□□□",
-          "□□□□□□■■■■■■",
-          "□□□□□□■■■■■■",
-          "□□□□□□■■■■■■",
-          "□□□■□□■■□■■■",
-          "□□□□□□■■■■■■",
-          "□□□□□□■■■■■■"
-        )
-      ),
-      tests: [
-        { mode: "default", size: { height: 6, width: 6 } },
-        { mode: "NEAREST_NEIGHBOR", size: { height: 6, width: 6 } },
-        { mode: "BILINEAR", size: { height: 6, width: 6 } },
-        { mode: "BICUBIC", size: { height: 6, width: 6 } },
-        { mode: "HERMITE", size: { height: 6, width: 6 } },
-        { mode: "BEZIER", size: { height: 6, width: 6 } },
-      ],
-    },
-    /**********************************************************************/
-    {
-      title: "mutch contrast 4x4",
-      src: jimp.fromBitmap(makeTestImage("▩▩▥▥", "▩▩▥▥", "▥▥▩▩", "▥▥▩▩")),
-      tests: [
-        { mode: "default", size: { height: 6, width: 6 } },
-        { mode: "NEAREST_NEIGHBOR", size: { height: 6, width: 6 } },
-        { mode: "BILINEAR", size: { height: 6, width: 6 } },
-        { mode: "BICUBIC", size: { height: 6, width: 6 } },
-        { mode: "HERMITE", size: { height: 6, width: 6 } },
-        { mode: "BEZIER", size: { height: 6, width: 6 } },
-      ],
-    },
+describe("Rotate a image with even size", () => {
+  const imgSrc = jimp.fromBitmap(
+    makeTestImage(
+      "▰▴▴▴▪▪▪▰",
+      "▴▴▴▴▪▪▪▪",
+      "▴▴▴▴▪▪▪▪",
+      "▴▴▴▴▪▪▪▪",
+      "▪▪▪▪▴▴▴▴",
+      "▪▪▪▪▴▴▴▴",
+      "▪▪▪▪▴▴▴▴",
+      "▦▪▪▪▴▴▴▦",
+    ),
+  );
+
+  const angles = [
+    1, 91, 30, 45, 60, 90, -90, 120, 135, 180, 225, 270, 315, 360,
   ];
 
-  testImages.forEach((image) => {
-    describe(image.title, () => {
-      image.tests.forEach(({ mode: modeType, size }) => {
-        test(`to ${modeType} ${size.width}x${size.height}`, () => {
-          const mode = ResizeStrategy[modeType as keyof typeof ResizeStrategy];
+  angles.forEach((angle) => {
+    test(`${angle} degrees`, () => {
+      expect(imgSrc.clone().rotate(angle)).toMatchSnapshot();
+    });
+  });
+});
 
-          expect(
-            image.src.clone().resize({
-              w: size.width,
-              h: size.height,
-              mode,
-            })
-          ).toMatchSnapshot();
-        });
-      });
+describe("Rotate a image with odd size", () => {
+  const imgSrc = jimp.fromBitmap(
+    makeTestImage(
+      "▴▴▴▦▪▪▪",
+      "▴▴▴▦▪▪▪",
+      "▴▴▴▦▪▪▪",
+      "▦▦▦▦▦▦▦",
+      "▴▴▴▦▴▴▴",
+      "▴▴▴▦▴▴▴",
+      "▴▴▴▦▴▴▴",
+    ),
+  );
+
+  const angles = [45, 135, 225, 315];
+
+  angles.forEach((angle) => {
+    test(`${angle} degrees`, () => {
+      expect(imgSrc.clone().rotate(angle)).toMatchSnapshot();
+    });
+  });
+});
+
+describe("Rotate a non-square image", () => {
+  const imgSrc = jimp.fromBitmap(
+    makeTestImage("▴▴▴▴▪▪▪▪", "▴▴▴▴▪▪▪▪", "▦▦▦▦▴▴▴▴", "▦▦▦▦▴▴▴▴"),
+  );
+
+  const angles = [1, 10, 30, 45, 90, -90, 135, 180, 225, 315, -180, -270];
+
+  angles.forEach((angle) => {
+    test(`${angle} degrees`, () => {
+      expect(imgSrc.clone().rotate(angle)).toMatchSnapshot();
+    });
+  });
+});
+
+describe("Rotate a non-square image without resizing", () => {
+  const imgSrc = jimp.fromBitmap(
+    makeTestImage("□□□□□□□□", "▹▹▹▹▹▹▹▹", "▿▿▿▿▿▿▿▿", "□□□□□□□□"),
+  );
+
+  const angles = [90, 180, 270, 45];
+
+  angles.forEach((angle) => {
+    test(`${angle} degrees`, () => {
+      expect(
+        imgSrc.clone().rotate({ deg: angle, mode: false }),
+      ).toMatchSnapshot();
     });
   });
 });
