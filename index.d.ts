@@ -1,32 +1,36 @@
-import { ResizeStrategy } from "@jimp/plugin-resize";
 import { JimpClass } from "@jimp/types";
 import { z } from "zod";
-declare const RotateOptionsSchema: z.ZodUnion<[z.ZodNumber, z.ZodObject<{
-    /** the number of degrees to rotate the image by */
-    deg: z.ZodNumber;
-    /** resize mode or a boolean, if false then the width and height of the image will not be changed */
-    mode: z.ZodOptional<z.ZodUnion<[z.ZodBoolean, z.ZodNativeEnum<typeof ResizeStrategy>]>>;
+declare const ThresholdOptionsSchema: z.ZodObject<{
+    /** A number auto limited between 0 - 255 */
+    max: z.ZodNumber;
+    /** A number auto limited between 0 - 255 (default 255)  */
+    replace: z.ZodOptional<z.ZodNumber>;
+    /** A boolean whether to apply greyscale beforehand (default true)  */
+    autoGreyscale: z.ZodOptional<z.ZodBoolean>;
 }, "strip", z.ZodTypeAny, {
-    deg: number;
-    mode?: boolean | ResizeStrategy | undefined;
+    max: number;
+    replace?: number | undefined;
+    autoGreyscale?: boolean | undefined;
 }, {
-    deg: number;
-    mode?: boolean | ResizeStrategy | undefined;
-}>]>;
-export type RotateOptions = z.infer<typeof RotateOptionsSchema>;
+    max: number;
+    replace?: number | undefined;
+    autoGreyscale?: boolean | undefined;
+}>;
+export type ThresholdOptions = z.infer<typeof ThresholdOptionsSchema>;
 export declare const methods: {
     /**
-     * Rotates the image counter-clockwise by a number of degrees. By default the width and height of the image will be resized appropriately.
+     * Applies a minimum color threshold to a grayscale image.
+     * Converts image to grayscale by default.
      * @example
      * ```ts
      * import { Jimp } from "jimp";
      *
      * const image = await Jimp.read("test/image.png");
      *
-     * image.rotate(90);
+     * image.threshold({ max: 150 });
      * ```
      */
-    rotate<I extends JimpClass>(image: I, options: RotateOptions): I;
+    threshold<I extends JimpClass>(image: I, options: ThresholdOptions): I;
 };
 export {};
 //# sourceMappingURL=index.d.ts.map
