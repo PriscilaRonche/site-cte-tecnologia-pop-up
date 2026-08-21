@@ -1,72 +1,67 @@
 import { expect, test, describe } from "vitest";
-import { createJimp } from "@jimp/core";
-import jpeg from "@jimp/js-jpeg";
-import png from "@jimp/js-png";
+
 import { makeTestImage } from "@jimp/test-utils";
+import { createJimp } from "@jimp/core";
 
-import * as blit from "./index.js";
+import { methods } from "./index.js";
 
-const Jimp = createJimp({ formats: [jpeg, png], plugins: [blit.methods] });
+const Jimp = createJimp({ plugins: [methods] });
 
-describe("Blit over image", function () {
-  const targetImg = Jimp.fromBitmap(
-    makeTestImage(
-      "▴▴▴▴▸▸▸▸",
-      "▴▴▴▴▸▸▸▸",
-      "▴▴▴▴▸▸▸▸",
-      "▴▴▴▴▸▸▸▸",
-      "▾▾▾▾◆◆◆◆",
-      "▾▾▾▾◆◆◆◆",
-      "▾▾▾▾◆◆◆◆",
-      "▾▾▾▾◆◆◆◆",
-    ),
-  );
-  // stores the Jimp instances of the JGD images above.
-  // prettier-ignore
-  const srcImg = Jimp.fromBitmap(makeTestImage(
-    "□□□□□□",
-    "□▥▥▥▥□",
-    "□▥■■▥□",
-    "□▥■■▥□",
-    "□▥▥▥▥□",
-    "□□□□□□"
-  ));
+describe("Circle", () => {
+  test("makes a circle based on image height and width", () => {
+    const imgSrc = Jimp.fromBitmap(
+      makeTestImage(
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+      ),
+    );
 
-  test("blit on top, with no crop", () => {
-    expect(targetImg.clone().blit(srcImg)).toMatchSnapshot();
+    expect(imgSrc.circle()).toMatchSnapshot();
   });
 
-  test("blit on middle, with no crop", () => {
-    expect(
-      targetImg.clone().blit({ src: srcImg, x: 1, y: 1 }),
-    ).toMatchSnapshot();
+  test("makes a circle using provided radius", () => {
+    const imgSrc = Jimp.fromBitmap(
+      makeTestImage(
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+      ),
+    );
+
+    expect(imgSrc.circle({ radius: 3 })).toMatchSnapshot();
   });
 
-  test("blit on middle, with x,y crop", () => {
-    expect(
-      targetImg
-        .clone()
-        .blit({ src: srcImg, x: 2, y: 2, srcX: 1, srcY: 1, srcW: 5, srcH: 5 }),
-    ).toMatchSnapshot();
-  });
+  test("should ", () => {
+    const imgSrc = Jimp.fromBitmap(
+      makeTestImage(
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+        "▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦▦",
+      ),
+    );
 
-  test("blit on middle, with x,y,w,h crop", () => {
-    expect(
-      targetImg
-        .clone()
-        .blit({ src: srcImg, x: 2, y: 2, srcX: 1, srcY: 1, srcW: 4, srcH: 4 }),
-    ).toMatchSnapshot();
-  });
-
-  test("blit partially out, on top-left", () => {
-    expect(
-      targetImg.clone().blit({ src: srcImg, x: -1, y: -1 }),
-    ).toMatchSnapshot();
-  });
-
-  test("blit partially out, on bottom-right", () => {
-    expect(
-      targetImg.clone().blit({ src: srcImg, x: 3, y: 3 }),
-    ).toMatchSnapshot();
+    expect(imgSrc.circle({ radius: 5, x: 5, y: 5 })).toMatchSnapshot();
   });
 });
