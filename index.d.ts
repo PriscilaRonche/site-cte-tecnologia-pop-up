@@ -1,93 +1,27 @@
-import { HorizontalAlign, VerticalAlign } from "@jimp/core";
 import { JimpClass } from "@jimp/types";
-import { z } from "zod";
-import { BmFont } from "./types.js";
-export { measureText, measureTextHeight } from "./measure-text.js";
-export * from "./types.js";
-declare const PrintOptionsSchema: z.ZodObject<{
-    /** the x position to draw the image */
-    x: z.ZodNumber;
-    /** the y position to draw the image */
-    y: z.ZodNumber;
-    /** the text to print */
-    text: z.ZodUnion<[z.ZodUnion<[z.ZodString, z.ZodNumber]>, z.ZodObject<{
-        text: z.ZodUnion<[z.ZodString, z.ZodNumber]>;
-        alignmentX: z.ZodOptional<z.ZodNativeEnum<typeof HorizontalAlign>>;
-        alignmentY: z.ZodOptional<z.ZodNativeEnum<typeof VerticalAlign>>;
-    }, "strip", z.ZodTypeAny, {
-        text: string | number;
-        alignmentX?: HorizontalAlign | undefined;
-        alignmentY?: VerticalAlign | undefined;
-    }, {
-        text: string | number;
-        alignmentX?: HorizontalAlign | undefined;
-        alignmentY?: VerticalAlign | undefined;
-    }>]>;
-    /** the boundary width to draw in */
-    maxWidth: z.ZodOptional<z.ZodNumber>;
-    /** the boundary height to draw in */
-    maxHeight: z.ZodOptional<z.ZodNumber>;
-    /** a callback for when complete that ahs the end co-ordinates of the text */
-    cb: z.ZodOptional<z.ZodFunction<z.ZodTuple<[z.ZodObject<{
-        x: z.ZodNumber;
-        y: z.ZodNumber;
-    }, "strip", z.ZodTypeAny, {
-        x: number;
-        y: number;
-    }, {
-        x: number;
-        y: number;
-    }>], null>, z.ZodUnknown>>;
+import z from "zod";
+declare const QuantizeOptionsSchema: z.ZodObject<{
+    colors: z.ZodOptional<z.ZodNumber>;
+    colorDistanceFormula: z.ZodOptional<z.ZodUnion<[z.ZodLiteral<"cie94-textiles">, z.ZodLiteral<"cie94-graphic-arts">, z.ZodLiteral<"ciede2000">, z.ZodLiteral<"color-metric">, z.ZodLiteral<"euclidean">, z.ZodLiteral<"euclidean-bt709-noalpha">, z.ZodLiteral<"euclidean-bt709">, z.ZodLiteral<"manhattan">, z.ZodLiteral<"manhattan-bt709">, z.ZodLiteral<"manhattan-nommyde">, z.ZodLiteral<"pngquant">]>>;
+    paletteQuantization: z.ZodOptional<z.ZodUnion<[z.ZodLiteral<"neuquant">, z.ZodLiteral<"neuquant-float">, z.ZodLiteral<"rgbquant">, z.ZodLiteral<"wuquant">]>>;
+    imageQuantization: z.ZodOptional<z.ZodUnion<[z.ZodLiteral<"nearest">, z.ZodLiteral<"riemersma">, z.ZodLiteral<"floyd-steinberg">, z.ZodLiteral<"false-floyd-steinberg">, z.ZodLiteral<"stucki">, z.ZodLiteral<"atkinson">, z.ZodLiteral<"jarvis">, z.ZodLiteral<"burkes">, z.ZodLiteral<"sierra">, z.ZodLiteral<"two-sierra">, z.ZodLiteral<"sierra-lite">]>>;
 }, "strip", z.ZodTypeAny, {
-    x: number;
-    y: number;
-    text: string | number | {
-        text: string | number;
-        alignmentX?: HorizontalAlign | undefined;
-        alignmentY?: VerticalAlign | undefined;
-    };
-    maxWidth?: number | undefined;
-    maxHeight?: number | undefined;
-    cb?: ((args_0: {
-        x: number;
-        y: number;
-    }) => unknown) | undefined;
+    colors?: number | undefined;
+    colorDistanceFormula?: "cie94-textiles" | "cie94-graphic-arts" | "ciede2000" | "color-metric" | "euclidean" | "euclidean-bt709-noalpha" | "euclidean-bt709" | "manhattan" | "manhattan-bt709" | "manhattan-nommyde" | "pngquant" | undefined;
+    paletteQuantization?: "neuquant" | "neuquant-float" | "rgbquant" | "wuquant" | undefined;
+    imageQuantization?: "nearest" | "riemersma" | "floyd-steinberg" | "false-floyd-steinberg" | "stucki" | "atkinson" | "jarvis" | "burkes" | "sierra" | "two-sierra" | "sierra-lite" | undefined;
 }, {
-    x: number;
-    y: number;
-    text: string | number | {
-        text: string | number;
-        alignmentX?: HorizontalAlign | undefined;
-        alignmentY?: VerticalAlign | undefined;
-    };
-    maxWidth?: number | undefined;
-    maxHeight?: number | undefined;
-    cb?: ((args_0: {
-        x: number;
-        y: number;
-    }) => unknown) | undefined;
+    colors?: number | undefined;
+    colorDistanceFormula?: "cie94-textiles" | "cie94-graphic-arts" | "ciede2000" | "color-metric" | "euclidean" | "euclidean-bt709-noalpha" | "euclidean-bt709" | "manhattan" | "manhattan-bt709" | "manhattan-nommyde" | "pngquant" | undefined;
+    paletteQuantization?: "neuquant" | "neuquant-float" | "rgbquant" | "wuquant" | undefined;
+    imageQuantization?: "nearest" | "riemersma" | "floyd-steinberg" | "false-floyd-steinberg" | "stucki" | "atkinson" | "jarvis" | "burkes" | "sierra" | "two-sierra" | "sierra-lite" | undefined;
 }>;
-export type PrintOptions = z.infer<typeof PrintOptionsSchema>;
+export type QuantizeOptions = z.infer<typeof QuantizeOptionsSchema>;
 export declare const methods: {
     /**
-     * Draws a text on a image on a given boundary
-     * @param font a bitmap font loaded from `Jimp.loadFont` command
-     * @param x the x position to start drawing the text
-     * @param y the y position to start drawing the text
-     * @param text the text to draw (string or object with `text`, `alignmentX`, and/or `alignmentY`)
-     * @example
-     * ```ts
-     * import { Jimp } from "jimp";
-     *
-     * const image = await Jimp.read("test/image.png");
-     * const font = await Jimp.loadFont(Jimp.FONT_SANS_32_BLACK);
-     *
-     * image.print({ font, x: 10, y: 10, text: "Hello world!" });
-     * ```
+     * Image color number reduction.
      */
-    print<I extends JimpClass>(image: I, { font, ...options }: PrintOptions & {
-        /** the BMFont instance */
-        font: BmFont<I>;
-    }): I;
+    quantize<I extends JimpClass>(image: I, options: QuantizeOptions): I;
 };
+export {};
 //# sourceMappingURL=index.d.ts.map
