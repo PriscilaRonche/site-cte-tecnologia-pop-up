@@ -1,21 +1,33 @@
-export interface ServiceItem {
-  id: string;
-  title: string;
-  shortDescription: string;
-  fullDescription: string;
-  iconName: string;
-  highlight?: boolean;
+import { JimpClass } from "@jimp/types";
+
+export interface BmCharacter {
+  id: number;
+  xadvance: number;
+  width: number;
+  height: number;
+  xoffset: number;
+  yoffset: number;
+  page: number;
+  x: number;
+  y: number;
 }
 
-export interface FaqItem {
-  question: string;
-  answer: string;
+export interface BmKerning {
+  [secondString: string]: number;
+  first: number;
+  second: number;
+  amount: number;
 }
 
-export interface TestimonialItem {
-  name: string;
-  role: string;
-  rating: number;
-  text: string;
-  date: string;
+export interface BmCommonProps {
+  lineHeight: number;
+}
+
+export interface BmFont<T extends JimpClass = JimpClass> {
+  chars: Record<string, BmCharacter>;
+  kernings: Record<string, BmKerning>;
+  common: BmCommonProps;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  info: Record<string, any>;
+  pages: T[];
 }

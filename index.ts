@@ -1,70 +1,219 @@
-import { JimpClass, JimpClassSchema } from "@jimp/types";
+import { HorizontalAlign, VerticalAlign } from "@jimp/core";
+import { JimpClass } from "@jimp/types";
+import { methods as blitMethods } from "@jimp/plugin-blit";
 import { z } from "zod";
 
-const MaskOptionsObjectSchema = z.object({
-  src: JimpClassSchema,
+import { measureText, measureTextHeight, splitLines } from "./measure-text.js";
+import { BmCharacter, BmFont } from "./types.js";
+
+export { measureText, measureTextHeight } from "./measure-text.js";
+export * from "./types.js";
+
+const PrintOptionsSchema = z.object({
   /** the x position to draw the image */
-  x: z.number().optional(),
+  x: z.number(),
   /** the y position to draw the image */
-  y: z.number().optional(),
+  y: z.number(),
+  /** the text to print */
+  text: z.union([
+    z.union([z.string(), z.number()]),
+    z.object({
+      text: z.union([z.string(), z.number()]),
+      alignmentX: z.nativeEnum(HorizontalAlign).optional(),
+      alignmentY: z.nativeEnum(VerticalAlign).optional(),
+    }),
+  ]),
+  /** the boundary width to draw in */
+  maxWidth: z.number().optional(),
+  /** the boundary height to draw in */
+  maxHeight: z.number().optional(),
+  /** a callback for when complete that ahs the end co-ordinates of the text */
+  cb: z
+    .function(z.tuple([z.object({ x: z.number(), y: z.number() })]))
+    .optional(),
 });
 
-const MaskOptionsSchema = z.union([JimpClassSchema, MaskOptionsObjectSchema]);
+export type PrintOptions = z.infer<typeof PrintOptionsSchema>;
 
-export type MaskOptions = z.infer<typeof MaskOptionsSchema>;
+function xOffsetBasedOnAlignment<I extends JimpClass>(
+  font: BmFont<I>,
+  line: string,
+  maxWidth: number,
+  alignment: HorizontalAlign
+) {
+  if (alignment === HorizontalAlign.LEFT) {
+    return 0;
+  }
+
+  if (alignment === HorizontalAlign.CENTER) {
+    return (maxWidth - measureText(font, line)) / 2;
+  }
+
+  return maxWidth - measureText(font, line);
+}
+
+function drawCharacter<I extends JimpClass>(
+  image: I,
+  font: BmFont<I>,
+  x: number,
+  y: number,
+  char: BmCharacter
+) {
+  if (char.width > 0 && char.height > 0) {
+    const characterPage = font.pages[char.page];
+
+    if (characterPage) {
+      image = blitMethods.blit(image, {
+        src: characterPage,
+        x: x + char.xoffset,
+        y: y + char.yoffset,
+        srcX: char.x,
+        srcY: char.y,
+        srcW: char.width,
+        srcH: char.height,
+      });
+    }
+  }
+
+  return image;
+}
+
+function printText<I extends JimpClass>(
+  image: I,
+  font: BmFont<I>,
+  x: number,
+  y: number,
+  text: string,
+  defaultCharWidth: number
+) {
+  for (let i = 0; i < text.length; i++) {
+    const stringChar = text[i]!;
+
+    let char;
+
+    if (font.chars[stringChar]) {
+      char = stringChar;
+    } else if (/\s/.test(stringChar)) {
+      char = "";
+    } else {
+      char = "?";
+    }
+
+    const fontChar = font.chars[char] || { xadvance: undefined };
+    const fontKerning = font.kernings[char];
+
+    if (fontChar) {
+      drawCharacter(image, font, x, y, fontChar as BmCharacter);
+    }
+
+    const nextChar = text[i + 1];
+    const kerning =
+      fontKerning && nextChar && fontKerning[nextChar]
+        ? fontKerning[nextChar] || 0
+        : 0;
+
+    x += kerning + (fontChar.xadvance || defaultCharWidth);
+  }
+}
 
 export const methods = {
   /**
-   * Masks a source image on to this image using average pixel colour. A completely black pixel on the mask will turn a pixel in the image completely transparent.
-   * @param src the source Jimp instance
-   * @param x the horizontal position to blit the image
-   * @param y the vertical position to blit the image
+   * Draws a text on a image on a given boundary
+   * @param font a bitmap font loaded from `Jimp.loadFont` command
+   * @param x the x position to start drawing the text
+   * @param y the y position to start drawing the text
+   * @param text the text to draw (string or object with `text`, `alignmentX`, and/or `alignmentY`)
    * @example
    * ```ts
    * import { Jimp } from "jimp";
    *
    * const image = await Jimp.read("test/image.png");
-   * const mask = await Jimp.read("test/mask.png");
+   * const font = await Jimp.loadFont(Jimp.FONT_SANS_32_BLACK);
    *
-   * image.mask(mask);
+   * image.print({ font, x: 10, y: 10, text: "Hello world!" });
    * ```
    */
-  mask<I extends JimpClass>(image: I, options: MaskOptions) {
-    MaskOptionsSchema.parse(options);
+  print<I extends JimpClass>(
+    image: I,
+    {
+      font,
+      ...options
+    }: PrintOptions & {
+      /** the BMFont instance */
+      font: BmFont<I>;
+    }
+  ) {
+    let {
+      // eslint-disable-next-line prefer-const
+      x,
+      y,
+      text,
+      // eslint-disable-next-line prefer-const
+      maxWidth = Infinity,
+      // eslint-disable-next-line prefer-const
+      maxHeight = Infinity,
+      // eslint-disable-next-line prefer-const
+      cb = () => {},
+    } = PrintOptionsSchema.parse(options);
 
-    let src: JimpClass;
-    let x: number;
-    let y: number;
+    let alignmentX: HorizontalAlign;
+    let alignmentY: VerticalAlign;
 
-    if ("bitmap" in options) {
-      src = options as unknown as JimpClass;
-      x = 0;
-      y = 0;
+    if (
+      typeof text === "object" &&
+      text.text !== null &&
+      text.text !== undefined
+    ) {
+      alignmentX = text.alignmentX || HorizontalAlign.LEFT;
+      alignmentY = text.alignmentY || VerticalAlign.TOP;
+      ({ text } = text);
     } else {
-      src = options.src as unknown as JimpClass;
-      x = options.x ?? 0;
-      y = options.y ?? 0;
+      alignmentX = HorizontalAlign.LEFT;
+      alignmentY = VerticalAlign.TOP;
+      text = text.toString();
     }
 
-    // round input
-    x = Math.round(x);
-    y = Math.round(y);
+    if (typeof text === "number") {
+      text = text.toString();
+    }
 
-    const w = image.bitmap.width;
-    const h = image.bitmap.height;
+    if (maxHeight !== Infinity && alignmentY === VerticalAlign.BOTTOM) {
+      y += maxHeight - measureTextHeight(font, text, maxWidth);
+    } else if (maxHeight !== Infinity && alignmentY === VerticalAlign.MIDDLE) {
+      y += maxHeight / 2 - measureTextHeight(font, text, maxWidth) / 2;
+    }
 
-    src.scan(function (sx, sy, idx) {
-      const destX = x + sx;
-      const destY = y + sy;
+    const defaultCharWidth = Object.entries(font.chars).find(
+      (c) => c[1].xadvance
+    )?.[1].xadvance;
 
-      if (destX >= 0 && destY >= 0 && destX < w && destY < h) {
-        const dstIdx = image.getPixelIndex(destX, destY);
-        const { data } = src.bitmap;
-        const avg = (data[idx + 0]! + data[idx + 1]! + data[idx + 2]!) / 3;
+    if (typeof defaultCharWidth !== "number") {
+      throw new Error("Could not find default character width");
+    }
 
-        image.bitmap.data[dstIdx + 3] *= avg / 255;
-      }
+    const { lines, longestLine } = splitLines(font, text, maxWidth);
+
+    lines.forEach((line) => {
+      const lineString = line.join(" ");
+      const alignmentWidth = xOffsetBasedOnAlignment(
+        font,
+        lineString,
+        maxWidth,
+        alignmentX
+      );
+
+      printText(
+        image,
+        font,
+        x + alignmentWidth,
+        y,
+        lineString,
+        defaultCharWidth
+      );
+      y += font.common.lineHeight;
     });
+
+    cb.bind(image)({ x: x + longestLine, y });
 
     return image;
   },
