@@ -10,16 +10,16 @@
 
 ---
 
-# v1.0.5 (Sun Sep 01 2024)
+# v1.1.0 (Sun Sep 01 2024)
 
-#### 🐛 Bug Fix
+#### ⚠️ Pushed to `main`
 
-- add missing dependency [#1306](https://github.com/jimp-dev/jimp/pull/1306) ([@benmccann](https://github.com/benmccann) [@hipstersmoothie](https://github.com/hipstersmoothie))
+- upgrade tshy ([@hipstersmoothie](https://github.com/hipstersmoothie))
+- update more docs ([@hipstersmoothie](https://github.com/hipstersmoothie))
 
-#### Authors: 2
+#### Authors: 1
 
 - Andrew Lisowski ([@hipstersmoothie](https://github.com/hipstersmoothie))
-- Ben McCann ([@benmccann](https://github.com/benmccann))
 
 ---
 
