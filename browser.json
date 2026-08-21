@@ -2,17 +2,15 @@
   "extends": "./build.json",
   "include": [
     "../src/**/*.ts",
-    "../src/**/*.cts",
+    "../src/**/*.mts",
     "../src/**/*.tsx",
     "../src/**/*.json"
   ],
   "exclude": [
     "../**/*.test.ts",
-    "../src/**/*.mts",
-    "../src/package.json",
-    "../src/index-browser.mts"
+    "../src/package.json"
   ],
   "compilerOptions": {
-    "outDir": "../.tshy-build/commonjs"
+    "outDir": "../.tshy-build/browser"
   }
 }
