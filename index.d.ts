@@ -1,40 +1,102 @@
 import { JimpClass } from "@jimp/types";
-import { ResizeStrategy } from "@jimp/plugin-resize";
 import { z } from "zod";
-declare const CoverOptionsSchema: z.ZodObject<{
-    /** the width to resize the image to */
+export declare const CropOptionsSchema: z.ZodObject<{
+    /** the x position to crop form */
+    x: z.ZodNumber;
+    /** the y position to crop form */
+    y: z.ZodNumber;
+    /** the width to crop form */
     w: z.ZodNumber;
-    /** the height to resize the image to */
+    /** the height to crop form */
     h: z.ZodNumber;
-    /** A bitmask for horizontal and vertical alignment */
-    align: z.ZodOptional<z.ZodNumber>;
-    /** a scaling method (e.g. ResizeStrategy.BEZIER) */
-    mode: z.ZodOptional<z.ZodNativeEnum<typeof ResizeStrategy>>;
 }, "strip", z.ZodTypeAny, {
+    x: number;
+    y: number;
     w: number;
     h: number;
-    align?: number | undefined;
-    mode?: ResizeStrategy | undefined;
 }, {
+    x: number;
+    y: number;
     w: number;
     h: number;
-    align?: number | undefined;
-    mode?: ResizeStrategy | undefined;
 }>;
-export type CoverOptions = z.infer<typeof CoverOptionsSchema>;
+export type CropOptions = z.infer<typeof CropOptionsSchema>;
+declare const AutocropComplexOptionsSchema: z.ZodObject<{
+    /** percent of color difference tolerance (default value) */
+    tolerance: z.ZodOptional<z.ZodNumber>;
+    /** flag to force cropping only if the image has a real "frame" i.e. all 4 sides have some border (default value) */
+    cropOnlyFrames: z.ZodOptional<z.ZodBoolean>;
+    /** force cropping top be symmetric */
+    cropSymmetric: z.ZodOptional<z.ZodBoolean>;
+    /** Amount of pixels in border to leave */
+    leaveBorder: z.ZodOptional<z.ZodNumber>;
+    ignoreSides: z.ZodOptional<z.ZodObject<{
+        north: z.ZodOptional<z.ZodBoolean>;
+        south: z.ZodOptional<z.ZodBoolean>;
+        east: z.ZodOptional<z.ZodBoolean>;
+        west: z.ZodOptional<z.ZodBoolean>;
+    }, "strip", z.ZodTypeAny, {
+        north?: boolean | undefined;
+        south?: boolean | undefined;
+        east?: boolean | undefined;
+        west?: boolean | undefined;
+    }, {
+        north?: boolean | undefined;
+        south?: boolean | undefined;
+        east?: boolean | undefined;
+        west?: boolean | undefined;
+    }>>;
+}, "strip", z.ZodTypeAny, {
+    tolerance?: number | undefined;
+    cropOnlyFrames?: boolean | undefined;
+    cropSymmetric?: boolean | undefined;
+    leaveBorder?: number | undefined;
+    ignoreSides?: {
+        north?: boolean | undefined;
+        south?: boolean | undefined;
+        east?: boolean | undefined;
+        west?: boolean | undefined;
+    } | undefined;
+}, {
+    tolerance?: number | undefined;
+    cropOnlyFrames?: boolean | undefined;
+    cropSymmetric?: boolean | undefined;
+    leaveBorder?: number | undefined;
+    ignoreSides?: {
+        north?: boolean | undefined;
+        south?: boolean | undefined;
+        east?: boolean | undefined;
+        west?: boolean | undefined;
+    } | undefined;
+}>;
+export type AutocropComplexOptions = z.infer<typeof AutocropComplexOptionsSchema>;
+export type AutocropOptions = number | AutocropComplexOptions;
 export declare const methods: {
     /**
-     * Scale the image so the given width and height keeping the aspect ratio. Some parts of the image may be clipped.
+     * Crops the image at a given point to a give size.
+     *
      * @example
      * ```ts
      * import { Jimp } from "jimp";
      *
      * const image = await Jimp.read("test/image.png");
-     *
-     * image.cover(150, 100);
+     * const cropped = image.crop(150, 100);
      * ```
      */
-    cover<I extends JimpClass>(image: I, options: CoverOptions): I;
+    crop<I extends JimpClass>(image: I, options: CropOptions): I;
+    /**
+     * Autocrop same color borders from this image.
+     * This function will attempt to crop out transparent pixels from the image.
+     *
+     * @example
+     * ```ts
+     * import { Jimp } from "jimp";
+     *
+     * const image = await Jimp.read("test/image.png");
+     * const cropped = image.autocrop();
+     * ```
+     */
+    autocrop<I extends JimpClass>(image: I, options?: AutocropOptions): I;
 };
 export {};
 //# sourceMappingURL=index.d.ts.map
