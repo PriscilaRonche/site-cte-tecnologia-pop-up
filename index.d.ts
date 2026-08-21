@@ -1,36 +1,66 @@
-import { JimpClass } from "@jimp/types";
 import { z } from "zod";
-declare const ThresholdOptionsSchema: z.ZodObject<{
-    /** A number auto limited between 0 - 255 */
-    max: z.ZodNumber;
-    /** A number auto limited between 0 - 255 (default 255)  */
-    replace: z.ZodOptional<z.ZodNumber>;
-    /** A boolean whether to apply greyscale beforehand (default true)  */
-    autoGreyscale: z.ZodOptional<z.ZodBoolean>;
+export declare enum Edge {
+    EXTEND = 1,
+    WRAP = 2,
+    CROP = 3
+}
+export interface Bitmap {
+    data: Buffer;
+    width: number;
+    height: number;
+}
+export interface Format<Mime extends string = string, ExportOptions extends Record<string, any> | undefined = undefined, DecodeOptions extends Record<string, any> | undefined = undefined> {
+    mime: Mime;
+    hasAlpha?: boolean;
+    encode: (image: Bitmap, options?: ExportOptions) => Promise<Buffer> | Buffer;
+    decode: (data: Buffer, options?: DecodeOptions) => Promise<Bitmap> | Bitmap;
+}
+export interface RGBColor {
+    r: number;
+    g: number;
+    b: number;
+}
+export interface RGBAColor {
+    r: number;
+    g: number;
+    b: number;
+    a: number;
+}
+export declare const JimpClassSchema: z.ZodObject<{
+    bitmap: z.ZodObject<{
+        data: z.ZodUnion<[z.ZodType<Buffer, z.ZodTypeDef, Buffer>, z.ZodType<Uint8Array, z.ZodTypeDef, Uint8Array>]>;
+        width: z.ZodNumber;
+        height: z.ZodNumber;
+    }, "strip", z.ZodTypeAny, {
+        data: Buffer | Uint8Array;
+        width: number;
+        height: number;
+    }, {
+        data: Buffer | Uint8Array;
+        width: number;
+        height: number;
+    }>;
 }, "strip", z.ZodTypeAny, {
-    max: number;
-    replace?: number | undefined;
-    autoGreyscale?: boolean | undefined;
+    bitmap: {
+        data: Buffer | Uint8Array;
+        width: number;
+        height: number;
+    };
 }, {
-    max: number;
-    replace?: number | undefined;
-    autoGreyscale?: boolean | undefined;
+    bitmap: {
+        data: Buffer | Uint8Array;
+        width: number;
+        height: number;
+    };
 }>;
-export type ThresholdOptions = z.infer<typeof ThresholdOptionsSchema>;
-export declare const methods: {
-    /**
-     * Applies a minimum color threshold to a grayscale image.
-     * Converts image to grayscale by default.
-     * @example
-     * ```ts
-     * import { Jimp } from "jimp";
-     *
-     * const image = await Jimp.read("test/image.png");
-     *
-     * image.threshold({ max: 150 });
-     * ```
-     */
-    threshold<I extends JimpClass>(image: I, options: ThresholdOptions): I;
-};
-export {};
+export interface JimpClass {
+    background: number;
+    bitmap: Bitmap;
+    getPixelIndex: (x: number, y: number, edgeHandling?: Edge) => number;
+    getPixelColor: (x: number, y: number) => number;
+    setPixelColor: (hex: number, x: number, y: number) => JimpClass;
+    scan(f: (x: number, y: number, idx: number) => any): JimpClass;
+    scan(x: number, y: number, w: number, h: number, cb: (x: number, y: number, idx: number) => any): JimpClass;
+    scan(x: number | ((x: number, y: number, idx: number) => any), y?: number, w?: number, h?: number, f?: (x: number, y: number, idx: number) => any): JimpClass;
+}
 //# sourceMappingURL=index.d.ts.map

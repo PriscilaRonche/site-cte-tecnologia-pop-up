@@ -1,56 +1,76 @@
-import { JimpClass } from "@jimp/types";
-import { limit255 } from "@jimp/utils";
-import { methods as color } from "@jimp/plugin-color";
 import { z } from "zod";
 
-const ThresholdOptionsSchema = z.object({
-  /** A number auto limited between 0 - 255 */
-  max: z.number().min(0).max(255),
-  /** A number auto limited between 0 - 255 (default 255)  */
-  replace: z.number().min(0).max(255).optional(),
-  /** A boolean whether to apply greyscale beforehand (default true)  */
-  autoGreyscale: z.boolean().optional(),
+export enum Edge {
+  EXTEND = 1,
+  WRAP = 2,
+  CROP = 3,
+}
+
+export interface Bitmap {
+  data: Buffer;
+  width: number;
+  height: number;
+}
+
+export interface Format<
+  Mime extends string = string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ExportOptions extends Record<string, any> | undefined = undefined,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  DecodeOptions extends Record<string, any> | undefined = undefined,
+> {
+  mime: Mime;
+  hasAlpha?: boolean;
+  encode: (image: Bitmap, options?: ExportOptions) => Promise<Buffer> | Buffer;
+  decode: (data: Buffer, options?: DecodeOptions) => Promise<Bitmap> | Bitmap;
+}
+
+export interface RGBColor {
+  r: number;
+  g: number;
+  b: number;
+}
+
+export interface RGBAColor {
+  r: number;
+  g: number;
+  b: number;
+  a: number;
+}
+
+export const JimpClassSchema = z.object({
+  bitmap: z.object({
+    data: z.union([z.instanceof(Buffer), z.instanceof(Uint8Array)]),
+    width: z.number(),
+    height: z.number(),
+  }),
 });
 
-export type ThresholdOptions = z.infer<typeof ThresholdOptionsSchema>;
+export interface JimpClass {
+  background: number;
+  bitmap: Bitmap;
 
-export const methods = {
-  /**
-   * Applies a minimum color threshold to a grayscale image.
-   * Converts image to grayscale by default.
-   * @example
-   * ```ts
-   * import { Jimp } from "jimp";
-   *
-   * const image = await Jimp.read("test/image.png");
-   *
-   * image.threshold({ max: 150 });
-   * ```
-   */
-  threshold<I extends JimpClass>(image: I, options: ThresholdOptions) {
-    let {
-      max,
-      replace = 255,
-      // eslint-disable-next-line prefer-const
-      autoGreyscale = true,
-    } = ThresholdOptionsSchema.parse(options);
+  getPixelIndex: (x: number, y: number, edgeHandling?: Edge) => number;
+  getPixelColor: (x: number, y: number) => number;
+  setPixelColor: (hex: number, x: number, y: number) => JimpClass;
 
-    max = limit255(max);
-    replace = limit255(replace);
-
-    if (autoGreyscale) {
-      color.greyscale(image);
-    }
-
-    image.scan((_, __, idx) => {
-      const grey =
-        image.bitmap.data[idx]! < max ? image.bitmap.data[idx]! : replace;
-
-      image.bitmap.data[idx] = grey;
-      image.bitmap.data[idx + 1] = grey;
-      image.bitmap.data[idx + 2] = grey;
-    });
-
-    return image;
-  },
-};
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  scan(f: (x: number, y: number, idx: number) => any): JimpClass;
+  scan(
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    cb: (x: number, y: number, idx: number) => any
+  ): JimpClass;
+  scan(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    x: number | ((x: number, y: number, idx: number) => any),
+    y?: number,
+    w?: number,
+    h?: number,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    f?: (x: number, y: number, idx: number) => any
+  ): JimpClass;
+}

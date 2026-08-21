@@ -1,43 +1,15 @@
-import { limit255 } from "@jimp/utils";
-import { methods as color } from "@jimp/plugin-color";
 import { z } from "zod";
-const ThresholdOptionsSchema = z.object({
-    /** A number auto limited between 0 - 255 */
-    max: z.number().min(0).max(255),
-    /** A number auto limited between 0 - 255 (default 255)  */
-    replace: z.number().min(0).max(255).optional(),
-    /** A boolean whether to apply greyscale beforehand (default true)  */
-    autoGreyscale: z.boolean().optional(),
+export var Edge;
+(function (Edge) {
+    Edge[Edge["EXTEND"] = 1] = "EXTEND";
+    Edge[Edge["WRAP"] = 2] = "WRAP";
+    Edge[Edge["CROP"] = 3] = "CROP";
+})(Edge || (Edge = {}));
+export const JimpClassSchema = z.object({
+    bitmap: z.object({
+        data: z.union([z.instanceof(Buffer), z.instanceof(Uint8Array)]),
+        width: z.number(),
+        height: z.number(),
+    }),
 });
-export const methods = {
-    /**
-     * Applies a minimum color threshold to a grayscale image.
-     * Converts image to grayscale by default.
-     * @example
-     * ```ts
-     * import { Jimp } from "jimp";
-     *
-     * const image = await Jimp.read("test/image.png");
-     *
-     * image.threshold({ max: 150 });
-     * ```
-     */
-    threshold(image, options) {
-        let { max, replace = 255, 
-        // eslint-disable-next-line prefer-const
-        autoGreyscale = true, } = ThresholdOptionsSchema.parse(options);
-        max = limit255(max);
-        replace = limit255(replace);
-        if (autoGreyscale) {
-            color.greyscale(image);
-        }
-        image.scan((_, __, idx) => {
-            const grey = image.bitmap.data[idx] < max ? image.bitmap.data[idx] : replace;
-            image.bitmap.data[idx] = grey;
-            image.bitmap.data[idx + 1] = grey;
-            image.bitmap.data[idx + 2] = grey;
-        });
-        return image;
-    },
-};
 //# sourceMappingURL=index.js.map
